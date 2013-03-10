@@ -1,7 +1,7 @@
 diff -Nhur rpmconfig-2.4.orig/common rpmconfig-2.4/common
---- rpmconfig-2.4.orig/common	2010-05-13 09:30:33.000000000 +0200
-+++ rpmconfig-2.4/common	2010-05-13 09:33:51.000000000 +0200
-@@ -341,7 +341,7 @@
+--- rpmconfig-2.4.orig/common	2011-09-27 05:09:57.000000000 +0200
++++ rpmconfig-2.4/common	2012-04-15 22:32:33.000000000 +0200
+@@ -350,7 +348,7 @@
  %autoremake \
  install="--install" ; \
  [ -n "`autoreconf --version | grep 2.13`" ] && install="" ; \
@@ -10,7 +10,7 @@ diff -Nhur rpmconfig-2.4.orig/common rpmconfig-2.4/common
  
  
  %target_autoreconf \
-@@ -357,7 +357,7 @@
+@@ -366,7 +364,7 @@
      echo "cd $dn"; \
      pushd $dn ; \
      rm -f configure ; \
