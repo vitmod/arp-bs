@@ -35,4 +35,11 @@ ln -sf /tmp /var/
 #
 swapon -a 2> /dev/null
 
+#
+# copy picon directories
+#
+echo "Copy picons to tmp..."
+[ -f /media/hdd/picon_tmp.tar ] && tar -xf /media/hdd/picon_tmp.tar -C /tmp
+[ ! -d /tmp/piconProv ] && [ -d /media/hdd/piconProv ] && cp -R /media/hdd/piconProv /tmp
+
 : exit 0
