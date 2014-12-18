@@ -1,5 +1,6 @@
 *.pyc
 *.pyo
+.directory
 .config
 .config.old
 .config.new
