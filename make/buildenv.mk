@@ -93,10 +93,9 @@ archivedir = $(HOME)/Archive
 
 # FIXME: root dir hack
 buildprefix := $(shell pwd)
-tdtdir := $(patsubst %/cvs/cdk,%,$(buildprefix))
 
 # build root directories
-prefix := $(tdtdir)/tufsbox
+prefix := $(buildprefix)/build
 
 # dependency control dir
 DEPDIR := $(prefix)/.deps
@@ -125,8 +124,8 @@ ipkorigin := $(prefix)/ipkbox-origin
 
 # strange directories
 configprefix := $(hostprefix)/config
-appsdir := $(tdtdir)/cvs/apps
-driverdir := $(tdtdir)/cvs/driver
+appsdir := $(buildprefix)/apps
+driverdir := $(buildprefix)/driver
 
 # build temporary directories
 specsprefix := $(prefix)/SPECS
