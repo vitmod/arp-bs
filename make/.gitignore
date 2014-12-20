@@ -2,3 +2,4 @@ local
 !local/README.md
 !local/Makefile.in
 !local/local.mk
+!local/template/
