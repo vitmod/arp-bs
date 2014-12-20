@@ -51,7 +51,7 @@ NAME_${P} ?= ${PN}
 
 call[[ base ]]
 
-GIT_DIR_${P} = $(appsdir)/misc/tools/$(subst target_,,${P})
+GIT_DIR_${P} = $(appsdir)/tools/$(subst target_,,${P})
 
 rule[[
   pdircreate:${DIR}

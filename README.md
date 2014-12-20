@@ -1,8 +1,12 @@
-tdt-arp
+ARP-Buildsystem
 =======================
 
 Image build-system for settopboxes sh4 based
 remake of duckbox tdt
+
+Please read the following readme carefully if you still have question create an *issue with question tag*
+на русском, in english, auf deutsch !
+
 
 Start
 =======================
@@ -18,6 +22,7 @@ That's it, now start toolchain
  5. To build image exec buildsystem with `make target-image`
  6. A lot of make targets are available
 
+This toolchain is based on GNU Make and small perl preporcessor for generating make files. The first section is about our preprocessor [(Smart-rules)](#Smart-rules) and the second one is about [(Makefile conventions)](#Makefile conventions)
 
 Smart-rules
 =======================
@@ -199,3 +204,15 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 
 #### purpose #####
 This macroses allows to define chunks of code for future use. Code block inside function is saved in memory and pasted instead of call.
+
+
+Makefile conventions
+================================
+Every package usually have some standart targets with typical things to do:
+* `do_prepare` - Clean working directory, then sources extraction and patching.
+* `do_compile` - Configuring sources and building binaries.
+* `do_package` - Copying resulting files to `$(PKDIR)` tree
+* `do_ipk` - Building package from `$(PKDIR)` tree for futher installing in _targetprefix_ root
+* `do_install` - Installing files to _targetprefix_ by installing coresponding *.ipk
+
+There are coresponding _clean_*_ targets... And more.
