@@ -37,7 +37,7 @@ package[[ target_ustslave
 call[[ header ]]
 ]]package
 
-PR_tdt_tools = 1
+PR_tdt_tools = 2
 # end tdt tools packages
 
 function[[ base_tdt_tools
@@ -67,6 +67,7 @@ function[[ TARGET_tdt_tools
 # you can overwrite any TARGET after call to this function
 
 CONFIG_FLAGS_${P} += \
+	--includedir=/usr/include \
 	--with-driver=$(driverdir) \
 	--with-dvbincludes=$(driverdir)/include \
 	--with-target=cdk

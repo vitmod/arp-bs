@@ -27,7 +27,7 @@ CONFIG_FLAGS_${P} += --enable-mediafwgstreamer
 endif
 ifdef CONFIG_EPLAYER3
 BDEPENDS_${P} += $(target_libeplayer3)
-CONFIG_FLAGS_${P} += --enable-libeplayer3 LIBEPLAYER3_CPPFLAGS="-I$(appsdir)/misc/tools/libeplayer3/include"
+CONFIG_FLAGS_${P} += --enable-libeplayer3
 endif
 
 # box type
