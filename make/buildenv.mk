@@ -19,6 +19,9 @@ unexport MAKEFLAGS
 ifeq ($(MAKE_VERSION),4.0)
 MAKEFLAGS := -r -R --trace
 endif
+ifeq ($(MAKE_VERSION),4.1)
+MAKEFLAGS := -r -R --trace
+endif
 
 
 # gnu make strings magic
