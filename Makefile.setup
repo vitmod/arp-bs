@@ -99,12 +99,12 @@ endif
 # configuration exec
 # ----------------------------------------------------------------------------
 
-menuconfig: $(CONFIG)/mconf
+run_menuconfig: $(CONFIG)/mconf
 	@$(CONFIG)/mconf $(CONFIG_CONFIG_IN)
 	@echo Ctrl+C to abort
 	@$(CONFIG)/conf --oldconfig $(CONFIG_CONFIG_IN)
 
-xconfig: $(CONFIG)/qconf
+run_xconfig: $(CONFIG)/qconf
 	test -f $(CONFIG)/qconf && $(CONFIG)/qconf $(CONFIG_CONFIG_IN) || $(CONFIG)/gconf $(CONFIG_CONFIG_IN)
 	@echo Ctrl+C to abort
 	@$(CONFIG)/conf --oldconfig $(CONFIG_CONFIG_IN)
@@ -112,7 +112,7 @@ xconfig: $(CONFIG)/qconf
 config: $(CONFIG)/conf
 	@$(CONFIG)/conf $(CONFIG_CONFIG_IN)
 
-oldconfig: $(CONFIG)/conf
+run_oldconfig: $(CONFIG)/conf
 	@$(CONFIG)/conf --oldconfig $(CONFIG_CONFIG_IN)
 
 randconfig: $(CONFIG)/conf
@@ -130,7 +130,12 @@ defconfig: $(CONFIG)/conf
 	@$(CONFIG)/conf -d $(CONFIG_CONFIG_IN)
 
 
+menuconfig: run_menuconfig SETUP
+xconfig: run_xconfig SETUP
+oldconfig: run_oldconfig SETUP
+
 .PHONY: kconfig-clean kconfig-distclean \
+        run_menuconfig run_oldconfig run_xconfig \
         menuconfig xconfig config oldconfig randconfig allyesconfig allnoconfig defconfig
 
 #
