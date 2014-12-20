@@ -161,6 +161,15 @@ make-distclean:
 
 .PRECIOUS: Makefile
 
+make/local/%.in:
+	touch make/local/Makefile.in
+	mkdir -p make/local/template
+	touch make/local/template/Makefile.in
+make/local/%.mk:
+	touch make/local/local.mk
+	mkdir -p make/local/template
+	touch make/local/template/template.mk
+
 Makefile.pre: \
   Makefile.setup \
   .config \
