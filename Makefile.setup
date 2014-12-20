@@ -24,6 +24,8 @@ SETUP: Makefile
 help::
 	@echo
 	@echo ----------------------------------------------------------------------------
+	@cat logo.txt
+	@echo ----------------------------------------------------------------------------
 	@echo run \'make\' to see some info about common targets and this system
 	@echo run \'make help-functions\' to see defined macroses.
 
