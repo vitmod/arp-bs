@@ -13,10 +13,16 @@ call[[ base ]]
 $(TARGET_${P}).do_image: $(DEPENDS_${P})
 	@echo "Create image ..."
 ifeq ($(CONFIG_SPARK)$(CONFIG_SPARK7162),y)
-	cd $(prefix)/../flash/spark && \
-		echo -e "1\n1" | ./spark.sh
+	mkdir -p $(prefix)/flash
+	cp ${SDIR}/spark.sh $(prefix)/flash
+	cd $(prefix)/flash && ./spark.sh $(prefix) \
+	OpenAR-P_$(KERNEL_RELEASE)_$(TARGET)_$(if $(CONFIG_EPLAYER3),epl3,gst)_py$(PYTHON_VERSION)\
+	_git`git rev-list --count HEAD`_`date +%d-%m-%y`
 endif
 	touch $@
+	@echo
+	@echo '==> FINISH'
+	@echo
 
 $(TARGET_${P}): $(TARGET_${P}).do_image
 
