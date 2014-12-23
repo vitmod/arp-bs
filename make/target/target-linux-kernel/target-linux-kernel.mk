@@ -223,6 +223,7 @@ $(TARGET_${P}).do_package: $(DEPENDS_${P})
 	$(PKDIR_clean)
 	cd $(DIR_${P}) && make ${MAKE_FLAGS} INSTALL_HDR_PATH=$(PKDIR)/usr headers_install
 	rm -rf $(PKDIR)/usr/include/scsi
+	find $(PKDIR)/usr/include/ -name ".install" -o -name "..install.cmd" -exec rm -f {} \;
 	touch $@
 
 call[[ ipk ]]
