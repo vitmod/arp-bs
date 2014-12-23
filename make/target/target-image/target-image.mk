@@ -22,6 +22,7 @@ endif
 	touch $@
 	@echo
 	@echo '==> FINISH'
+	@echo '==> image is in $(prefix)/flash/out'
 	@echo
 
 $(TARGET_${P}): $(TARGET_${P}).do_image
