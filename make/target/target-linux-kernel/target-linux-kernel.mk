@@ -138,9 +138,9 @@ endif #CONFIG_SPARK7162
 #############################################################################
 # end patches
 
-${P}_config = linux-sh4-$(KERNEL_UPSTREAM)-$(KERNEL_LABEL)_$(TARGET).config$(DEBUG_STR)
+CONFIG_${P} = linux-sh4-$(KERNEL_UPSTREAM)-$(KERNEL_LABEL)_$(TARGET).config$(DEBUG_STR)
 
-DEPENDS_${P} += $(addprefix ${SDIR}/,$(${P}_patches) $(${P}_config))
+DEPENDS_${P} += $(addprefix ${SDIR}/,$(${P}_patches) ${CONFIG})
 
 rule[[
   dirextract:local://$(archivedir)/$(STLINUX)-host-kernel-source-sh4-$(KERNEL_VERSION)-$(KERNEL_RELEASE).src.rpm
@@ -159,7 +159,7 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 # FIXME:
 	ln -sf ${SDIR}/integrated_firmware $(DIR_${P})/../integrated_firmware
 
-	cp ${SDIR}/$(${P}_config) $(DIR_${P})/.config
+	cp ${SDIR}/${CONFIG} $(DIR_${P})/.config
 	touch $@
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare

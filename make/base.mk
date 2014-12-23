@@ -130,7 +130,7 @@ $(TARGET_${P}).do_%: $(TARGET_${P}).do_prepare
 	@echo You might have to COPY
 	@echo ${DIR}/.config
 	@echo to
-	@echo ${SDIR}
+	@echo ${SDIR}/$(if ${CONFIG},${CONFIG},???.config)
 	@echo to make changes permanent !!!
 	@echo ----------------------------------------------------------------------------
 ]]function
