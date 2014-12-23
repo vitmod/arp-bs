@@ -6,7 +6,7 @@ package[[ target_base_files
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = 0.2
-PR_${P} = 1
+PR_${P} = 2
 PACKAGE_ARCH_${P} = $(box_arch)
 
 DESCRIPTION_${P} = Miscellaneous files for the base system.
@@ -49,6 +49,7 @@ rule[[
   install:-d:$(PKDIR)/var/log
   install:-d:$(PKDIR)/var/cache
   install:-d:$(PKDIR)/etc
+  install:-d:$(PKDIR)/root
   install:-d:$(PKDIR)/dev
   install:-d:$(PKDIR)/dev.static
   install_file:$(PKDIR)/etc/motd:file://motd
