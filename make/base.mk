@@ -158,7 +158,12 @@ opkg-check-%:
 	set -e; \
 	cat $($*prefix)/usr/lib/opkg/info/*.list |sort -u > db;  \
 	find $($*prefix)/ -type d -printf '%p/\n' -o -print | sed 's,$(prefix)/*,/,' | sort > fs; \
+	echo; \
+	echo "files unknown to opkg:"; \
 	comm --check-order -23 fs db; \
+	echo; \
+	echo "files missing:"; \
+	comm --check-order -13 fs db; \
 	true
 help::
 	@echo "run 'make opkg-check-{host|cross|target}' to list opkg disowned files"
