@@ -111,7 +111,7 @@ all: $(TARGET_${P})
 
 ]]function
 
-function[[ TARGET_base_do_prepare
+function[[ base_do_prepare
 # place after variables and rule definitions
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 	$(PREPARE_${P})
@@ -130,7 +130,7 @@ $(TARGET_${P}).do_%: $(TARGET_${P}).do_prepare
 	@echo You might have to COPY
 	@echo ${DIR}/.config
 	@echo to
-	@echo ${SDIR}
+	@echo ${SDIR}/$(if ${CONFIG},${CONFIG},???.config)
 	@echo to make changes permanent !!!
 	@echo ----------------------------------------------------------------------------
 ]]function
@@ -158,7 +158,12 @@ opkg-check-%:
 	set -e; \
 	cat $($*prefix)/usr/lib/opkg/info/*.list |sort -u > db;  \
 	find $($*prefix)/ -type d -printf '%p/\n' -o -print | sed 's,$(prefix)/*,/,' | sort > fs; \
+	echo; \
+	echo "files unknown to opkg:"; \
 	comm --check-order -23 fs db; \
+	echo; \
+	echo "files missing:"; \
+	comm --check-order -13 fs db; \
 	true
 help::
 	@echo "run 'make opkg-check-{host|cross|target}' to list opkg disowned files"
@@ -371,7 +376,8 @@ $(TARGET_${P}).do_ipkbox: $(TARGET_${P}).do_split
 	set -e; \
 	for pkg in `ls $(SPLITDIR_${P})`; do \
 		echo "building package $${pkg} ..."; \
-		echo ${P} > $(ipkorigin)/$${pkg}.origin; \
+		pkgn=`cat $(SPLITDIR_${P})/$${pkg}/CONTROL/control |sed -n '/^Package:/ s/Package: //p'`; \
+		echo ${P} > $(ipkorigin)/$${pkgn}.origin; \
 		ipkg-build -o root -g root $(SPLITDIR_${P})/$${pkg} $(ipkbox); \
 	done
 

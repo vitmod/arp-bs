@@ -8,6 +8,17 @@ $(target_ustslave) $(target_sysvinit) $(target_devinit) $(target_udev) $(target_
 $(target_fp_control) $(target_stfbcontrol) $(target_libfribidi) $(target_showiframe) $(target_portmap) $(target_firmware) $(target_bootelf) $(target_util_linux) $(target_e2fsprogs) $(target_wget) \
 $(target_udev_rules) $(target_bootlogo) $(target_flash_tools) $(target_rfkill) $(target_distro_feed_configs) $(target_initscripts) $(target_update_rcd) \
 $(target_streamripper)
+PR_${P} = 6
+RM_WORK_${P} = $(false)
+
+call[[ base_do_prepare ]]
+	echo "OpenAR-P \n \l" > $(DIR_${P})/etc/issue
+$(TARGET_${P}): $(TARGET_${P}).do_install
+
+# helps to fill DEPENDS list
+$(TARGET_${P}).print_depends:
+#	catch cat exitstatus and see stderr
+	@cd $(ipkorigin) && cat $(addsuffix .origin,$(opkg_my_list)) 2>&1 |uniq
 
 # core system libraries, binaries and scripts
 opkg_my_list = \
@@ -18,12 +29,14 @@ opkg_my_list = \
 	initscripts \
 	update-rc.d \
 	busybox \
+	vsftpd \
 	base-passwd \
 	base-files \
 	netbase \
 	opkg \
 	distro-feed-configs \
 	libz1 \
+	libbz2 \
 	libc6 \
 	libgcc1 \
 	libncurses5 \
@@ -76,17 +89,14 @@ opkg_my_list += \
 	kernel-module-ath9k-htc \
 	kernel-module-rt73usb
 endif
-
 ifdef CONFIG_3G_SUPPORT
 IPKBOX_LIST_${P} += $(target_modem_scripts) $(target_usb_modeswitch) $(target_pppd)
 opkg_my_list += modem-scripts
 endif
-
 ifdef CONFIG_NTFS_3G_SUPPORT
 IPKBOX_LIST_${P} += $(target_ntfs_3g)
 opkg_my_list += ntfs-3g
 endif
-
 ifdef CONFIG_IPTABLES_SUPPORT
 IPKBOX_LIST_${P} += $(target_iptables)
 opkg_my_list += iptables
@@ -133,19 +143,13 @@ ifdef CONFIG_SPARK7162
 opkg_my_list += \
 	enigma2-plugin-systemplugins-uniontunertype
 endif
-
 ifdef CONFIG_WLAN_SUPPORT
 IPKBOX_LIST_${P} += $(target_python_wifi)
 opkg_my_list += enigma2-plugin-systemplugins-wirelesslan
 endif
 endif
-
 ifdef CONFIG_ENIGMA2_PLUGINS
 IPKBOX_LIST_${P} += $(target_enigma2_plugins)
-endif
-
-ifdef CONFIG_ENIGMA2_SKINS
-IPKBOX_LIST_${P} += $(target_enigma2_skins)
 endif
 
 ifdef CONFIG_ENIGMA2_EXTENSION_OPENWEBIF
@@ -271,6 +275,5 @@ $(TARGET_${P}).print_depends_all: $(TARGET_${P})
 	for x in $${list}; do \
 		cat $(ipkorigin)/$${x}.origin || true; \
 	done
-
 
 ]]package

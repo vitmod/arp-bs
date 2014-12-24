@@ -78,7 +78,7 @@ RDEPENDS_enigma2 += gst_plugins_dvbmediasink gst_plugins_fluendo_mpegdemux gst_p
 endif
 ifdef CONFIG_EPLAYER3
 BDEPENDS_${P} += $(target_libeplayer3)
-CONFIG_FLAGS_${P} += --enable-libeplayer3 LIBEPLAYER3_CPPFLAGS="-I$(appsdir)/misc/tools/libeplayer3/include"
+CONFIG_FLAGS_${P} += --enable-libeplayer3
 RDEPENDS_enigma2 += libeplayer3
 endif
 ifdef CONFIG_ENIGMA2_SRC_MAX
@@ -110,6 +110,9 @@ RDEPENDS_enigma2 += libgraphlcd
 endif
 
 call[[ base ]]
+
+CONFIGS_${P} = CONFIG_ENIGMA2_%
+call[[ config ]]
 
 CONFIGS_${P} = CONFIG_ENIGMA2_%
 call[[ config ]]

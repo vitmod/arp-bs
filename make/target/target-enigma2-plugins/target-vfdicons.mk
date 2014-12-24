@@ -22,13 +22,12 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && \
-		mkdir -p $(PKDIR)/usr/lib/enigma2/python/Plugins/SystemPlugins && \
-		cp -a plugin $(PKDIR)/usr/lib/enigma2/python/Plugins/SystemPlugins/VFD-Icons && \
+	mkdir -p $(PKDIR)/usr/lib/enigma2/python/Plugins/SystemPlugins
+	cp -a $(DIR_${P})/plugin $(PKDIR)/usr/lib/enigma2/python/Plugins/SystemPlugins/VFD-Icons
 	touch $@
 
 NAME_${P} = enigma2-plugin-systemplugins-vfd-icons
-DESCRIPTION_${P} = "open VFD-icons plugin for enigma2 by openAR-P teamv full simbols for Alien²"
+DESCRIPTION_${P} = open VFD-icons plugin for enigma2 by openAR-P team full simbols for Alien2
 RDEPENDS_${P} = python_core
 RCONFLICTS_${P} = enigma2-plugin-systemplugins-minivfd-icons
 FILES_${P} = /usr/lib/enigma2/python/Plugins/SystemPlugins/VFD-Icons

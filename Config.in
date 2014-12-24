@@ -6,11 +6,11 @@ mainmenu "global config"
 
 	config DEBUG_ARP
 	default n
-	bool "Activate debug (y/N)?"
+	bool "Activate debug ?"
 
 	config ENABLE_CCACHE
 	default y
-	bool "Activate ccache (y/N)?"
+	bool "Activate ccache ?"
 
 ###########################################################################################
   menu "Global Configuration"
@@ -92,6 +92,7 @@ mainmenu "global config"
 
 		config GCC_LIB_FROM_CROSS
 		bool "cross-gcc"
+		depends on AVOID_RPM_SPEC
 
 		config GCC_LIB_FROM_TARGET
 		bool "target-gcc"

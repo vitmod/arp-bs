@@ -1,6 +1,8 @@
 #
 # AR-P buildsystem smart Makefile
 #
+# Warning: don't break license
+# NEVER COMMIT THE BOOTELFS !!!
 package[[ target_bootelf
 
 BDEPENDS_${P} = $(target_filesystem)

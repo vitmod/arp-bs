@@ -19,6 +19,9 @@ unexport MAKEFLAGS
 ifeq ($(MAKE_VERSION),4.0)
 MAKEFLAGS := -r -R --trace
 endif
+ifeq ($(MAKE_VERSION),4.1)
+MAKEFLAGS := -r -R --trace
+endif
 
 
 # gnu make strings magic
@@ -90,10 +93,9 @@ archivedir = $(HOME)/Archive
 
 # FIXME: root dir hack
 buildprefix := $(shell pwd)
-tdtdir := $(patsubst %/cvs/cdk,%,$(buildprefix))
 
 # build root directories
-prefix := $(tdtdir)/tufsbox
+prefix := $(buildprefix)/build
 
 # dependency control dir
 DEPDIR := $(prefix)/.deps
@@ -122,8 +124,8 @@ ipkorigin := $(prefix)/ipkbox-origin
 
 # strange directories
 configprefix := $(hostprefix)/config
-appsdir := $(tdtdir)/cvs/apps
-driverdir := $(tdtdir)/cvs/driver
+appsdir := $(buildprefix)/apps
+driverdir := $(buildprefix)/driver
 
 # build temporary directories
 specsprefix := $(prefix)/SPECS
@@ -222,7 +224,7 @@ MAKE_ARGS := \
 	OBJDUMP=$(target)-objdump \
 	LN_S="ln -s"
 
-PLATFORM_CPPFLAGS := $(CPPFLAGS) -I$(driverdir)/include -I$(appsdir)/misc/tools
+PLATFORM_CPPFLAGS := $(CPPFLAGS) -I$(driverdir)/include
 ifdef CONFIG_SPARK
 PLATFORM_CPPFLAGS += -DPLATFORM_SPARK
 endif

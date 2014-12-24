@@ -45,7 +45,6 @@ package[[ target_libstgles
 call[[ header ]]
 ]]package
 
-PR_tdt_tools = 1
 # end tdt tools packages
 
 function[[ base_tdt_tools
@@ -59,7 +58,7 @@ NAME_${P} ?= ${PN}
 
 call[[ base ]]
 
-GIT_DIR_${P} = $(appsdir)/misc/tools/$(subst target_,,${P})
+GIT_DIR_${P} = $(appsdir)/tools/$(subst target_,,${P})
 
 rule[[
   pdircreate:${DIR}
@@ -75,6 +74,7 @@ function[[ TARGET_tdt_tools
 # you can overwrite any TARGET after call to this function
 
 CONFIG_FLAGS_${P} += \
+	--includedir=/usr/include \
 	--with-driver=$(driverdir) \
 	--with-dvbincludes=$(driverdir)/include \
 	--with-target=cdk

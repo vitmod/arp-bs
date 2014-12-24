@@ -24,6 +24,8 @@ SETUP: Makefile
 help::
 	@echo
 	@echo ----------------------------------------------------------------------------
+	@cat logo.txt
+	@echo ----------------------------------------------------------------------------
 	@echo run \'make\' to see some info about common targets and this system
 	@echo run \'make help-functions\' to see defined macroses.
 
@@ -99,12 +101,12 @@ endif
 # configuration exec
 # ----------------------------------------------------------------------------
 
-menuconfig: $(CONFIG)/mconf
+run_menuconfig: $(CONFIG)/mconf
 	@$(CONFIG)/mconf $(CONFIG_CONFIG_IN)
 	@echo Ctrl+C to abort
 	@$(CONFIG)/conf --oldconfig $(CONFIG_CONFIG_IN)
 
-xconfig: $(CONFIG)/qconf
+run_xconfig: $(CONFIG)/qconf
 	test -f $(CONFIG)/qconf && $(CONFIG)/qconf $(CONFIG_CONFIG_IN) || $(CONFIG)/gconf $(CONFIG_CONFIG_IN)
 	@echo Ctrl+C to abort
 	@$(CONFIG)/conf --oldconfig $(CONFIG_CONFIG_IN)
@@ -112,7 +114,7 @@ xconfig: $(CONFIG)/qconf
 config: $(CONFIG)/conf
 	@$(CONFIG)/conf $(CONFIG_CONFIG_IN)
 
-oldconfig: $(CONFIG)/conf
+run_oldconfig: $(CONFIG)/conf
 	@$(CONFIG)/conf --oldconfig $(CONFIG_CONFIG_IN)
 
 randconfig: $(CONFIG)/conf
@@ -130,7 +132,12 @@ defconfig: $(CONFIG)/conf
 	@$(CONFIG)/conf -d $(CONFIG_CONFIG_IN)
 
 
+menuconfig: run_menuconfig SETUP
+xconfig: run_xconfig SETUP
+oldconfig: run_oldconfig SETUP
+
 .PHONY: kconfig-clean kconfig-distclean \
+        run_menuconfig run_oldconfig run_xconfig \
         menuconfig xconfig config oldconfig randconfig allyesconfig allnoconfig defconfig
 
 #
@@ -161,6 +168,15 @@ make-distclean:
 
 .PRECIOUS: Makefile
 
+make/local/%.in:
+	touch make/local/Makefile.in
+	mkdir -p make/local/template
+	touch make/local/template/Makefile.in
+make/local/%.mk:
+	touch make/local/local.mk
+	mkdir -p make/local/template
+	touch make/local/template/template.mk
+
 Makefile.pre: \
   Makefile.setup \
   .config \
@@ -174,12 +190,16 @@ Makefile.pre: \
   make/cross/*/*.in \
   make/target/*.in \
   make/target/*/*.in \
+  make/local/*.in \
+  make/local/*/*.in \
   make/host/*.mk \
   make/host/*/*.mk \
   make/cross/*.mk \
   make/cross/*/*.mk \
   make/target/*.mk \
   make/target/*/*.mk \
+  make/local/*.mk \
+  make/local/*/*.mk \
   make/archive-specs.mk
 
 	echo "# Automatically generated file; DO NOT EDIT." > $@
