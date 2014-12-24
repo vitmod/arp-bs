@@ -104,7 +104,18 @@ $(TARGET_${P}):
 ifeq (${RM_WORK},y)
 	rm -rf $(WORK_${P}) || true
 endif
+	test -f $@ && cp -a $@ $@.hold || true
 	touch $@
+
+ifdef MAKE_VERBOSE
+# HACK
+# touch deps with previous stamp
+# should avoid dependent packages rebuild
+$(TARGET_${P}).hold: $(TARGET_${P})
+	touch $(TARGET_${P}).* -r $@
+	touch $(TARGET_${P})   -r $@
+PHONY: $(TARGET_${P}).hold
+endif
 
 # add to list
 all: $(TARGET_${P})
