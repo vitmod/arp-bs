@@ -114,9 +114,6 @@ call[[ base ]]
 CONFIGS_${P} = CONFIG_ENIGMA2_%
 call[[ config ]]
 
-CONFIGS_${P} = CONFIG_ENIGMA2_%
-call[[ config ]]
-
 rule[[
 
 ifdef CONFIG_ENIGMA2_SRC_MASTER
