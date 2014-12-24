@@ -124,7 +124,7 @@ $(TARGET_${P}).do_menuconfig $(TARGET_${P}).do_xconfig: \
 $(TARGET_${P}).do_%: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && make $(MAKE_FLAGS_${P}) $*
 	@echo
-	diff -u $(DIR_${P})/.config.old $(DIR_${P})/.config; \
+	`which colordiff || which diff` -u $(DIR_${P})/.config.old $(DIR_${P})/.config; \
 	  test $$? -ne 2
 	@echo ----------------------------------------------------------------------------
 	@echo You might have to COPY
