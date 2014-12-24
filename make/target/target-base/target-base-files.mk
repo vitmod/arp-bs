@@ -6,7 +6,7 @@ package[[ target_base_files
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = 0.2
-PR_${P} = 1
+PR_${P} = 2
 PACKAGE_ARCH_${P} = $(box_arch)
 
 DESCRIPTION_${P} = Miscellaneous files for the base system.

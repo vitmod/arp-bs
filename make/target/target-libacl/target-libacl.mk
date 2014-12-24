@@ -30,6 +30,8 @@ define postinst_libacl
 $$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 
+endef
+
 call[[ ipkbox ]]
 
 ]]package

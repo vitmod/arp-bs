@@ -117,9 +117,9 @@ endif #CONFIG_SPARK7162
 #############################################################################
 # end patches
 
-${P}_config = linux-sh4-$(KERNEL_UPSTREAM)-$(KERNEL_LABEL)_$(TARGET).config$(DEBUG_STR)
+CONFIG_${P} = linux-sh4-$(KERNEL_UPSTREAM)-$(KERNEL_LABEL)_$(TARGET).config$(DEBUG_STR)
 
-DEPENDS_${P} += $(addprefix ${SDIR}/,$(${P}_patches) $(${P}_config))
+DEPENDS_${P} += $(addprefix ${SDIR}/,$(${P}_patches) ${CONFIG})
 
 rule[[
 ifdef CONFIG_GIT_KERNEL_ARP
@@ -154,7 +154,7 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 # FIXME:
 	ln -sf ${SDIR}/integrated_firmware $(DIR_${P})/../integrated_firmware
 
-	cp ${SDIR}/$(${P}_config) $(DIR_${P})/.config
+	cp ${SDIR}/${CONFIG} $(DIR_${P})/.config
 	touch $@
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
@@ -220,6 +220,7 @@ $(TARGET_${P}).do_package: $(DEPENDS_${P})
 	$(PKDIR_clean)
 	cd $(DIR_${P}) && make ${MAKE_FLAGS} INSTALL_HDR_PATH=$(PKDIR)/usr headers_install
 	rm -rf $(PKDIR)/usr/include/scsi
+	find $(PKDIR)/usr/include/ -name ".install" -o -name "..install.cmd" -exec rm -f {} \;
 	touch $@
 
 call[[ ipk ]]
