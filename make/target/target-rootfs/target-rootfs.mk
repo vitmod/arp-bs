@@ -8,17 +8,59 @@ $(target_ustslave) $(target_sysvinit) $(target_devinit) $(target_udev) $(target_
 $(target_fp_control) $(target_stfbcontrol) $(target_libfribidi) $(target_showiframe) $(target_portmap) $(target_firmware) $(target_bootelf) $(target_util_linux) $(target_e2fsprogs) $(target_wget) \
 $(target_udev_rules) $(target_bootlogo) $(target_flash_tools) $(target_rfkill) $(target_distro_feed_configs) $(target_initscripts) $(target_update_rcd) \
 $(target_streamripper)
+
+PV_${P} = 0.1
 PR_${P} = 6
+
 RM_WORK_${P} = $(false)
+call[[ base ]]
+#overwrite workdir
+WORK_${P} = $(prefix)/release
+DIR_${P} = $(WORK_${P})
 
 call[[ base_do_prepare ]]
+opkg_rootfs := opkg -f $(prefix)/opkg-box.conf -o $(DIR_${P})
+
+$(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
+	( echo "dest root /"; \
+	  echo "arch $(box_arch) 16"; \
+	  echo "arch sh4 10"; \
+	  echo "arch all 1"; \
+	  echo "src/gz box file://$(ipkbox)"; \
+	) > $(prefix)/opkg-box.conf
+
+	cd $(ipkbox) && \
+		/usr/bin/python $(hostprefix)/bin/ipkg-make-index . > Packages && \
+		cat Packages | gzip > Packages.gz
+	install -d $(DIR_${P})/usr/lib/opkg
+
+	export OPKG_OFFLINE_ROOT=$(DIR_${P}) && \
+	$(opkg_rootfs) update && \
+	$(opkg_rootfs) install --force-postinstall $(opkg_my_list)
+#	add version
+	echo "version=OpenAR-P_`date +%d-%m-%y-%T`_git-`git rev-list --count HEAD`" > $(DIR_${P})/etc/image-version
+	echo "----------------------------------------------------------" >>          $(DIR_${P})/etc/image-version
+	echo "----------------------------------------------------------" >>          $(DIR_${P})/etc/image-version
+	cat $(buildprefix)/.config |grep -v '^#' |tr ' ' '\n' >>                      $(DIR_${P})/etc/image-version
 	echo "OpenAR-P \n \l" > $(DIR_${P})/etc/issue
+	touch $@
+
 $(TARGET_${P}): $(TARGET_${P}).do_install
 
 # helps to fill DEPENDS list
 $(TARGET_${P}).print_depends:
 #	catch cat exitstatus and see stderr
 	@cd $(ipkorigin) && cat $(addsuffix .origin,$(opkg_my_list)) 2>&1 |uniq
+
+# some packages are installed due to rdepends of other ones
+# we want to see all the installed packages and rebuild rootfs when any of them changes
+$(TARGET_${P}).print_depends_all: $(TARGET_${P})
+	set -e; \
+	list=`$(opkg_rootfs) list-installed | cut -d ' ' -f 1`; \
+	for x in $${list}; do \
+		cat $(ipkorigin)/$${x}.origin || true; \
+	done
+
 
 # core system libraries, binaries and scripts
 opkg_my_list = \
@@ -148,8 +190,13 @@ IPKBOX_LIST_${P} += $(target_python_wifi)
 opkg_my_list += enigma2-plugin-systemplugins-wirelesslan
 endif
 endif
+
 ifdef CONFIG_ENIGMA2_PLUGINS
 IPKBOX_LIST_${P} += $(target_enigma2_plugins)
+endif
+
+ifdef CONFIG_ENIGMA2_SKINS
+IPKBOX_LIST_${P} += $(target_enigma2_skins)
 endif
 
 ifdef CONFIG_ENIGMA2_EXTENSION_OPENWEBIF
@@ -221,59 +268,5 @@ endif
 
 #########################################################################################
 
-DEPENDS_${P} = $(addsuffix .do_ipkbox, $(IPKBOX_LIST_${P}))
-
-#########################################################################################
-
-PV_${P} = 0.1
-PR_${P} = 6
-
-call[[ base ]]
-
-WORK_${P} = $(prefix)/release
-DIR_${P} = $(WORK_${P})
-opkg_rootfs := opkg -f $(prefix)/opkg-box.conf -o $(DIR_${P})
-
-$(TARGET_${P}): $(DEPENDS_${P})
-	$(PREPARE_${P})
-	( echo "dest root /"; \
-	  echo "arch $(box_arch) 16"; \
-	  echo "arch sh4 10"; \
-	  echo "arch all 1"; \
-	  echo "src/gz box file://$(ipkbox)"; \
-	) > $(prefix)/opkg-box.conf
-
-	cd $(ipkbox) && \
-		/usr/bin/python $(hostprefix)/bin/ipkg-make-index . > Packages && \
-		cat Packages | gzip > Packages.gz
-	install -d $(DIR_${P})/usr/lib/opkg
-
-	export OPKG_OFFLINE_ROOT=$(DIR_${P}) && \
-	$(opkg_rootfs) update && \
-	$(opkg_rootfs) install --force-postinstall $(opkg_my_list)
-
-#		$(opkg_system) $(opkg_os) $(opkg_enigma2) $(opkg_wireless) $(opkg_net_utils)
-
-# add version
-	echo "version=OpenAR-P_`date +%d-%m-%y-%T`_git-`git rev-list --count HEAD`" > $(DIR_${P})/etc/image-version
-	echo "----------------------------------------------------------" >>          $(DIR_${P})/etc/image-version
-	echo "----------------------------------------------------------" >>          $(DIR_${P})/etc/image-version
-	cat $(buildprefix)/.config |grep -v '^#' |tr ' ' '\n' >>                      $(DIR_${P})/etc/image-version
-	echo "OpenAR-P \n \l" > $(DIR_${P})/etc/issue
-
-# helps to fill DEPENDS list
-$(TARGET_${P}).print_depends:
-#	catch cat exitstatus and see stderr
-	@cd $(ipkorigin) && cat $(addsuffix .origin,$(opkg_my_list)) > $(buildprefix)/list
-	cat $(buildprefix)/list
-
-# some packages are installed due to rdepends of other ones
-# we want to see all the installed packages and rebuild rootfs when any of them changes
-$(TARGET_${P}).print_depends_all: $(TARGET_${P})
-	set -e; \
-	list=`$(opkg_rootfs) list-installed | cut -d ' ' -f 1`; \
-	for x in $${list}; do \
-		cat $(ipkorigin)/$${x}.origin || true; \
-	done
 
 ]]package
