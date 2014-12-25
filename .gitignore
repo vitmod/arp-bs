@@ -15,6 +15,9 @@ build.env
 make.log
 kconfig-frontends-*.tar.bz2
 kconfig_frontends/
+apps/
+build/
+driver/
 make-*.tar.gz
 make-4.0/
 opkg.lock
