@@ -10,8 +10,8 @@ PR_${P} = 2
 
 ${P}_VERSION := 2.14.1-53
 ${P}_SPEC = stm-$(${P}).spec
-${P}_SPEC_PATCH = 
-${P}_PATCHES = 
+${P}_SPEC_PATCH = $(${P}_SPEC).diff
+${P}_PATCHES = make-versions-4.0-and-greater.patch
 ${P}_SRCRPM = $(archivedir)/$(STLINUX)-$(${P})-$(${P}_VERSION).src.rpm
 
 call[[ base ]]

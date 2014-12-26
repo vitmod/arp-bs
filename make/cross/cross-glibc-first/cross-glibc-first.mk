@@ -1,5 +1,5 @@
 #
-# CROSS GCC
+# CROSS GLIBC
 #
 package[[ target_glibc_first
 
@@ -11,8 +11,8 @@ PR_${P} = 1
 ${P}_VERSION = 2.14.1-51
 
 ${P}_SPEC = stm-target-glibc.spec
-${P}_SPEC_PATCH =
-${P}_PATCHES =
+${P}_SPEC_PATCH = $(${P}_SPEC).diff
+${P}_PATCHES = make-versions-4.0-and-greater.patch
 ${P}_SRCRPM = $(archivedir)/$(STLINUX)-target-glibc-$(${P}_VERSION).src.rpm
 
 call[[ base ]]
@@ -23,8 +23,8 @@ call[[ ipk ]]
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 	$(rpm_src_install) $(${P}_SRCRPM)
-	$(if $(${P}_SPEC_PATCH), cd $(specsprefix) && patch -p1 $(${P}_SPEC) < $(buildprefix)/Patches/$(${P}_SPEC_PATCH) )
-	$(if $(${P}_PATCHES), cp $(${P}_PATCHES:%=Patches/%) $(sourcesprefix) )
+	$(if $(${P}_SPEC_PATCH), cd $(specsprefix) && patch -p1 $(${P}_SPEC) < ${SDIR}/$(${P}_SPEC_PATCH) )
+	$(if $(${P}_PATCHES), cp $(addprefix ${SDIR}/,$(${P}_PATCHES)) $(sourcesprefix) )
 	touch $@
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
