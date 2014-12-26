@@ -4,7 +4,7 @@
 ifeq ($(strip $(CONFIG_BUILD_ENIGMA2)),y)
 package[[ target_enigma2
 
-BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi)
+BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif)
 
 PV_${P} = git
 PR_${P} = 8
@@ -80,13 +80,6 @@ ifdef CONFIG_EPLAYER3
 BDEPENDS_${P} += $(target_libeplayer3)
 CONFIG_FLAGS_${P} += --enable-libeplayer3
 RDEPENDS_enigma2 += libeplayer3
-endif
-ifdef CONFIG_ENIGMA2_SRC_MAX
-BDEPENDS_${P} += $(target_libjpeg_turbo) $(target_libgif)
-RDEPENDS_enigma2 += libjpeg-turbo
-else
-BDEPENDS_${P} += $(target_libgif)
-RDEPENDS_enigma2 += libjpeg8
 endif
 
 # box type
@@ -208,7 +201,7 @@ PACKAGES_${P} = \
 	enigma2_plugin_systemplugins_videomode \
 	enigma2_plugin_systemplugins_wirelesslan
 
-RDEPENDS_enigma2 += libgcc1 libpython2.7 python-threading libtuxtxt0 libbz2 libgif4 libfreetype6 python-core python-twisted-core libdvbsi++1 python-re font-ae-almateen font-andale font-lcd font-md-khmurabi font-tuxtxt font-nmsbd libpng16 font-valis-enigma libstdc++6 libglib libsigc-1.2 python-fcntl python-netclient python-netserver python-math python-codecs libcrypto1 libfribidi0 python-zopeinterface python-xml libtuxtxt32bpp0 python-pickle libxmlccwrap python-shell ethtool libdreamdvd0 python-twisted-web python-zlib python-crypt python-lang python-subprocess enigma2_meta python-compression e2fsprogs-e2fsck e2fsprogs-tune2fs
+RDEPENDS_enigma2 += libgcc1 libpython2.7 python-threading libtuxtxt0 libbz2 libgif4 libfreetype6 python-core python-twisted-core libdvbsi++1 python-re font-ae-almateen font-andale font-lcd font-md-khmurabi font-tuxtxt font-nmsbd libpng16 font-valis-enigma libstdc++6 libglib libsigc-1.2 python-fcntl python-netclient python-netserver python-math python-codecs libcrypto1 libfribidi0 python-zopeinterface python-xml libtuxtxt32bpp0 python-pickle libxmlccwrap python-shell ethtool libdreamdvd0 python-twisted-web python-zlib python-crypt python-lang python-subprocess enigma2_meta python-compression e2fsprogs-e2fsck e2fsprogs-tune2fs libjpeg-turbo
 FILES_enigma2 = \
 	/usr/bin \
 	/usr/lib/libopen.s* \

@@ -3,7 +3,7 @@
 #
 package[[ target_minidlna
 
-BDEPENDS_${P} = $(target_ffmpeg) $(target_flac) $(target_sqlite) $(target_libogg) $(target_libid3tag) $(target_libvorbis) $(target_libexif) $(target_libjpeg)
+BDEPENDS_${P} = $(target_ffmpeg) $(target_flac) $(target_sqlite) $(target_libogg) $(target_libid3tag) $(target_libvorbis) $(target_libexif)  $(target_libjpeg_turbo)
 
 PV_${P} = 1.0.25
 PR_${P} = 1

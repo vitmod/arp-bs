@@ -3,14 +3,7 @@
 #
 package[[ target_aio_grab
 
-BDEPENDS_${P} = $(target_glibc)
-ifdef CONFIG_ENIGMA2_SRC_MAX
-BDEPENDS_${P} += $(target_libjpeg_turbo)
-RDEPENDS_${P} = libjpeg-turbo
-else
-BDEPENDS_${P} += $(target_libjpeg)
-RDEPENDS_${P} = libjpeg8
-endif
+BDEPENDS_${P} = $(target_glibc) $(target_libjpeg_turbo)
 
 PV_${P} = git
 PR_${P} = 1

@@ -3,14 +3,7 @@
 #
 package[[ target_gst_plugins_good
 
-BDEPENDS_${P} = $(target_gstreamer) $(target_gst_plugins_base) $(target_cdparanoia) $(target_cairo) $(target_libpng)  $(target_zlib) $(target_libid3tag) $(target_flac) $(target_speex) $(target_libsoup)
-ifdef CONFIG_ENIGMA2_SRC_MAX
-BDEPENDS_${P} += $(target_libjpeg_turbo)
-RDEPENDS_gst_plugins_good_jpeg = libjpeg-turbo
-else
-BDEPENDS_${P} += $(target_libjpeg)
-RDEPENDS_gst_plugins_good_jpeg = libjpeg8
-endif
+BDEPENDS_${P} = $(target_gstreamer) $(target_gst_plugins_base) $(target_cdparanoia) $(target_cairo) $(target_libpng)  $(target_zlib) $(target_libid3tag) $(target_flac) $(target_speex) $(target_libsoup) $(target_libjpeg_turbo)
 
 ifeq ($(strip $(CONFIG_GSTREAMER_GIT)),y)
 
@@ -225,7 +218,7 @@ FILES_gst_plugins_good_interleave = /usr/lib/gstreamer-0.10/libgstinterleave.so
 RDEPENDS_gst_plugins_good_isomp4= libgstriff gstreamer libgstpbutils libgstaudio libxml2 libz1 libgstinterfaces libffi6 gst_plugins_good libgsttag libgstrtp libc6 libglib
 FILES_gst_plugins_good_isomp4 = /usr/lib/gstreamer-0.10/libgstisomp4.so
 
-RDEPENDS_gst_plugins_good_jpeg += libffi6 libgstvideo libxml2 libz1 gstreamer gst_plugins_good libc6 libglib liborc
+RDEPENDS_gst_plugins_good_jpeg += libffi6 libgstvideo libxml2 libz1 gstreamer gst_plugins_good libc6 libglib liborc libjpeg_turbo
 FILES_gst_plugins_good_jpeg += /usr/lib/gstreamer-0.10/libgstjpeg.so
 
 RDEPENDS_gst_plugins_good_level = libffi6 libxml2 libz1 gstreamer gst_plugins_good libc6 libglib

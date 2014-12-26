@@ -3,7 +3,7 @@
 #
 package[[ target_tiff
 
-BDEPENDS_${P} = $(target_glibc)
+BDEPENDS_${P} = $(target_glibc) $(target_libjpeg_turbo)
 
 PV_${P} = 4.0.3
 PR_${P} = 1
@@ -40,7 +40,7 @@ PACKAGES_${P} = libtiff5 \
 		libtiff_utils
 
 DESCRIPTION_libtiff5 =  Provides support for the Tag Image File Format (TIFF).
-RDEPENDS_libtiff5 = liblzma5 libz1 libjpeg8 libc6
+RDEPENDS_libtiff5 = liblzma5 libz1 libjpeg_turbo libc6
 define postinst_libtiff5
 #!/bin/sh
 if [ x"$$D" = "x" ]; then
@@ -50,7 +50,7 @@ endef
 FILES_libtiff5 = /usr/lib/libtiff.so.*
 
 DESCRIPTION_libtiffxx5 =  Provides support for the Tag Image File Format (TIFF).
-RDEPENDS_libtiffxx5 = libgcc1 libstdc++6 liblzma5 libtiff5 libz1 libjpeg8 libc6
+RDEPENDS_libtiffxx5 = libgcc1 libstdc++6 liblzma5 libtiff5 libz1 libjpeg_turbo libc6
 define postinst_libtiffxx5
 #!/bin/sh
 if [ x"$$D" = "x" ]; then
