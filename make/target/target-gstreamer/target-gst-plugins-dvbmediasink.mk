@@ -6,13 +6,13 @@ package[[ target_gst_plugins_dvbmediasink
 BDEPENDS_${P} = $(target_glibc) $(target_gcc_lib) $(target_driver) $(target_gstreamer) $(target_gst_plugins_fluendo_mpegdemux) $(target_gst_plugins_base) $(target_gst_plugins_good) $(target_gst_plugins_bad) $(target_gst_plugins_ugly) $(target_gst_plugin_subsink)
 
 PV_${P} = git
-PR_${P} = 1
+PR_${P} = 2
 
-SRC_URI_${P} = http://gitorious.org/~schpuntik/open-duckbox-project-sh4/tdt-amiko
+SRC_URI_${P} = https://github.com/OpenAR-P/apps/tree/master/tools/gst-plugins-dvbmediasink
 
 call[[ base ]]
 
-GIT_DIR_${P} = $(appsdir)/misc/tools/gst-plugins-dvbmediasink
+GIT_DIR_${P} = $(appsdir)/tools/gst-plugins-dvbmediasink
 
 rule[[
   pdircreate:${DIR}
