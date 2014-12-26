@@ -3,7 +3,7 @@
 #
 package[[ target_gst_plugins_ugly
 
-BDEPENDS_${P} = $(target_gstreamer) $(target_gst_plugins_base) $(target_libid3tag) $(target_libmad) $(target_orc) $(target_libcdio) $(target_lame) $(target_a52dec) $(target_libmpeg2)
+BDEPENDS_${P} = $(target_gstreamer) $(target_gst_plugins_base) $(target_libid3tag) $(target_libmad) $(target_orc) $(target_libcdio) $(target_lame) $(target_a52dec) $(target_libmpeg2) $(target_libdvdnav) $(target_libdvdread)
 
 ifeq ($(strip $(CONFIG_GSTREAMER_GIT)),y)
 

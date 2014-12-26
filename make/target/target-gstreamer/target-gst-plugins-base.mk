@@ -59,7 +59,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 		--build=$(build) \
 		--libexecdir=/usr/lib/gstreamer/ \
 		--prefix=/usr \
-		--disable-theora \
+		--enable-theora \
 		--disable-gnome_vfs \
 		--disable-pango \
 		--disable-x \
