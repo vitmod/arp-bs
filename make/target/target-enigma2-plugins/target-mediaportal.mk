@@ -6,7 +6,7 @@ package[[ target_mediaportal
 BDEPENDS_${P} = $(target_python) $(target_python_mechanize)
 
 PV_${P} = 5.4.0
-PR_${P} = 2
+PR_${P} = 3
 
 call[[ base ]]
 
@@ -49,12 +49,11 @@ call[[ ipk ]]
 
 NAME_${P} = enigma2-plugin-extensions-mediaportal
 DESCRIPTION_${P} = "Enigma2 MediaPortal"
+RDEPENDS_${P} = python_core python_json python_pyopenssl python_xml python_html python_misc python_twisted_core python_twisted_web python_compression python_robotparser python_mechanize librtmp1
 ifeq ($(strip $(CONFIG_GSTREAMER)),y)
-RDEPENDS_${P} = python_json python_pyopenssl python_xml python_html python_misc python_twisted_core python_twisted_web python_compression python_robotparser python_mechanize gst_plugins_good_flv gst_plugins_bad_fragmented gst_plugins_bad_rtmp
-else
-RDEPENDS_${P} = python_core python_json python_xml python_html python_misc python_twisted_core python_twisted_web python_compression python_robotparser python_mechanize librtmp1
+RDEPENDS_${P} += gst_plugins_good_flv gst_plugins_bad_fragmented gst_plugins_bad_rtmp
 endif
-FILES_${P} = /usr/lib/enigma2/python/Plugins/Extensions/MediaPortal
+FILES_${P} = /usr/lib/enigma2/python/Plugins/Extensions/MediaPortal /usr/lib/enigma2/python/Components/Converter
 
 call[[ ipkbox ]]
 
