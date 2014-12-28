@@ -3,7 +3,7 @@
 #
 package[[ target_eplayer4
 
-BDEPENDS_${P} = $(target_glibc) $(target_gstreamer)
+BDEPENDS_${P} = $(target_glibc) $(target_gst_plugins_dvbmediasink)
 
 PR_${P} = $(PR_tdt_tools).1
 
