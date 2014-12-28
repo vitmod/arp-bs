@@ -3,7 +3,7 @@
 #
 package[[ target_freetype
 
-BDEPENDS_${P} = $(target_glibc)
+BDEPENDS_${P} = $(target_glibc) $(target_libpng) $(target_zlib)
 
 PV_${P} = 2.4.9
 PR_${P} = 2
