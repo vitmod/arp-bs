@@ -176,9 +176,23 @@ opkg-check-%:
 	echo "files missing:"; \
 	comm --check-order -13 fs db; \
 	true
+
+define opkg-check-depends
+	set -e; \
+	myopkg() { $(opkg) -f $(prefix)/opkg.conf -o $(prefix) $$*; }; \
+	myopkg depends `myopkg list-installed |cut -f 1 -d ' '` |awk '/^\t/{print $$1}' > want; \
+	myopkg whatprovides `cat want |sort -u` |awk ' \
+	  /^What provides/{if(search) {print "==> Not found: " search; exit 1} else {search = $$3}} \
+	  /^    /{search=""}'; \
+	echo -e '==> depends OK'
+endef
+opkg-check-depends:
+	$(opkg-check-depends)
+
 help::
 	@echo "run 'make opkg-check-{host|cross|target}' to list opkg disowned files"
-.PHONY: opkg-check-target opkg-check-cross opkg-check-host
+	@echo "run 'make opkg-check-depends' to see unresolved dependencies"
+.PHONY: opkg-check-target opkg-check-cross opkg-check-host opkg-check-depends
 
 # format list separated with spaces to list separeated with commas
 _ipk_control_list = $(subst $(space),$(comma),$(subst $(space)$(space),$(space),$(subst _,-,$(strip $1))))
