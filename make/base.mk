@@ -3,7 +3,7 @@
 
 # in case you reference ${P} outside function[[ or package[[ directive
 # it is expanded relative to current target name.
-# targets should have only one '.' in their filenames !
+# targets must have only one '.' in their filenames !
 P = $(subst -,_,$(basename $(notdir $@)))
 
 function[[ header
