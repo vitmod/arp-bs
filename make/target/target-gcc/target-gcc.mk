@@ -9,15 +9,15 @@ BREPLACES_${P} = $(target_cross_gcc_lib)
 PR_${P} = 1
 
 ifdef GCC48
-${P}_VERSION := 4.8.2-135
+PV_${P} := 4.8.2-135
 else
-${P}_VERSION := 4.7.3-129
+PV_${P} := 4.7.3-129
 endif
 
 ${P}_SPEC = stm-$(${P}).spec
-${P}_SPEC_PATCH = $(${P}_SPEC).$(${P}_VERSION).diff
-${P}_PATCHES = stm-$(${P}).$(${P}_VERSION).diff
-${P}_SRCRPM = $(archivedir)/$(STLINUX)-$(${P})-$(${P}_VERSION).src.rpm
+${P}_SPEC_PATCH = $(${P}_SPEC).$(PV_${P}).diff
+${P}_PATCHES = stm-$(${P}).$(PV_${P}).diff
+${P}_SRCRPM = $(archivedir)/$(STLINUX)-$(${P})-$(PV_${P}).src.rpm
 
 call[[ base ]]
 call[[ base_rpm ]]

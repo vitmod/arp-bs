@@ -8,12 +8,12 @@ BREPLACES_${P} = $(target_glibc_headers)
 
 PR_${P} = 1
 
-${P}_VERSION = 2.14.1-48
+PV_${P} = 2.14.1-48
 
 ${P}_SPEC = stm-target-glibc.spec
 ${P}_SPEC_PATCH =
 ${P}_PATCHES =
-${P}_SRCRPM = $(archivedir)/$(STLINUX)-target-glibc-$(${P}_VERSION).src.rpm
+${P}_SRCRPM = $(archivedir)/$(STLINUX)-target-glibc-$(PV_${P}).src.rpm
 
 call[[ base ]]
 call[[ base_rpm ]]

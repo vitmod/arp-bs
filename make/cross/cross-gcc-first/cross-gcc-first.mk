@@ -8,16 +8,16 @@ BDEPENDS_${P} = $(target_kernel_headers) $(target_glibc_headers) $(cross_mpc) $(
 PR_${P} = 1
 
 ifdef CONFIG_GCC48
-${P}_VERSION = 4.8.2-131
+PV_${P} = 4.8.2-131
 else
-${P}_VERSION = 4.7.3-124
+PV_${P} = 4.7.3-124
 endif
 
 ST_PN_${P} = cross-gcc
 ${P}_SPEC = stm-${ST_PN}.spec
-${P}_SPEC_PATCH = $(${P}_SPEC).$(${P}_VERSION).diff
-${P}_PATCHES = stm-${ST_PN}.$(${P}_VERSION).diff
-${P}_SRCRPM = $(archivedir)/$(STLINUX)-${ST_PN}-$(${P}_VERSION).src.rpm
+${P}_SPEC_PATCH = $(${P}_SPEC).$(PV_${P}).diff
+${P}_PATCHES = stm-${ST_PN}.$(PV_${P}).diff
+${P}_SRCRPM = $(archivedir)/$(STLINUX)-${ST_PN}-$(PV_${P}).src.rpm
 
 # NAME_${P} = libgcc1
 # DESCRIPTION_${P} =  The GNU cc and gcc C compilers.

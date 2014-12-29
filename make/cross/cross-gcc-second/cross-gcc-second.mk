@@ -25,12 +25,12 @@ call[[ ipk ]]
 #############################################################################
 ifndef CONFIG_AVOID_RPM_SPEC
 
-${P}_VERSION := ${ST_PV}-${ST_PR}
+PV_${P} := ${ST_PV}-${ST_PR}
 
 ${P}_SPEC = stm-${ST_PN}.spec
-${P}_SPEC_PATCH = $(${P}_SPEC).$(${P}_VERSION).diff
-${P}_PATCHES = stm-${ST_PN}.$(${P}_VERSION).diff
-${P}_SRCRPM = $(archivedir)/$(STLINUX)-${ST_PN}-$(${P}_VERSION).src.rpm
+${P}_SPEC_PATCH = $(${P}_SPEC).$(PV_${P}).diff
+${P}_PATCHES = stm-${ST_PN}.$(PV_${P}).diff
+${P}_SRCRPM = $(archivedir)/$(STLINUX)-${ST_PN}-$(PV_${P}).src.rpm
 
 call[[ base_rpm ]]
 # FIXME: this rpm spec has bug and installs some packages directly to $(crossprefix)/$(target)

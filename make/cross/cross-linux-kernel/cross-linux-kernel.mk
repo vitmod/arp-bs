@@ -62,7 +62,7 @@ ${P}_patches += patch_swap_notify_core_support.diff
 # endif
 ${P}_config = linux-sh4-$(KERNEL_UPSTREAM)-$(KERNEL_LABEL)_$(TARGET).config$(DEBUG_STR)
 
-${P}_VERSION := $(KERNEL_VERSION)
+PV_${P} := $(KERNEL_VERSION)
 ${P}_SPEC = stm-host-kernel-sh4.spec
 ${P}_SPEC_PATCH =
 ${P}_PATCHES =

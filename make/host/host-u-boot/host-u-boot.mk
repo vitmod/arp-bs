@@ -9,11 +9,11 @@ PR_${P} = 2
 
 ST_PN_${P} = host-u-boot
 ST_PV_${P} = sh4-1.3.1_stm24_0048
-${P}_VERSION = ${ST_PV}-48
+PV_${P} = ${ST_PV}-48
 ${P}_SPEC = stm-${ST_PN}.spec
 ${P}_SPEC_PATCH = uboot-1.3.1_spec_stm24.patch
 ${P}_PATCHES = uboot-1.3.1_lzma_stm24.patch
-${P}_SRCRPM = $(archivedir)/$(STLINUX)-${ST_PN}-source-$(${P}_VERSION).src.rpm
+${P}_SRCRPM = $(archivedir)/$(STLINUX)-${ST_PN}-source-$(PV_${P}).src.rpm
 
 call[[ base ]]
 call[[ base_rpm ]]
