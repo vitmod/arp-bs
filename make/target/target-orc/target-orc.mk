@@ -5,7 +5,7 @@ package[[ target_orc
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 0.4.20
+PV_${P} = 0.4.23
 PR_${P} = 1
 
 DESCRIPTION_${P} = ORC - The Oil Runtime Compiler is a library and simple set of tools for compiling and executing simple programs.
