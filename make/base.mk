@@ -233,6 +233,7 @@ define _ipk_write_control
 	echo 'Depends: $(call _ipk_control_list,$(BDEPENDS_$1))' >> $2
 	echo 'Replaces: $(call _ipk_control_list,$(BREPLACES_$1))' >> $2
 	echo 'Conflicts: $(call _ipk_control_list,$(BCONFLICTS_$1))' >> $2
+	echo 'Provides: $(call _ipk_control_list,$(BREMOVES_$1))' >> $2
 	$(call _ipk_write_control_common,$1,$2)
 endef
 
@@ -287,17 +288,50 @@ $(TARGET_${P}).clean_ipk:
 
 # finally install
 $(TARGET_${P}).do_install: $(TARGET_${P}).do_ipk
-	$(opkg) $($(SYSROOT_${P})_ipkg_args) install $(IPK_${P})
-# I need this flag to make dependencies work correctly
-	$(opkg) $($(SYSROOT_${P})_ipkg_args) flag installed $(${P})
+
+#	Remove and save install commands for BREMOVES
+	echo '#Saved list that undo bremoves' > $(TARGET_${P}).reinstall
+	$(foreach pkg,${BREMOVES}, \
+	  $(opkg) $(${SYSROOT}_ipkg_args) remove --force-depends $(pkg)  $(newline) \
+	  cat $(DEPDIR)/$(pkg).do_install >> $(TARGET_${P}).reinstall    $(newline) \
+	)
+
+#	Save install command and run it
+	echo '#Saved install command'                         >  $@
+	echo '$(opkg) $(${SYSROOT}_ipkg_args) install ${IPK}' >> $@
+	$(SHELL) $@
+
+#	Track reverse dependency graph
+	$(foreach bdep,$(BDEPENDS_${P}), \
+	  echo '$(DEPDIR)/$(bdep).clean_install: $(TARGET_${P}).clean_install' > $(TARGET_${P}).bdeps && \
+	) true
+
+#	$(opkg-check-depends)
 	touch $@
+
+# Include tracked reverse dependencies
+-include $(TARGET_${P}).bdeps
+# Thanks to traked bdeps it is in fact recursive clean_install
+$(TARGET_${P}).clean_install:
+#	Remove my package
+	$(if $(MAKE_DEBUG_IPK),,@) \
+	if test -f $(TARGET_${P}).do_install; then \
+	  $(opkg) $(${SYSROOT}_ipkg_args) remove --force-depends $(${P}); \
+	fi
+
+#	Reinstall BREMOVES packages
+	$(if $(MAKE_DEBUG_IPK),,@) \
+	if test -f $(TARGET_${P}).reinstall; then \
+	  $(SHELL) $(TARGET_${P}).reinstall; \
+	fi
+
+#	$(opkg-check-depends)
+	rm -f $(TARGET_${P}).do_install
+	rm -f $(TARGET_${P}).reinstall
+	rm -f $(TARGET_${P}).bdeps
 
 $(TARGET_${P}): $(TARGET_${P}).do_install
 $(TARGET_${P}).clean: $(TARGET_${P}).clean_install
-
-$(TARGET_${P}).clean_install:
-	$(opkg) $($(SYSROOT_${P})_ipkg_args) --force-removal-of-dependent-packages remove $(${P})
-	rm -f $(TARGET_${P}).do_install
 
 ]]function
 

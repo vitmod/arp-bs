@@ -7,6 +7,7 @@ true := y
 
 # some configuration (true/false)
 MAKE_DEBUG := $(false)
+MAKE_DEBUG_IPK := $(false)
 MAKE_VERBOSE := $(true)
 
 # Don't pass any toplevel flags to child make
