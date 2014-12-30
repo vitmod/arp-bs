@@ -149,6 +149,22 @@ $(TARGET_${P}).do_%: $(TARGET_${P}).do_prepare
 
 
 
+# rollback
+#############################################################################
+
+# clean all dependent packages before do_compile
+# do it if you suspect that future sysroot modifications influence your build
+function[[ rollback
+$(TARGET_${P}).do_compile: $(TARGET_${P}).do_rollback
+$(TARGET_${P}).do_rollback: $(TARGET_${P}).do_prepare
+#	Don't update makefile during submake runs
+	$(MAKE) -o Makefile $(TARGET_${P}).clean
+	touch $@
+]]function
+
+
+
+
 # ipk
 #############################################################################
 
