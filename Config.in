@@ -206,6 +206,10 @@ menu "GUI Configuration"
 		  bool "public enigma2 max10  diff0"
 		  depends on BUILD_ENIGMA2
 
+		  config ENIGMA2_SRC_TESTING
+		  bool "public enigma2 ARP testing"
+		  depends on BUILD_ENIGMA2
+
 		endchoice
 
 	config ENIGMA2_PLUGINS

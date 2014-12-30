@@ -122,6 +122,9 @@ ifdef CONFIG_ENIGMA2_SRC_MAX
   git://git.code.sf.net/p/openpli/enigma2.git;b=master;r=20a8c5
   patch:file://enigma2-pli-nightly.0.diff
 endif
+ifdef CONFIG_ENIGMA2_SRC_TESTING
+  git://github.com:OpenAR-P/amiko-e2-pli.git;b=testing;protocol=ssh
+endif
 
   install:-d:$(PKDIR)/usr/share/enigma2/
   install_file:$(PKDIR)/usr/share/enigma2/keymap.xml:file://$(keymap_${P})
@@ -228,6 +231,31 @@ FILES_enigma2_meta = /usr/share/meta
 
 DESCRIPTION_font_andale = ttf fonts
 FILES_font_andale = /usr/share/fonts/andale.ttf
+
+ifdef CONFIG_ENIGMA2_SRC_TESTING
+PACKAGES_${P} += \
+	font_liberationsans_b \
+	font_liberationsans_bl \
+	font_liberationsans_i \
+	font_liberationsans_r
+RDEPENDS_enigma2 += \
+	font_liberationsans_b \
+	font_liberationsans_bl \
+	font_liberationsans_i \
+	font_liberationsans_r
+
+DESCRIPTION_font_liberationsans_b = ttf fonts
+FILES_font_verdana = /usr/share/fonts/LiberationSans-Bold.ttf
+
+DESCRIPTION_font_liberationsans_bl = ttf fonts
+FILES_font_verdanab = /usr/share/fonts/LiberationSans-BoldItalic.ttf
+
+DESCRIPTION_font_liberationsans_i = ttf fonts
+FILES_font_verdanai = /usr/share/fonts/LiberationSans-Italic.ttf
+
+DESCRIPTION_font_liberationsans_r = ttf fonts
+FILES_font_verdanaz = /usr/share/fonts/LiberationSans-Regular.ttf
+endif
 
 ifdef CONFIG_ENIGMA2_SRC_MAX
 PACKAGES_${P} += \
