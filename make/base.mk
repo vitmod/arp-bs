@@ -114,7 +114,7 @@ ifdef MAKE_VERBOSE
 $(TARGET_${P}).hold: $(TARGET_${P})
 	touch $(TARGET_${P}).* -r $@
 	touch $(TARGET_${P})   -r $@
-PHONY: $(TARGET_${P}).hold
+.PHONY: $(TARGET_${P}).hold
 endif
 
 # add to list
