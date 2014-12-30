@@ -5,13 +5,13 @@ package[[ host_opkg
 
 BDEPENDS_${P} = $(host_filesystem)
 
-PV_${P} = 0.2.0
+PV_${P} = 0.2.4
 PR_${P} = 1
 
 call[[ base ]]
 
 rule[[
-  extract:http://opkg.googlecode.com/files/${PN}-${PV}.tar.gz
+  http://downloads.yoctoproject.org/releases/${PN}/${PN}-${PV}.tar.gz
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
@@ -19,7 +19,6 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 	touch $@
 
 $(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
-	$(PREPARE_${P})
 	cd $(DIR_${P}) && \
 		export PATH=$(HOST_PATH) && \
 		./configure \
