@@ -9,7 +9,7 @@ BREMOVES_${P} = $(cross_gcc_first)
 PR_${P} = 1
 ST_PN_${P} = cross-gcc
 
-ifdef CONFIG_GCC483
+ifdef CONFIG_GCC48
  ST_PV_${P} = 4.8.3
  ST_PR_${P} = 138
 else
