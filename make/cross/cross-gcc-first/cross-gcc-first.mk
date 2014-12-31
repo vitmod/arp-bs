@@ -8,10 +8,13 @@ BDEPENDS_${P} = $(target_kernel_headers) $(target_glibc_headers) $(cross_mpc) $(
 PR_${P} = 1
 
 ifdef CONFIG_GCC48
-PV_${P} = 4.8.3-138
+ ST_PV_${P} = 4.8.3
+ ST_PR_${P} = 138
 else
-PV_${P} = 4.7.3-124
+ ST_PV_${P} = 4.7.3
+ ST_PR_${P} = 124
 endif
+PV_${P} := ${ST_PV}-${ST_PR}
 
 ST_PN_${P} = cross-gcc
 ${P}_SPEC = stm-${ST_PN}.spec
