@@ -54,7 +54,6 @@ rule[[
   install:-d:$(PKDIR)/root
   install:-d:$(PKDIR)/bin
   install:-d:$(PKDIR)/dev
-  install:-d:$(PKDIR)/dev.static
   install_file:$(PKDIR)/etc/motd:file://motd
   install_file:$(PKDIR)/etc/fstab:file://fstab
   install_bin:$(PKDIR)/bin/vdstandby:file://vdstandby
