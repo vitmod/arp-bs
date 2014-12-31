@@ -4,7 +4,7 @@
 package[[ target_glibc
 
 BDEPENDS_${P} = $(target_zlib) $(target_libelf)
-BREPLACES_${P} = $(target_glibc_first) $(target_glibc_headers)
+BREMOVES_${P} = $(target_glibc_first)
 
 PR_${P} = 2
 

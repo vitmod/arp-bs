@@ -4,7 +4,7 @@
 package[[ cross_gcc_second
 
 BDEPENDS_${P} = $(target_glibc_first)
-BREPLACES_${P} = $(cross_gcc_first)
+BREMOVES_${P} = $(cross_gcc_first)
 
 PR_${P} = 1
 ST_PN_${P} = cross-gcc
