@@ -16,6 +16,7 @@ else
  ST_PV_${P} = 4.7.3
  ST_PR_${P} = 124
 endif
+PV_${P} := ${ST_PV}-${ST_PR}
 
 call[[ base ]]
 call[[ ipk ]]
@@ -25,15 +26,13 @@ call[[ ipk ]]
 #############################################################################
 ifndef CONFIG_AVOID_RPM_SPEC
 
-PV_${P} := ${ST_PV}-${ST_PR}
-
 ${P}_SPEC = stm-${ST_PN}.spec
 ${P}_SPEC_PATCH = $(${P}_SPEC).$(PV_${P}).diff
 ${P}_PATCHES = stm-${ST_PN}.$(PV_${P}).diff
 ${P}_SRCRPM = $(archivedir)/$(STLINUX)-${ST_PN}-$(PV_${P}).src.rpm
 
 call[[ base_rpm ]]
-# FIXME: this rpm spec has bug and installs some packages directly to $(crossprefix)/$(target)
+# FIXME: this rpm spec has bug and installs some files directly to $(crossprefix)/$(target)
 # but this directory is never used // not critical
 call[[ rpm ]]
 
@@ -42,7 +41,6 @@ call[[ rpm ]]
 else
 # my build
 #############################################################################
-PV_${P} := ${ST_PV}-${ST_PR}
 DIR_${P} = $(WORK_${P})/gcc-${ST_PV}
 
 rule[[
