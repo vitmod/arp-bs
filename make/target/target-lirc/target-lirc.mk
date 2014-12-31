@@ -3,10 +3,7 @@
 #
 package[[ target_lirc
 
-BDEPENDS_${P} = $(target_glibc)
-# FIXME
-DEPENDS_${P} = $(target_linux_kernel)
-
+BDEPENDS_${P} = $(target_glibc) $(target_linux_kernel_headers)
 PV_${P} = 0.9.0
 PR_${P} = 3
 
