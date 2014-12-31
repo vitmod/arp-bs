@@ -3,7 +3,7 @@
 
 # in case you reference ${P} outside function[[ or package[[ directive
 # it is expanded relative to current target name.
-# targets should have only one '.' in their filenames !
+# targets must have only one '.' in their filenames !
 P = $(subst -,_,$(basename $(notdir $@)))
 
 function[[ header
@@ -114,7 +114,7 @@ ifdef MAKE_VERBOSE
 $(TARGET_${P}).hold: $(TARGET_${P})
 	touch $(TARGET_${P}).* -r $@
 	touch $(TARGET_${P})   -r $@
-PHONY: $(TARGET_${P}).hold
+.PHONY: $(TARGET_${P}).hold
 endif
 
 # add to list
@@ -149,6 +149,22 @@ $(TARGET_${P}).do_%: $(TARGET_${P}).do_prepare
 
 
 
+# rollback
+#############################################################################
+
+# clean all dependent packages before do_compile
+# do it if you suspect that future sysroot modifications influence your build
+function[[ rollback
+$(TARGET_${P}).do_compile: $(TARGET_${P}).do_rollback
+$(TARGET_${P}).do_rollback: $(TARGET_${P}).do_prepare
+#	Don't update makefile during submake runs
+	$(MAKE) -o Makefile $(TARGET_${P}).clean
+	touch $@
+]]function
+
+
+
+
 # ipk
 #############################################################################
 
@@ -156,13 +172,23 @@ $(TARGET_${P}).do_%: $(TARGET_${P}).do_prepare
 INHERIT_VARIABLES := NAME VERSION DESCRIPTION SECTION PRIORITY MAINTAINER LICENSE PACKAGE_ARCH HOMEPAGE RDEPENDS RREPLACES RCONFLICTS SRC_URI FILES
 INHERIT_DEFINES := preinst postinst prerm postrm conffiles
 
+opkg_cmd := echo -n "==> " && $(hostprefix)/bin/opkg -f $(prefix)/opkg.conf -o $(prefix)
 # makes run only one instance of opkg at a time
-opkg := $(call lock,opkg.lock) opkg
+opkg_script := $(call lock,$(opkg_cmd) $$@,$(prefix)/opkg.lock)
+# opkg-safe must be created by host-opkg package
+opkg := opkg-safe
 
 # we have several dests, so dependencies are shared across them
-host_ipkg_args = -f $(prefix)/opkg.conf -o $(prefix) -d hostroot
-cross_ipkg_args = -f $(prefix)/opkg.conf -o $(prefix) -d crossroot
-target_ipkg_args = -f $(prefix)/opkg.conf -o $(prefix) -d targetroot
+host_ipkg_args   = -d hostroot
+cross_ipkg_args  = -d crossroot
+target_ipkg_args = -d targetroot
+
+# If there is something strange with opkg run 'source opkg.env' and start hacking!
+.PHONY: opkg.env
+opkg.env:
+	echo 'opkg-host()   { `which $(opkg)` $(host_ipkg_args) $$*; }'   >  $@
+	echo 'opkg-cross()  { `which $(opkg)` $(cross_ipkg_args) $$*; }'  >> $@
+	echo 'opkg-target() { `which $(opkg)` $(target_ipkg_args) $$*; }' >> $@
 
 opkg-check-target opkg-check-cross opkg-check-host: \
 opkg-check-%:
@@ -176,9 +202,23 @@ opkg-check-%:
 	echo "files missing:"; \
 	comm --check-order -13 fs db; \
 	true
+
+define opkg-check-depends
+	set -e; \
+	$(opkg) list-installed |cut -f 1 -d ' ' |xargs $(opkg) depends \
+	  |awk '/^\t/{print $$1}' |xargs $(opkg) whatprovides \
+	  |awk ' \
+	  /^What provides/{if(search) {print "==> Not found: " search; exit 1} else {search = $$3}} \
+	  /^    /{search=""}'; \
+	echo -e '==> depends OK'
+endef
+opkg-check-depends:
+	$(opkg-check-depends)
+
 help::
 	@echo "run 'make opkg-check-{host|cross|target}' to list opkg disowned files"
-.PHONY: opkg-check-target opkg-check-cross opkg-check-host
+	@echo "run 'make opkg-check-depends' to see unresolved dependencies"
+.PHONY: opkg-check-target opkg-check-cross opkg-check-host opkg-check-depends
 
 # format list separated with spaces to list separeated with commas
 _ipk_control_list = $(subst $(space),$(comma),$(subst $(space)$(space),$(space),$(subst _,-,$(strip $1))))
@@ -203,6 +243,7 @@ define _ipk_write_control
 	echo 'Depends: $(call _ipk_control_list,$(BDEPENDS_$1))' >> $2
 	echo 'Replaces: $(call _ipk_control_list,$(BREPLACES_$1))' >> $2
 	echo 'Conflicts: $(call _ipk_control_list,$(BCONFLICTS_$1))' >> $2
+	echo 'Provides: $(call _ipk_control_list,$(BREMOVES_$1))' >> $2
 	$(call _ipk_write_control_common,$1,$2)
 endef
 
@@ -257,17 +298,50 @@ $(TARGET_${P}).clean_ipk:
 
 # finally install
 $(TARGET_${P}).do_install: $(TARGET_${P}).do_ipk
-	$(opkg) $($(SYSROOT_${P})_ipkg_args) install $(IPK_${P})
-# I need this flag to make dependencies work correctly
-	$(opkg) $($(SYSROOT_${P})_ipkg_args) flag installed $(${P})
+
+#	Remove and save install commands for BREMOVES
+	echo '#Saved list that undo bremoves' > $(TARGET_${P}).reinstall
+	$(foreach pkg,${BREMOVES}, \
+	  $(opkg) $(${SYSROOT}_ipkg_args) remove --force-depends $(pkg)  $(newline) \
+	  cat $(DEPDIR)/$(pkg).do_install >> $(TARGET_${P}).reinstall    $(newline) \
+	)
+
+#	Save install command and run it
+	echo '#Saved install command'                         >  $@
+	echo '$(opkg) $(${SYSROOT}_ipkg_args) install ${IPK}' >> $@
+	$(SHELL) $@
+
+#	Track reverse dependency graph
+	$(foreach bdep,$(BDEPENDS_${P}), \
+	  echo '$(DEPDIR)/$(bdep).clean_install: $(TARGET_${P}).clean_install' > $(TARGET_${P}).bdeps && \
+	) true
+
+#	$(opkg-check-depends)
 	touch $@
+
+# Include tracked reverse dependencies
+-include $(TARGET_${P}).bdeps
+# Thanks to traked bdeps it is in fact recursive clean_install
+$(TARGET_${P}).clean_install:
+#	Remove my package
+	$(if $(MAKE_DEBUG_IPK),,@) \
+	if test -f $(TARGET_${P}).do_install; then \
+	  $(opkg) $(${SYSROOT}_ipkg_args) remove --force-depends $(${P}); \
+	fi
+
+#	Reinstall BREMOVES packages
+	$(if $(MAKE_DEBUG_IPK),,@) \
+	if test -f $(TARGET_${P}).reinstall; then \
+	  $(SHELL) $(TARGET_${P}).reinstall; \
+	fi
+
+#	$(opkg-check-depends)
+	rm -f $(TARGET_${P}).do_install
+	rm -f $(TARGET_${P}).reinstall
+	rm -f $(TARGET_${P}).bdeps
 
 $(TARGET_${P}): $(TARGET_${P}).do_install
 $(TARGET_${P}).clean: $(TARGET_${P}).clean_install
-
-$(TARGET_${P}).clean_install:
-	$(opkg) $($(SYSROOT_${P})_ipkg_args) --force-removal-of-dependent-packages remove $(${P})
-	rm -f $(TARGET_${P}).do_install
 
 ]]function
 
@@ -432,7 +506,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_git_version
 
 # In case more than one package use sources from same git
 ifdef UPDATE_${P}
-UPDATE_SAFE_${P} := update() { $(UPDATE_${P}); } && $(call lock, $(GIT_DIR_${P}).lock) update
+UPDATE_SAFE_${P} := $(call lock, $(UPDATE_${P}), $(GIT_DIR_${P}).lock)
 else
 UPDATE_SAFE_${P} :=
 endif

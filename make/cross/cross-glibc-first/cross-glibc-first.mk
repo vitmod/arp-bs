@@ -4,16 +4,16 @@
 package[[ target_glibc_first
 
 BDEPENDS_${P} = $(cross_gcc_first)
-BREPLACES_${P} = $(target_glibc_headers)
+BREMOVES_${P} = $(target_glibc_headers)
 
 PR_${P} = 1
 
-${P}_VERSION = 2.14.1-51
+PV_${P} = 2.14.1-51
 
 ${P}_SPEC = stm-target-glibc.spec
 ${P}_SPEC_PATCH = $(${P}_SPEC).diff
 ${P}_PATCHES = make-versions-4.0-and-greater.patch
-${P}_SRCRPM = $(archivedir)/$(STLINUX)-target-glibc-$(${P}_VERSION).src.rpm
+${P}_SRCRPM = $(archivedir)/$(STLINUX)-target-glibc-$(PV_${P}).src.rpm
 
 call[[ base ]]
 call[[ base_rpm ]]

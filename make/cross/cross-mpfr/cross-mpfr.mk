@@ -7,11 +7,11 @@ BDEPENDS_${P} = $(cross_gmp)
 
 PR_${P} = 1
 
-${P}_VERSION = 3.1.2-13
+PV_${P} = 3.1.2-13
 ${P}_SPEC = stm-$(${P}).spec
 ${P}_SPEC_PATCH = 
 ${P}_PATCHES = 
-${P}_SRCRPM = $(archivedir)/$(STLINUX)-$(${P})-$(${P}_VERSION).src.rpm
+${P}_SRCRPM = $(archivedir)/$(STLINUX)-$(${P})-$(PV_${P}).src.rpm
 
 call[[ base ]]
 call[[ base_rpm ]]

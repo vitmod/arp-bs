@@ -8,12 +8,12 @@ DEPENDS_${P} = $(host_rpmlocalmacros)
 
 PR_${P} = 2
 
-${P}_VERSION = 2.4-33
+PV_${P} = 2.4-33
 ${P}_SPEC = stm-$(${P}).spec
-${P}_SPEC_PATCH = $(${P}_SPEC).$(${P}_VERSION).diff
-${P}_PATCHES = stm-$(${P})-$(${P}_VERSION)-ignore-skip-cvs-errors.patch \
-               stm-$(${P})-$(${P}_VERSION)-autoreconf-add-libtool-macros.patch
-${P}_SRCRPM = $(archivedir)/$(STLINUX)-$(${P})-$(${P}_VERSION).src.rpm
+${P}_SPEC_PATCH = $(${P}_SPEC).$(PV_${P}).diff
+${P}_PATCHES = stm-$(${P})-$(PV_${P})-ignore-skip-cvs-errors.patch \
+               stm-$(${P})-$(PV_${P})-autoreconf-add-libtool-macros.patch
+${P}_SRCRPM = $(archivedir)/$(STLINUX)-$(${P})-$(PV_${P}).src.rpm
 
 call[[ base ]]
 call[[ base_rpm ]]

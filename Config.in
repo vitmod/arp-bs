@@ -104,13 +104,13 @@ mainmenu "global config"
 	
 	choice
 		prompt "Select GCC"
-		default GCC473
+		default GCC47
 
-		config GCC473
+		config GCC47
 		bool "Build gcc 4.7.3"
 		depends on GCC_LIB_FROM_TARGET
 
-		config GCC483
+		config GCC48
 		bool "Build gcc 4.8.3"
 		depends on GCC_LIB_FROM_TARGET
 	  endchoice
