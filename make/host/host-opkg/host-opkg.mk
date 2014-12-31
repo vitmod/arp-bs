@@ -6,7 +6,7 @@ package[[ host_opkg
 BDEPENDS_${P} = $(host_filesystem)
 
 PV_${P} = 0.2.4
-PR_${P} = 1
+PR_${P} = 2
 
 call[[ base ]]
 
@@ -27,6 +27,10 @@ $(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
 		$(MAKE) && \
 		$(MAKE) install
 	ln -sf opkg-cl $(hostprefix)/bin/opkg
+
+	echo '$(opkg_script)' > $(hostprefix)/bin/opkg-safe
+	chmod +x $(hostprefix)/bin/opkg-safe
+
 	touch $@
 
 $(TARGET_${P}): $(TARGET_${P}).do_install

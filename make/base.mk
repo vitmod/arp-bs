@@ -172,13 +172,23 @@ $(TARGET_${P}).do_rollback: $(TARGET_${P}).do_prepare
 INHERIT_VARIABLES := NAME VERSION DESCRIPTION SECTION PRIORITY MAINTAINER LICENSE PACKAGE_ARCH HOMEPAGE RDEPENDS RREPLACES RCONFLICTS SRC_URI FILES
 INHERIT_DEFINES := preinst postinst prerm postrm conffiles
 
+opkg_cmd := echo -n "==> " && $(hostprefix)/bin/opkg -f $(prefix)/opkg.conf -o $(prefix)
 # makes run only one instance of opkg at a time
-opkg := $(call lock,opkg.lock) opkg
+opkg_script := $(call lock,$(opkg_cmd) $$@,$(prefix)/opkg.lock)
+# opkg-safe must be created by host-opkg package
+opkg := opkg-safe
 
 # we have several dests, so dependencies are shared across them
-host_ipkg_args = -f $(prefix)/opkg.conf -o $(prefix) -d hostroot
-cross_ipkg_args = -f $(prefix)/opkg.conf -o $(prefix) -d crossroot
-target_ipkg_args = -f $(prefix)/opkg.conf -o $(prefix) -d targetroot
+host_ipkg_args   = -d hostroot
+cross_ipkg_args  = -d crossroot
+target_ipkg_args = -d targetroot
+
+# If there is something strange with opkg run 'source opkg.env' and start hacking!
+.PHONY: opkg.env
+opkg.env:
+	echo 'opkg-host()   { `which $(opkg)` $(host_ipkg_args) $$*; }'   >  $@
+	echo 'opkg-cross()  { `which $(opkg)` $(cross_ipkg_args) $$*; }'  >> $@
+	echo 'opkg-target() { `which $(opkg)` $(target_ipkg_args) $$*; }' >> $@
 
 opkg-check-target opkg-check-cross opkg-check-host: \
 opkg-check-%:
@@ -195,9 +205,9 @@ opkg-check-%:
 
 define opkg-check-depends
 	set -e; \
-	myopkg() { $(opkg) -f $(prefix)/opkg.conf -o $(prefix) $$*; }; \
-	myopkg depends `myopkg list-installed |cut -f 1 -d ' '` |awk '/^\t/{print $$1}' > want; \
-	myopkg whatprovides `cat want |sort -u` |awk ' \
+	$(opkg) list-installed |cut -f 1 -d ' ' |xargs $(opkg) depends \
+	  |awk '/^\t/{print $$1}' |xargs $(opkg) whatprovides \
+	  |awk ' \
 	  /^What provides/{if(search) {print "==> Not found: " search; exit 1} else {search = $$3}} \
 	  /^    /{search=""}'; \
 	echo -e '==> depends OK'
@@ -496,7 +506,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_git_version
 
 # In case more than one package use sources from same git
 ifdef UPDATE_${P}
-UPDATE_SAFE_${P} := update() { $(UPDATE_${P}); } && $(call lock, $(GIT_DIR_${P}).lock) update
+UPDATE_SAFE_${P} := $(call lock, $(UPDATE_${P}), $(GIT_DIR_${P}).lock)
 else
 UPDATE_SAFE_${P} :=
 endif

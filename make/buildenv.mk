@@ -59,9 +59,9 @@ undefined = $(if $(findstring undefined,$(origin $1)),$(true),$(false))
 
 # For parallel builds, some targets may share same resources
 # Put it in a recipie and it will be only one instance of foo_command at the same time
-# usage $(call lock_run,foo.lock) foo_command
+# usage $(call lock,commands,lockfile)
 # we use it for opkg for example
-lock = lock_run() { (flock --timeout 60 --exclusive 200 && $$@) 200>$1; } && lock_run
+lock = (flock -w 60 -x 200 && ($1)) 200>$2
 
 
 # global consts
