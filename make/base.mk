@@ -309,7 +309,7 @@ $(TARGET_${P}).do_install: $(TARGET_${P}).do_ipk
 #	Save install command and run it
 	echo '#Saved install command'                         >  $@
 	echo '$(opkg) $(${SYSROOT}_ipkg_args) install ${IPK}' >> $@
-	$(SHELL) $@
+	$(SHELL) $@ || (rm -f $@ && false)
 
 #	Track reverse dependency graph
 	$(foreach bdep,$(BDEPENDS_${P}), \
