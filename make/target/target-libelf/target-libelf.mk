@@ -7,7 +7,7 @@ BDEPENDS_${P} = $(target_filesystem) $(cross_gcc_second)
 
 PR_${P} = 1
 
-PV_${P} = $(cross_libelf_VERSION)
+PV_${P} = $(PV_cross_libelf)
 ${P}_SPEC = stm-$(${P}).spec
 ${P}_SPEC_PATCH =
 ${P}_PATCHES =
