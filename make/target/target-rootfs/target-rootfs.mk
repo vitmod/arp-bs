@@ -56,13 +56,14 @@ opkg_my_list += \
 	kernel-module-e2-proc \
 	kernel-module-encrypt \
 	kernel-module-frontcontroller \
-	kernel-module-frontends \
+	kernel-dvb-modules-stv090x \
 	kernel-module-multicom \
 	kernel-module-player2 \
 	kernel-module-ptinp \
 	kernel-module-simu-button \
 	kernel-module-smartcard \
 	kernel-module-stgfb
+
 #extras
 
 ifdef CONFIG_WLAN_SUPPORT
