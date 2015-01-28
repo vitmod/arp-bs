@@ -120,7 +120,7 @@ PACKAGES_${P} = \
 	kernel_module_e2_proc \
 	kernel_module_encrypt \
 	kernel_module_frontcontroller \
-	kernel_module_frontends \
+	kernel_dvb_modules_stv090x \
 	kernel_module_multicom \
 	kernel_module_player2 \
 	kernel_module_pti \
@@ -161,8 +161,8 @@ DESCRIPTION_kernel_module_frontcontroller = frontcontroller driver for control  
 #RDEPENDS_kernel_module_frontcontroller = fp_control
 FILES_kernel_module_frontcontroller = /lib/modules/$(KERNEL_VERSION)/extra/frontcontroller
 
-DESCRIPTION_kernel_module_frontends = frontends driver for control  devices
-FILES_kernel_module_frontends = /lib/modules/$(KERNEL_VERSION)/extra/frontends
+DESCRIPTION_kernel_dvb_modules_stv090x = frontends driver for control  devices
+FILES_kernel_dvb_modules_stv090x = /lib/modules/$(KERNEL_VERSION)/extra/frontends
 
 DESCRIPTION_kernel_module_multicom = stm-multicom driver for control  devices
 RDEPENDS_kernel_module_multicom = libmme-host libmmeimage
