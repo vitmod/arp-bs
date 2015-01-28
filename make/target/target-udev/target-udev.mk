@@ -8,7 +8,7 @@ $(target_filesystem) $(target_libattr) $(target_libacl) $(target_glib2) $(target
 
 PR_${P} = 2
 
-PV_${P} = 162-40
+PV_${P} = 162-41
 ${P}_SPEC = stm-$(${P}).spec
 ${P}_SPEC_PATCH = $(${P}_SPEC).diff
 ${P}_PATCHES = usbhd-automount.rules
