@@ -7,7 +7,7 @@ BDEPENDS_${P} = $(target_gcc_lib)
 
 PR_${P} = 2
 
-PV_${P} = 1.0.1h-31
+PV_${P} = 1.0.1k-32
 ${P}_SPEC = stm-$(${P}).spec
 ${P}_SPEC_PATCH =
 ${P}_PATCHES =
