@@ -37,6 +37,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 
 NAME_${P} = ${PN}
 DESCRIPTION_${P} = Multi-format archive and compression library
+FILES_${P} = /usr/lib/*.s*
 
 call[[ ipkbox ]]
 
