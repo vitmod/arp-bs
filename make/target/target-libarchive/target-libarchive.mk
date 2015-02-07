@@ -27,7 +27,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--prefix=/usr \
 		&& \
-		$(MAKE)
+		$(MAKE) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
@@ -35,9 +35,11 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
 	touch $@
 
+call[[ ipk ]]
+
 NAME_${P} = ${PN}
 DESCRIPTION_${P} = Multi-format archive and compression library
-FILES_${P} = /usr/lib/*.s*
+FILES_${P} = /usr/lib/*.so*
 
 call[[ ipkbox ]]
 
