@@ -1,5 +1,5 @@
---- stm-cross-gcc.spec.orig	2015-02-03 21:05:11.000000000 +0100
-+++ stm-cross-gcc.spec	2015-02-09 20:30:40.961669062 +0100
+--- stm-cross-gcc.spec.orig	2015-02-10 20:11:32.701146270 +0100
++++ stm-cross-gcc.spec	2015-02-10 20:12:58.705144672 +0100
 @@ -16,6 +16,7 @@
  Source3: gcc-protoize.1
  
@@ -75,7 +75,7 @@
  cd ..
  
  %compress_man %{buildroot}%{_stm_cross_info_dir}
-@@ -295,13 +296,6 @@
+@@ -295,78 +296,13 @@
  mkdir -p %{buildroot}%{_stm_cross_target_dir}/lib
  mkdir -p %{buildroot}%{_stm_cross_target_dir}%{_stm_target_lib_dir}/
  
@@ -89,10 +89,13 @@
  ln -s libgcc_s-%{version}.so.1 \
  	%{buildroot}%{_stm_cross_target_dir}/lib/libgcc_s.so.1
  
-@@ -312,61 +306,7 @@
- mv %{buildroot}%{_stm_cross_targetconf_dir}/lib/libgcc_s.so \
- 	%{buildroot}%{_stm_cross_lib_dir}/gcc/%{_stm_target_config}/%{version}/libgcc_s.so
+ mv %{buildroot}%{_stm_cross_lib_dir}/gcc/%{_stm_target_config}/%{version}/include-fixed/* \
+ 	%{buildroot}%{_stm_cross_lib_dir}/gcc/%{_stm_target_config}/%{version}/include/
  
+-# This is a text file, so shift it to the right place.
+-mv %{buildroot}%{_stm_cross_targetconf_dir}/lib/libgcc_s.so \
+-	%{buildroot}%{_stm_cross_lib_dir}/gcc/%{_stm_target_config}/%{version}/libgcc_s.so
+-
 -%if %target_cpu sh
 -mkdir -p %{buildroot}%{_stm_cross_target_dir}/lib/m4-nofpu
 -mkdir -p %{buildroot}%{_stm_cross_target_dir}%{_stm_target_lib_dir}/m4-nofpu
@@ -151,7 +154,7 @@
  ##############################################################################
  %clean
  rm -rf %{buildroot}
-@@ -389,54 +329,17 @@
+@@ -389,54 +325,17 @@
  %dir %{_stm_cross_lib_dir}/gcc/%{_stm_target_config}
  %dir %{_stm_cross_lib_dir}/gcc/%{_stm_target_config}/%{version}
  
@@ -206,7 +209,7 @@
  %if_target_cpu arm
  %{_stm_cross_targetconf_dir}/lib/libasan.la
  %{_stm_cross_targetconf_dir}/lib/libasan.so*
-@@ -473,65 +376,17 @@
+@@ -473,65 +372,17 @@
  
  %doc COPYING COPYING.LIB ABOUT-NLS README
  
