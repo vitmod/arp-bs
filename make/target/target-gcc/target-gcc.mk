@@ -9,8 +9,8 @@ BREMOVES_${P} = $(target_cross_gcc_lib)
 PR_${P} = 1
 
 ifdef CONFIG_GCC48
- ST_PV_${P} = 4.8.3
- ST_PR_${P} = 147
+ ST_PV_${P} = 4.8.4
+ ST_PR_${P} = 148
 else
  ST_PV_${P} = 4.7.3
  ST_PR_${P} = 129

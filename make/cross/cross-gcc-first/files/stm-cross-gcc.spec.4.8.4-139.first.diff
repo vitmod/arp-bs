@@ -1,11 +1,11 @@
---- stm-cross-gcc.spec.orig	2014-08-22 21:05:10.000000000 +0200
-+++ stm-cross-gcc.spec	2014-09-08 23:12:49.125856212 +0200
+--- stm-cross-gcc.spec.orig	2015-02-03 21:05:11.000000000 +0100
++++ stm-cross-gcc.spec	2015-02-09 20:30:40.961669062 +0100
 @@ -16,6 +16,7 @@
  Source3: gcc-protoize.1
  
  # SH4 common
 +Patch0: stm-cross-gcc.%{version}-%{release}.diff
- Patch100: gcc-4.8.3-stm-140709.patch
+ Patch100: gcc-4.8.4-stm-150128.patch
  Patch101: gcc-4.7.0-sh-use-gnu-hash-style.patch
  Patch102: gcc-4.2.4-multilibpath.patch
 @@ -55,6 +56,9 @@
@@ -18,7 +18,7 @@
  %description
  This is the GNU C compiler, a fairly portable optimizing compiler which
  supports multiple languages.  This package includes support for C, and
-@@ -149,6 +153,7 @@
+@@ -140,6 +144,7 @@
  
  # SH4 common patches
  %if %target_cpu sh
@@ -26,7 +26,7 @@
  %patch100 -p1
  %patch101 -p1
  %patch102 -p1
-@@ -178,7 +183,7 @@
+@@ -169,7 +174,7 @@
  echo 'STMicroelectronics/Linux Base %{version}-%{release}' > gcc/DEV-PHASE
  
  # Update configure in the gcc directory
@@ -35,7 +35,7 @@
  
  ##############################################################################
  
-@@ -190,8 +195,13 @@
+@@ -181,8 +186,13 @@
          --with-local-prefix=%{_stm_cross_dir} \
          --with-sysroot=%{_stm_cross_target_dir} \
  	--enable-target-optspace \
@@ -50,7 +50,7 @@
  	--disable-libstdcxx-pch \
  %if %target_cpu arm
  	--disable-multilib \
-@@ -200,7 +210,7 @@
+@@ -191,7 +201,7 @@
          --enable-c99 \
          --enable-long-long \
          --with-system-zlib \
@@ -59,7 +59,7 @@
  %if "%{_stm_target_arch}" != "armv7" && "%{_stm_target_arch}" != "armv7_uclibc"
  	--disable-libgomp \
  %endif
-@@ -263,15 +273,6 @@
+@@ -254,15 +264,6 @@
  %cross_setup
  %cross_makeinstall
  
@@ -75,7 +75,7 @@
  cd ..
  
  %compress_man %{buildroot}%{_stm_cross_info_dir}
-@@ -304,78 +305,14 @@
+@@ -295,13 +296,6 @@
  mkdir -p %{buildroot}%{_stm_cross_target_dir}/lib
  mkdir -p %{buildroot}%{_stm_cross_target_dir}%{_stm_target_lib_dir}/
  
@@ -89,13 +89,10 @@
  ln -s libgcc_s-%{version}.so.1 \
  	%{buildroot}%{_stm_cross_target_dir}/lib/libgcc_s.so.1
  
- mv %{buildroot}%{_stm_cross_lib_dir}/gcc/%{_stm_target_config}/%{version}/include-fixed/* \
- 	%{buildroot}%{_stm_cross_lib_dir}/gcc/%{_stm_target_config}/%{version}/include/
+@@ -312,61 +306,7 @@
+ mv %{buildroot}%{_stm_cross_targetconf_dir}/lib/libgcc_s.so \
+ 	%{buildroot}%{_stm_cross_lib_dir}/gcc/%{_stm_target_config}/%{version}/libgcc_s.so
  
--# This is a text file, so shift it to the right place.
--mv %{buildroot}%{_stm_cross_targetconf_dir}/lib/libgcc_s.so \
--	%{buildroot}%{_stm_cross_lib_dir}/gcc/%{_stm_target_config}/%{version}/libgcc_s.so
--
 -%if %target_cpu sh
 -mkdir -p %{buildroot}%{_stm_cross_target_dir}/lib/m4-nofpu
 -mkdir -p %{buildroot}%{_stm_cross_target_dir}%{_stm_target_lib_dir}/m4-nofpu
@@ -115,7 +112,7 @@
 -%endif
 -
  %find_lang gcc
- 
+-
 -# Target include files and libs are part of the target-gcc packages
 -rm %{buildroot}%{_stm_cross_targetconf_dir}/lib/libstdc++.so*
 -rm %{buildroot}%{_stm_cross_targetconf_dir}/lib/libstdc++.la
@@ -154,7 +151,7 @@
  ##############################################################################
  %clean
  rm -rf %{buildroot}
-@@ -398,54 +335,18 @@
+@@ -389,54 +329,17 @@
  %dir %{_stm_cross_lib_dir}/gcc/%{_stm_target_config}
  %dir %{_stm_cross_lib_dir}/gcc/%{_stm_target_config}/%{version}
  
@@ -189,7 +186,7 @@
 -%{_stm_cross_lib_dir}/gcc/%{_stm_target_config}/%{version}/m4-nofpu/libgcov.a
 -%{_stm_cross_lib_dir}/gcc/%{_stm_target_config}/%{version}/m4-nofpu/crt*
 -%endif
- 
+-
  %if %target_cpu arm
  #%dir %{_stm_cross_lib_dir}/gcc/%{_stm_target_config}/%{version}/arm-linux-gnueabi
  #%{_stm_cross_lib_dir}/gcc/%{_stm_target_config}/%{version}/arm-linux-gnueabi/*
@@ -209,7 +206,7 @@
  %if_target_cpu arm
  %{_stm_cross_targetconf_dir}/lib/libasan.la
  %{_stm_cross_targetconf_dir}/lib/libasan.so*
-@@ -482,65 +383,17 @@
+@@ -473,65 +376,17 @@
  
  %doc COPYING COPYING.LIB ABOUT-NLS README
  
@@ -273,5 +270,5 @@
 -	%{_stm_cross_info_dir}/gcc.info
 -
  %changelog
- * Fri Aug 22 2014 Christian Bruel <christian.bruel@st.com> 135
- - [Spec: Bugzilla 56275] Install libstdc++.a at the correct location for target gcc bootstrap.
+ * Wed Jan 28 2015 Christian Bruel <christian.bruel@st.com> 139
+ - [Update: 4.8.4] Upgrade ST40 to gcc 4.8.4-stm-150128.

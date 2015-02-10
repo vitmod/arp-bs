@@ -8,8 +8,8 @@ BDEPENDS_${P} = $(target_kernel_headers) $(target_glibc_headers) $(cross_mpc) $(
 PR_${P} = 1
 
 ifdef CONFIG_GCC48
- ST_PV_${P} = 4.8.3
- ST_PR_${P} = 138
+ ST_PV_${P} = 4.8.4
+ ST_PR_${P} = 139
 else
  ST_PV_${P} = 4.7.3
  ST_PR_${P} = 124
