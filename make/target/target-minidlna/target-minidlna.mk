@@ -47,7 +47,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 call[[ ipk ]]
 
 DESCRIPTION_${P} = "The MiniDLNA daemon is an UPnP-A/V and DLNA service which serves multimedia content to compatible clients on the network."
-RDEPENDS_${P} = libexif12 libid3tag libflac8 libogg0 libjpeg8 libvorbis
+RDEPENDS_${P} = libexif12 libid3tag0 libflac8 libogg0 libjpeg-turbo libvorbis
 define conffiles_${P}
 /etc/minidlna.conf
 endef
