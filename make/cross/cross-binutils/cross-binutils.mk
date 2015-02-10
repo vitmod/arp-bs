@@ -7,7 +7,7 @@ BDEPENDS_${P} = $(cross_filesystem)
 
 PR_${P} = 1
 
-PV_${P} = 2.24.51.0.3-75
+PV_${P} = 2.24.51.0.3-76
 ${P}_SPEC = stm-$(${P}).spec
 ${P}_SPEC_PATCH = $(${P}_SPEC).$(PV_${P}).diff
 ${P}_PATCHES = stm-$(${P}).$(PV_${P}).diff
