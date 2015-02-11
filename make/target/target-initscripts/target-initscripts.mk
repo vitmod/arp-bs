@@ -47,10 +47,11 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	ln -sf ../init.d $(PKDIR)/etc/rc.d/init.d
 	touch $@
 
-PACKAGES_${P} = inetd initscripts
+PACKAGES_${P} = inetd avahi-daemon initscripts
 
 FILES_initscripts = /
 FILES_inetd = /etc/init.d/inetd
+FILES_avahi-daemon = /etc/init.d/avahi-daemon
 
 define postinst_${P}
 #!/bin/sh
@@ -65,7 +66,6 @@ update-rc.d -r $$OPKG_OFFLINE_ROOT/ sendsigs start 20 0 6 .
 update-rc.d -r $$OPKG_OFFLINE_ROOT/ telnetd start 43 S . stop 30 0 6 .
 update-rc.d -r $$OPKG_OFFLINE_ROOT/ lircd start 36 S . stop 80 0 6 .
 update-rc.d -r $$OPKG_OFFLINE_ROOT/ umountfs start 40 0 6 .
-update-rc.d -r $$OPKG_OFFLINE_ROOT/ avahi-daemon stop 20 0 6 .
 update-rc.d -r $$OPKG_OFFLINE_ROOT/ rdate start 99 S .
 endef
 
@@ -82,7 +82,6 @@ update-rc.d -f -r $$OPKG_OFFLINE_ROOT/ sendsigs remove
 update-rc.d -f -r $$OPKG_OFFLINE_ROOT/ telnetd remove
 update-rc.d -f -r $$OPKG_OFFLINE_ROOT/ lircd remove
 update-rc.d -f -r $$OPKG_OFFLINE_ROOT/ umountfs remove
-update-rc.d -f -r $$OPKG_OFFLINE_ROOT/ avahi-daemon remove
 update-rc.d -f -r $$OPKG_OFFLINE_ROOT/ rdate remove
 endef
 
@@ -94,6 +93,16 @@ endef
 define prerm_inetd
 #!/bin/sh
 update-rc.d -f -r $$OPKG_OFFLINE_ROOT/ inetd remove
+endef
+
+define postinst_avahi-daemon
+#!/bin/sh
+update-rc.d -r $$OPKG_OFFLINE_ROOT/ avahi-daemon start 50 S . stop 20 0 6 .
+endef
+
+define prerm_avahi-daemon
+#!/bin/sh
+update-rc.d -f -r $$OPKG_OFFLINE_ROOT/ avahi-daemon remove
 endef
 
 call[[ ipkbox ]]
