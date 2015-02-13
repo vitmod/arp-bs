@@ -81,7 +81,7 @@ opkg_my_list += \
 endif
 ifdef CONFIG_3G_SUPPORT
 BDEPENDS_${P} += $(target_modem_scripts) $(target_usb_modeswitch) $(target_pppd)
-opkg_my_list += modem-scripts
+opkg_my_list += modem-scripts usb-modeswitch
 endif
 ifdef CONFIG_NTFS_3G_SUPPORT
 BDEPENDS_${P} += $(target_ntfs_3g)
