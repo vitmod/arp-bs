@@ -3,7 +3,7 @@
 #
 package[[ target_libarchive
 
-BDEPENDS_${P} = $(target_glibc)
+BDEPENDS_${P} = $(target_glibc) $(target_libxml2)
 
 PV_${P} = 3.1.2
 PR_${P} = 1
