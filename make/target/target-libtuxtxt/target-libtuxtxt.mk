@@ -6,13 +6,13 @@ package[[ target_libtuxtxt
 BDEPENDS_${P} = $(target_freetype) $(target_zlib) $(target_driver_headers)
 
 PV_${P} = git
-PR_${P} = 1
+PR_${P} = 2
 
 call[[ base ]]
 
 rule[[
   nothing:git://git.code.sf.net/p/openpli/tuxtxt.git:sub=libtuxtxt
-  patch:file://libtuxtxt-1.0-fix_dbox_headers.diff
+  patch:file://${PN}.diff
 ]]rule
 
 call[[ git ]]
