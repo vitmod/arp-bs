@@ -35,6 +35,7 @@ rule[[
 # FIXME avahi mess
   install_bin:$(PKDIR)/etc/init.d:file://avahi-daemon
   install_bin:$(PKDIR)/etc/init.d:file://rdate
+  install_bin:$(PKDIR)/etc/init.d:file://mountspark
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
@@ -47,11 +48,12 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	ln -sf ../init.d $(PKDIR)/etc/rc.d/init.d
 	touch $@
 
-PACKAGES_${P} = inetd avahi-daemon initscripts
+PACKAGES_${P} = inetd avahi-daemon mountspark initscripts
 
 FILES_initscripts = /
 FILES_inetd = /etc/init.d/inetd
 FILES_avahi-daemon = /etc/init.d/avahi-daemon
+FILES_mountspark = /etc/init.d/mountspark
 
 define postinst_${P}
 #!/bin/sh
@@ -103,6 +105,16 @@ endef
 define prerm_avahi-daemon
 #!/bin/sh
 update-rc.d -f -r $$OPKG_OFFLINE_ROOT/ avahi-daemon remove
+endef
+
+define postinst_mountspark
+#!/bin/sh
+update-rc.d -r $$OPKG_OFFLINE_ROOT/ mountspark start 39 S .
+endef
+
+define prerm_mountspark
+#!/bin/sh
+update-rc.d -f -r $$OPKG_OFFLINE_ROOT/ mountspark remove
 endef
 
 call[[ ipkbox ]]

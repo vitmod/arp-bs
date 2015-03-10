@@ -1,0 +1,21 @@
+#! /bin/sh
+#
+# mountspark	Mount spark root as usb.
+#
+# chkconfig: S 39 0
+#
+
+if [ -f /lib/modules/$(uname -r)/kernel/fs/yaffs2/yaffs.ko ]; then
+	MOUNT=$(mount | grep "/media/usb ")
+	if [ -z "$MOUNT" ]; then
+		modprobe yaffs
+		if [ ! -d /media/usb ]; then
+			mkdir /media/usb
+		fi
+		echo "Mount /dev/mtdblock4 on /media/usb"
+		mount -t yaffs2 /dev/mtdblock4 /media/usb
+	fi
+fi
+
+exit 0
+$
