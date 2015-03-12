@@ -123,7 +123,7 @@ ifdef CONFIG_ENIGMA2_SRC_MAX
   patch:file://enigma2-pli-nightly.0.diff
 endif
 ifdef CONFIG_ENIGMA2_SRC_TESTING
-  git://github.com:OpenAR-P/amiko-e2-pli.git;b=testing;protocol=ssh
+  git://github.com:schpuntik/amiko-e2-pli.git;b=testing;protocol=ssh
 endif
 
   install:-d:$(PKDIR)/usr/share/enigma2/
