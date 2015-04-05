@@ -1,5 +1,5 @@
---- grab-git/main.c.org	2014-03-27 19:39:47.813029718 +0200
-+++ grab-git/main.c	2014-03-27 19:42:07.769723726 +0200
+--- a/main.c	2015-04-05 13:06:55.759815404 +0300
++++ b/main.c	2015-04-05 13:51:13.416994012 +0300
 @@ -37,10 +37,48 @@
  #include <sys/mman.h>
  #include <linux/types.h>
@@ -123,21 +123,26 @@
  
  	// resizing
   	if (video_only)
-@@ -731,6 +782,235 @@
- 	char buf[256];
+@@ -724,6 +775,15 @@
+ 	int stride = 0;
  	FILE *fp;
- 
+ 	char buf[256];
 +	int yblock, xblock, iyblock, ixblock, yblockoffset, offset, layer_offset, OUTITER, OUTINC, OUTITERoffset;
 +	int stride_half;
-+	unsigned char *out;
++	unsigned char *out = NULL;
 +	unsigned char even, cr;
 +	int fd_bpa;
-+	int ioctlres;
 +	BPAMemMapMemData bpa_data;
 +	char bpa_mem_device[30];
 +	char *decode_surface;
 +	int delay;
-+
+ 
+ 	if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0)
+ 	{
+@@ -731,6 +791,219 @@
+ 		return;
+ 	}
+ 
 +	fp = fopen("/proc/stb/vmpeg/0/xres", "r");
 +	if (fp)
 +	{
@@ -147,6 +152,7 @@
 +		}
 +		fclose(fp);
 +	}
++
 +	fp = fopen("/proc/stb/vmpeg/0/yres", "r");
 +	if (fp)
 +	{
@@ -166,10 +172,8 @@
 +	chroma = (unsigned char *)malloc(stride * res / 2);
 +
 +	memset(chroma, 0x80, stride * res / 2);
-+
-+	fd_bpa = open("/dev/bpamem0", O_RDWR);
 +	
-+	if(fd_bpa < 0)
++	if((fd_bpa = open("/dev/bpamem0", O_RDWR)) < 0)
 +	{
 +		fprintf(stderr, "cannot access /dev/bpamem0! err = %d\n", fd_bpa);
 +		return;
@@ -208,8 +212,7 @@
 +	//bpa_data.phys_addr = 0x4a824000;
 +	//bpa_data.mem_size = 28311552;
 +	
-+	ioctlres = ioctl(fd_bpa, BPAMEMIO_MAPMEM, &bpa_data); // request memory from bpamem
-+	if(ioctlres)
++	if(ioctl(fd_bpa, BPAMEMIO_MAPMEM, &bpa_data) == -1) // request memory from bpamem
 +	{
 +		fprintf(stderr, "cannot map required mem\n");
 +		return;
@@ -218,10 +221,8 @@
 +	sprintf(bpa_mem_device, "/dev/bpamem%d", bpa_data.device_num);
 +	close(fd_bpa);
 +	
-+	fd_bpa = open(bpa_mem_device, O_RDWR);
-+	
 +	// if somebody forgot to add all bpamem devs then this gets really bad here
-+	if(fd_bpa < 0)
++	if((fd_bpa = open(bpa_mem_device, O_RDWR)) < 0)
 +	{
 +		fprintf(stderr, "cannot access %s! err = %d\n", bpa_mem_device, fd_bpa);
 +		return;
@@ -345,8 +346,7 @@
 +
 +	munmap(decode_surface, bpa_data.mem_size);
 +
-+	ioctlres = ioctl(fd_bpa, BPAMEMIO_UNMAPMEM); // request memory from bpamem
-+	if(ioctlres)
++	if(ioctl(fd_bpa, BPAMEMIO_UNMAPMEM) == -1) // request memory from bpamem
 +	{
 +		fprintf(stderr, "cannot unmap required mem\n");
 +		close(fd_bpa);
@@ -359,7 +359,7 @@
  	if (stb_type > XILLEON)
  	{
  		// grab bcm pic from decoder memory
-@@ -1096,6 +1376,7 @@
+@@ -1094,6 +1367,7 @@
  
  		free(memory_tmp);
  	}
@@ -367,7 +367,7 @@
  
  	close(mem_fd);
  
-@@ -1121,22 +1402,26 @@
+@@ -1119,22 +1393,26 @@
  			int GV=yuv2rgbtable_gv[V];
  			int BV=yuv2rgbtable_bv[V];
  
@@ -394,7 +394,7 @@
  			video[out1+rgbstride]=CLAMP((Y + RU)>>16);
  			video[out1+1+rgbstride]=CLAMP((Y - GV - GU)>>16);
  			video[out1+2+rgbstride]=CLAMP((Y + BV)>>16);
-@@ -1146,12 +1431,14 @@
+@@ -1144,12 +1422,14 @@
  
  			Y=yuv2rgbtable_y[luma[pos]];
  
@@ -409,7 +409,7 @@
  			video[out1+rgbstride]=CLAMP((Y + RU)>>16);
  			video[out1+1+rgbstride]=CLAMP((Y - GV - GU)>>16);
  			video[out1+2+rgbstride]=CLAMP((Y + BV)>>16);
-@@ -1274,6 +1561,7 @@
+@@ -1272,6 +1552,7 @@
  			return;
  		}
  
@@ -417,7 +417,7 @@
  		if (stb_type == VULCAN) // DM500/5620 stores the colors as a 16bit word with yuv values, so we have to convert :(
  		{
  			unsigned short yuv;
-@@ -1314,6 +1602,7 @@
+@@ -1312,6 +1593,7 @@
  			fprintf(stderr, "unsupported framebuffermode\n");
  			return;
  		}
