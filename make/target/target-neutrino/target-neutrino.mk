@@ -73,7 +73,7 @@ ifdef CONFIG_NEUTRINO_SRC_MASTER
 endif
 
 ifdef CONFIG_NEUTRINO_SRC_MARTII
-  git://gitorious.org/neutrino-mp/martiis-neutrino-mp.git
+  git://github.com/Duckbox-Developers/neutrino-mp-cst-next.git
 endif
 
 ]]rule
