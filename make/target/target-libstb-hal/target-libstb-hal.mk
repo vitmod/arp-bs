@@ -5,7 +5,7 @@ ifeq ($(strip $(CONFIG_BUILD_NEUTRINO)),y)
 
 package[[ target_libstb_hal
 
-BDEPENDS_${P} = $(target_glibc) $(target_ffmpeg) $(target_libalsa) $(target_libpng)
+BDEPENDS_${P} = $(target_glibc) $(target_ffmpeg) $(target_libalsa) $(target_libpng) $(target_libass)
 
 PV_${P} = git
 PR_${P} = 1
@@ -19,7 +19,7 @@ ifdef CONFIG_NEUTRINO_SRC_MASTER
 endif
 
 ifdef CONFIG_NEUTRINO_SRC_MARTII
-  git://gitorious.org/neutrino-mp/martiis-libstb-hal.git
+  git://github.com/Duckbox-Developers/libstb-hal.git
 endif
 
 ]]rule
