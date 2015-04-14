@@ -110,13 +110,13 @@ call[[ config ]]
 rule[[
 
 ifdef CONFIG_ENIGMA2_SRC_MASTER
-  git://github.com:OpenAR-P/enigma2-pli-arp.git;b=master
+  git://github.com/OpenAR-P/enigma2-pli-arp.git;b=master
 endif
 ifdef CONFIG_ENIGMA2_SRC_STAGING
-  git://github.com:OpenAR-P/enigma2-pli-arp.git;b=staging
+  git://github.com/OpenAR-P/enigma2-pli-arp.git;b=staging
 endif
 ifdef CONFIG_ENIGMA2_SRC_LAST
-  git://github.com:OpenAR-P/enigma2-pli-arp.git;b=last
+  git://github.com/OpenAR-P/enigma2-pli-arp.git;b=last
 endif
 ifdef CONFIG_ENIGMA2_SRC_MAX
   git://git.code.sf.net/p/openpli/enigma2.git;b=master;r=20a8c5
