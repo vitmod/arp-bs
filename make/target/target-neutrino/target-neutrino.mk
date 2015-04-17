@@ -19,7 +19,6 @@ CONFIG_FLAGS_${P} = \
 		--with-boxtype=$(TARGET) \
 		--enable-giflib \
 		--with-tremor \
-		--enable-lua \
 		--enable-ffmpegdec \
 		--enable-maintainer-mode \
 		--with-libdir=/usr/lib \
@@ -33,7 +32,7 @@ CONFIG_FLAGS_${P} = \
 		CXXFLAGS="$(CXXFLAGS_${P})" \
 		CPPFLAGS="$(CPPFLAGS_${P})"
 
-CXXFLAGS_${P} += -Wall -W -Wshadow -fno-strict-aliasing -rdynamic -DNEW_LIBCURL -DCPU_FREQ -DMARTII -funsigned-char
+CXXFLAGS_${P} += -Wall -W -Wshadow -g0 -pipe -Os -fno-strict-aliasing -D__KERNEL_STRICT_NAMES -DCPU_FREQ
 CPPFLAGS_${P} += -I$(driverdir)/bpamem
 
 ifdef CONFIG_SPARK
