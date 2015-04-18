@@ -77,12 +77,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix=/usr \
 			$(CONFIG_FLAGS_${P}) \
 		&& \
-		$(MAKE) $(MAKE_OPTS)
+		$(run_make) $(MAKE_OPTS)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P})/source3 && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P})/source3 && $(run_make) install DESTDIR=$(PKDIR)
 
 	$(INSTALL) -d $(PKDIR)/etc/samba && \
 	$(INSTALL) -c -m644 $(DIR_${P})/examples/smb.conf.spark $(PKDIR)/etc/samba/smb.conf && \

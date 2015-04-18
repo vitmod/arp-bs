@@ -25,12 +25,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 		-DCMAKE_INSTALL_PREFIX=/usr \
 		-DCMAKE_RELEASE_TYPE=Release . \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]

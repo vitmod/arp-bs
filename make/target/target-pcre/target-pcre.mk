@@ -28,7 +28,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--enable-utf8 \
 			--enable-unicode-properties \
 		&& \
-		make
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
@@ -36,7 +36,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	cd $(DIR_${P}) && \
 	sed -e "s,^prefix=,prefix=$(targetprefix)," < pcre-config > $(crossprefix)/bin/pcre-config && \
 	chmod 755 $(crossprefix)/bin/pcre-config && \
-	$(MAKE) install DESTDIR=$(PKDIR)
+	$(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]

@@ -22,8 +22,8 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 $(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
 	install -d $(hostprefix)/bin
 	cd $(DIR_${P}) && \
-		$(MAKE) all PREFIX=$(hostprefix) && \
-		$(MAKE) install PREFIX=$(hostprefix)
+		$(run_make) all PREFIX=$(hostprefix) && \
+		$(run_make) install PREFIX=$(hostprefix)
 	touch $@
 
 $(TARGET_${P}): $(TARGET_${P}).do_install

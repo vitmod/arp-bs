@@ -169,9 +169,9 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 	touch $@
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
-	cd $(DIR_${P}) && $(MAKE) ${MAKE_FLAGS} uImage modules
+	cd $(DIR_${P}) && $(run_make) ${MAKE_FLAGS} uImage modules
 ifdef CONFIG_DEBUG_ARP
-	cd $(DIR_${P})/tools/perf && $(MAKE) ${MAKE_FLAGS} $(MAKE_ARGS) all
+	cd $(DIR_${P})/tools/perf && $(run_make) ${MAKE_FLAGS} $(MAKE_ARGS) all
 endif
 	touch $@
 
@@ -179,7 +179,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
 	install -d $(PKDIR)/boot
 	cp $(DIR_${P})/arch/sh/boot/uImage $(PKDIR)/boot/
-	cd $(DIR_${P}) && $(MAKE) ${MAKE_FLAGS} INSTALL_MOD_PATH=$(PKDIR) modules_install
+	cd $(DIR_${P}) && $(run_make) ${MAKE_FLAGS} INSTALL_MOD_PATH=$(PKDIR) modules_install
 
 # provide this dir to build external modules (target_driver)
 #	rm -rf $(PKDIR)/lib/modules/$(KERNEL_VERSION)/build

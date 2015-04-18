@@ -28,12 +28,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--target=$(target) \
 			--prefix=/usr \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR) && \
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR) && \
 	ln -sf sh4-linux-fusermount $(PKDIR)/usr/bin/fusermount && \
 	ln -sf sh4-linux-ulockmgr_server $(PKDIR)/usr/bin/ulockmgr_server && \
 	touch $@

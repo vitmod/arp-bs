@@ -28,12 +28,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--disable-rpath \
 			ac_cv_member_struct_tm_tm_gmtoff=no \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	rm -r $(PKDIR)/usr/share/info/dir
 	touch $@
 

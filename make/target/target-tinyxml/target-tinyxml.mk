@@ -26,12 +26,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 		libtoolize -f -c && \
 		$(BUILDENV) \
 		 \
-		make
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install PREFIX=$(PKDIR)/usr LD=sh4-linux-ld
+	cd $(DIR_${P}) && $(run_make) install PREFIX=$(PKDIR)/usr LD=sh4-linux-ld
 	touch $@
 
 call[[ ipk ]]

@@ -34,13 +34,13 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
-		make $(MAKE_FLAGS_${P}) all
+		$(run_make) $(MAKE_FLAGS_${P}) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
 	cd $(DIR_${P}) && \
-		make $(MAKE_FLAGS_${P}) install CONFIG_PREFIX=$(PKDIR)
+		$(run_make) $(MAKE_FLAGS_${P}) install CONFIG_PREFIX=$(PKDIR)
 
 #	install -m644 -D /dev/null $(PKDIR)/etc/shells
 #	export HHL_CROSS_TARGET_DIR=$(PKDIR) && $(hostprefix)/bin/target-shellconfig --add /bin/ash 5

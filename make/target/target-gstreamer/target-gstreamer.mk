@@ -61,12 +61,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 		--enable-introspection=no \
 		ac_cv_func_register_printf_function=no \
 	&& \
-	$(MAKE)
+	$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	rm -r $(PKDIR)/usr/share/locale
 	touch $@
 

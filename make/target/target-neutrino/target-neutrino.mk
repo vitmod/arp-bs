@@ -93,12 +93,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix=/usr \
 			$(CONFIG_FLAGS_${P}) \
 		&& \
-		make all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	$(MAKE) -C $(DIR_${P}) install DESTDIR=$(PKDIR) \
+	$(run_make) -C $(DIR_${P}) install DESTDIR=$(PKDIR) \
 
 	$(target)-strip $(PKDIR)/usr/bin/neutrino
 	$(target)-strip $(PKDIR)/usr/bin/pzapit

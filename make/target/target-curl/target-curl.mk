@@ -38,12 +38,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--mandir=/usr/share/man \
 			--with-random \
 		&& \
-		make all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	
 	$(call rewrite_config, $(PKDIR)/usr/bin/curl-config)
 	touch $@

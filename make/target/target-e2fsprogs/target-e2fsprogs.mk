@@ -43,13 +43,13 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--without-libiconv-prefix \
 			--with-root-prefix= \
 			&& \
-		$(MAKE) all && \
-		$(MAKE) -C e2fsck e2fsck.static
+		$(run_make) all && \
+		$(run_make) -C e2fsck e2fsck.static
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && make install install-libs DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install install-libs DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]

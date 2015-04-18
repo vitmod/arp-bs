@@ -26,7 +26,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 		--host=$(target) \
 		--prefix=/usr \
 	&& \
-	make all
+	$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile

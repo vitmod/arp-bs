@@ -22,12 +22,12 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
-		$(MAKE) $(MAKE_ARGS)
+		$(run_make) $(MAKE_ARGS)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 DESCRIPTION_${P} = rfkill is a small tool to query the state of the rfkill switches, buttons and subsystem interfaces

@@ -32,7 +32,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix=/usr \
 			$(CONFIG_FLAGS_${P}) \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 
@@ -85,7 +85,7 @@ $(TARGET_${P}).do_split: $(TARGET_${P}).write_vars
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install-metaDATA DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install-metaDATA DESTDIR=$(PKDIR)
 	touch $@
 
 PACKAGES_${P} = enigma2_plugins_meta $(PACKAGES_DYNAMIC_${P})

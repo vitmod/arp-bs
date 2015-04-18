@@ -36,7 +36,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	
 	$(INSTALL_DIR) $(PKDIR)/etc && \
 	$(INSTALL_DIR) $(PKDIR)/etc/init.d && \

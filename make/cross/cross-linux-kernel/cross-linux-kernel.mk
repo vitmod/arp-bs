@@ -102,9 +102,9 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile $(DEPENDS_${P})
 	echo "_$(KERNEL_STM)_$(KERNEL_LABEL)" > $(DIR_${P})/localversion-stm
 # 	if [ `grep -c "CONFIG_BPA2_DIRECTFBOPTIMIZED" $(KERNEL_DIR)/.config` -eq 0 ]; then echo "# CONFIG_BPA2_DIRECTFBOPTIMIZED is not set" >> $(KERNEL_DIR)/.config; fi
 
-	cd $(DIR_${P}) && $(MAKE) ARCH=sh oldconfig
-	cd $(DIR_${P}) && $(MAKE) ARCH=sh include/asm
-	cd $(DIR_${P}) && $(MAKE) ARCH=sh include/linux/version.h
+	cd $(DIR_${P}) && $(run_make) ARCH=sh oldconfig
+	cd $(DIR_${P}) && $(run_make) ARCH=sh include/asm
+	cd $(DIR_${P}) && $(run_make) ARCH=sh include/linux/version.h
 	rm $(DIR_${P})/.config
 	
 	install -d $(PKDIR)/$(crossprefix)/sources/kernel

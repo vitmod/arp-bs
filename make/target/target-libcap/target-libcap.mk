@@ -28,12 +28,12 @@ MAKE_FLAGS_${P} = \
 	BUILD_CC=gcc
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
-	cd $(DIR_${P}) && $(MAKE) ${MAKE_FLAGS}
+	cd $(DIR_${P}) && $(run_make) ${MAKE_FLAGS}
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) ${MAKE_FLAGS} install
+	cd $(DIR_${P}) && $(run_make) ${MAKE_FLAGS} install
 	touch $@
 
 call[[ ipk ]]

@@ -44,13 +44,13 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--with-driver=userspace \
 			--enable-sandboxed \
 		&& \
-		make all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
 
-	cd $(DIR_${P}) && make install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 
 	$(INSTALL_DIR) $(PKDIR)/etc
 	$(INSTALL_DIR) $(PKDIR)/var/run/lirc/

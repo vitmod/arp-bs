@@ -115,6 +115,11 @@ mainmenu "global config"
 		depends on GCC_LIB_FROM_TARGET
 	  endchoice
 
+	config MAKE_JLEVEL
+		int "Number of jobs to run simultaneously"
+		default "1"
+		help
+		    Number of jobs to run simultanesouly
 	config TARGET_CFLAGS
 		string "Target Optimizations C Flags"
 		default "-O2"

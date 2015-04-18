@@ -25,12 +25,12 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		export CC=sh4-linux-gcc && \
-		make $(MAKE_FLAGS_${P})
+		$(run_make) $(MAKE_FLAGS_${P})
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && make $(MAKE_FLAGS_${P}) install-strip DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) $(MAKE_FLAGS_${P}) install-strip DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]

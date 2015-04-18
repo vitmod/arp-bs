@@ -44,7 +44,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--with-wctype-functions \
 			HOSTPYTHON=$(crossprefix)/bin/python \
 		&& \
-		$(MAKE) $(MAKE_ARGS) \
+		$(run_make) $(MAKE_ARGS) \
 			HOSTPYTHON=$(crossprefix)/bin/python \
 			HOSTPGEN=$(crossprefix)/bin/pgen \
 			CROSS_COMPILE=$(target) \
@@ -75,7 +75,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
 	cd $(DIR_${P}) && \
-		$(MAKE) $(MAKE_ARGS) \
+		$(run_make) $(MAKE_ARGS) \
 			TARGET_OS=$(target) \
 			HOSTPYTHON=$(crossprefix)/bin/python \
 			CROSS_COMPILE=$(target) \

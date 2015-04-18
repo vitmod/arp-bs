@@ -69,12 +69,12 @@ endif
 
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
-	cd $(DIR_${P}) && make $(MAKE_FLAGS_${P})
+	cd $(DIR_${P}) && $(run_make) $(MAKE_FLAGS_${P})
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && make $(MAKE_FLAGS_${P}) install
+	cd $(DIR_${P}) && $(run_make) $(MAKE_FLAGS_${P}) install
 
 # copy free pti ko if we have built pti_np
 ifdef CONFIG_PTINP_SRC

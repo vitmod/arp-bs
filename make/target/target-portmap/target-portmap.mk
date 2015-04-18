@@ -25,12 +25,12 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		$(BUILDENV) \
-		$(MAKE)
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install BASEDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install BASEDIR=$(PKDIR)
 	touch $@
 
 DESCRIPTION_${P} = "the program supports access control in the style of the tcp wrapper (log_tcp) packag"

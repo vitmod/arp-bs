@@ -25,13 +25,13 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 		./autogen.sh &&\
 		./configure \
 			--prefix=$(hostprefix) && \
-		$(MAKE) all PREFIX=$((hostprefix) &&  \
-		$(MAKE) install PREFIX=$((hostprefix)
+		$(run_make) all PREFIX=$((hostprefix) &&  \
+		$(run_make) install PREFIX=$((hostprefix)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]

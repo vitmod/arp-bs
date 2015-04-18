@@ -175,6 +175,7 @@ endif
 DEPMOD = $(hostprefix)/bin/depmod
 SOCKSIFY=
 WGET=$(SOCKSIFY) wget -P
+run_make:=make -j$(CONFIG_MAKE_JLEVEL)
 
 INSTALL := install
 INSTALL_DIR=$(INSTALL) -d
