@@ -1,6 +1,7 @@
 #
 # AR-P buildsystem smart Makefile
 #
+ifeq ($(strip $(CONFIG_BUILD_ENIGMA2)),y)
 package[[ target_enigma2_plugins
 
 BDEPENDS_${P} = $(target_enigma2) $(target_python_gdata) $(target_aio_grab)
@@ -119,3 +120,4 @@ $(TARGET_${P}).do_split_post: $(TARGET_${P}).do_split
 $(TARGET_${P}).do_ipkbox: $(TARGET_${P}).do_split_post
 
 ]]package
+endif
