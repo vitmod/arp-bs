@@ -18,8 +18,8 @@ ifdef CONFIG_NEUTRINO_SRC_MASTER
   git://github.com/OpenAR-P/libstb-hal.git 
 endif
 
-ifdef CONFIG_NEUTRINO_SRC_MARTII
-  git://github.com/Duckbox-Developers/libstb-hal.git
+ifdef CONFIG_NEUTRINO_SRC_MAX
+  git://github.com/Duckbox-Developers/libstb-hal-cst-next.git
 endif
 
 ]]rule
@@ -33,7 +33,7 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		$(BUILDENV) \
-		ACLOCAL_FLAGS="-I $(hostprefix)/share/aclocal" ./autogen.sh && \
+		./autogen.sh && \
 		./configure \
 			--host=$(target) \
 			--build=$(build) \

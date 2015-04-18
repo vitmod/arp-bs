@@ -4,7 +4,7 @@
 ifeq ($(strip $(CONFIG_BUILD_NEUTRINO)),y)
 package[[ target_neutrino
 
-BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libstb_hal) $(target_libopenthreads) $(target_lua) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc)
+BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libstb_hal) $(target_libopenthreads) $(target_lua) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc) $(target_ffmpeg)
 
 PV_${P} = git
 PR_${P} = 1
@@ -17,12 +17,15 @@ CONFIG_FLAGS_${P} = \
 		--enable-silent-rules \
 		--enable-freesatepg \
 		--with-boxtype=$(TARGET) \
+		--enable-upnp \
 		--enable-giflib \
 		--with-tremor \
 		--enable-ffmpegdec \
 		--enable-maintainer-mode \
 		--with-libdir=/usr/lib \
 		--bindir=/usr/bin \
+		--with-datadir=/usr/share/tuxbox \
+		--with-fontdir=/usr/share/fonts \
 		--with-configdir=/var/tuxbox/config \
 		--with-gamesdir=/var/tuxbox/games \
 		--with-plugindir=/var/plugins \
@@ -71,7 +74,7 @@ ifdef CONFIG_NEUTRINO_SRC_MASTER
   git://github.com/OpenAR-P/neutrino-mp.git;b=master
 endif
 
-ifdef CONFIG_NEUTRINO_SRC_MARTII
+ifdef CONFIG_NEUTRINO_SRC_MAX
   git://github.com/Duckbox-Developers/neutrino-mp-cst-next.git
 endif
 

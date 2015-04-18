@@ -279,8 +279,8 @@ menu "GUI Configuration"
 			bool "public branch master"
 			depends on BUILD_NEUTRINO
 
-			config NEUTRINO_SRC_MARTII
-			bool "public branch Martii"
+			config NEUTRINO_SRC_MAX
+			bool "public branch Max"
 			depends on BUILD_NEUTRINO
 
 		      endchoice
