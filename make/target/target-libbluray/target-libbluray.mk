@@ -3,8 +3,7 @@
 #
 package[[ target_libbluray
 
-BDEPENDS_${P} = $(target_glibc) $(target_libaacs)
-
+BDEPENDS_${P} = $(target_glibc) $(target_libaacs) $(target_libdvdread) $(target_libdvdnav)
 PV_${P} = 0.6.0
 PR_${P} = 1
 
