@@ -403,9 +403,11 @@ DESCRIPTION_enigma2_plugin_systemplugins_videomode = The Videomode plugin provid
 RDEPENDS_enigma2_plugin_systemplugins_videomode = enigma2
 FILES_enigma2_plugin_systemplugins_videomode = /usr/lib/enigma2/python/Plugins/SystemPlugins/Videomode
 
+ifdef CONFIG_WLAN_SUPPORT
 DESCRIPTION_enigma2_plugin_systemplugins_wirelesslan = The wireless lan plugin helps you configuring your WLAN network interface.
 RDEPENDS_enigma2_plugin_systemplugins_wirelesslan = enigma2 python_wifi
 FILES_enigma2_plugin_systemplugins_wirelesslan = /usr/lib/enigma2/python/Plugins/SystemPlugins/WirelessLan
+endif
 
 ifdef CONFIG_SPARK7162
 PACKAGES_${P} += \
