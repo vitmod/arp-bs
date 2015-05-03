@@ -28,6 +28,7 @@ rule[[
   install_bin:$(PKDIR)/etc/init.d:file://rc
   install_bin:$(PKDIR)/etc/init.d:file://reboot
   install_bin:$(PKDIR)/etc/init.d:file://sendsigs
+  install_bin:$(PKDIR)/etc/init.d:file://startgui
   install_bin:$(PKDIR)/etc/init.d:file://telnetd
   install_bin:$(PKDIR)/etc/init.d:file://umountfs
   install_bin:$(PKDIR)/etc/init.d:file://lircd
@@ -45,6 +46,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && $(INSTALL_${P})
 
 	ln -sf ../init.d $(PKDIR)/etc/rc.d/init.d
+	touch $(PKDIR)/etc/.gui
 
 	touch $@
 
