@@ -5,13 +5,14 @@ package[[ target_curl
 
 BDEPENDS_${P} = $(target_glibc) $(target_zlib)
 
-PV_${P} = 7.37.0
+PV_${P} = 7.40.0
 PR_${P} = 1
 
 call[[ base ]]
 
 rule[[
   extract:http://${PN}.haxx.se/download/${PN}-${PV}.tar.gz
+  patch:file://libcurl-${PV}.patch
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
