@@ -13,6 +13,7 @@ call[[ base ]]
 
 rule[[
   git://github.com/google/oauth2client.git
+  patch:file://${PN}.patch
 ]]rule
 
 call[[ git ]]
