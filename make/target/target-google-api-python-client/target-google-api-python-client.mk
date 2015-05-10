@@ -6,7 +6,7 @@ package[[ target_google_api_python_client
 BDEPENDS_${P} = $(target_python_setuptools)
 
 PV_${P} = git
-PR_${P} = 1
+PR_${P} = 2
 PACKAGE_ARCH_${P} = all
 
 call[[ base ]]
@@ -32,7 +32,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 
 
 DESCRIPTION_${P} = "Python client library for Google's discovery based APIs."
-RDEPENDS_${P} = python_core python_six python_oauth2client python_httplib2 python_uritemplate
+RDEPENDS_${P} = python_core python_misc python_six python_oauth2client python_httplib2 python_uritemplate
 FILES_${P} =   \
 $(PYTHON_DIR)/site-packages/apiclient/* \
 $(PYTHON_DIR)/site-packages/googleapiclient/*
