@@ -32,7 +32,8 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 
 
 DESCRIPTION_${P} = "Python client library for Google's discovery based APIs."
-RDEPENDS_${P} = python_core python_misc python_six python_oauth2client python_httplib2 python_uritemplate
+RDEPENDS_${P} = python_core python_misc python_six python_oauth2client \
+	python_httplib2 python_uritemplate python_argparse
 FILES_${P} =   \
 $(PYTHON_DIR)/site-packages/apiclient/* \
 $(PYTHON_DIR)/site-packages/googleapiclient/*
