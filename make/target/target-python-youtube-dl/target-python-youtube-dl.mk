@@ -35,7 +35,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 
 
 DESCRIPTION_${P} = "Small command-line program to download videos from YouTube.com and other video sites"
-RDEPENDS_${P} = python_core python_unixadmin python_html python_ctypes python_email
+RDEPENDS_${P} = python_core python_unixadmin python_html python_ctypes python_email python_subprocess
 FILES_${P} =   \
 $(PYTHON_DIR)/site-packages/youtube_dl/*.p* \
 $(PYTHON_DIR)/site-packages/youtube_dl/downloader/* \
