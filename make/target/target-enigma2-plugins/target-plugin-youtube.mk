@@ -27,11 +27,13 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
 	cd $(DIR_${P}) && \
-	$(crossprefix)/bin/python ./setup.py install --install-purelib=$(PKDIR)/usr/lib/enigma2/python/Plugins
+	$(crossprefix)/bin/python ./setup.py install \
+	--install-purelib=$(PKDIR)/usr/lib/enigma2/python/Plugins
 	touch $@
 
 NAME_${P} = enigma2-plugin-extensions-youtube
 DESCRIPTION_${P} = Watch YouTube videos
+MAINTAINER_${P} = Taapat taapat@gmail.com
 RDEPENDS_${P} = python_core python-twisted-web google-api-python-client python-youtube-dl
 
 FILES_${P} = /usr/lib/enigma2/python/Plugins/Extensions/YouTube/*
