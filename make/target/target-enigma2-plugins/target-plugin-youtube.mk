@@ -34,7 +34,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 NAME_${P} = enigma2-plugin-extensions-youtube
 DESCRIPTION_${P} = Watch YouTube videos
 MAINTAINER_${P} = Taapat taapat@gmail.com
-RDEPENDS_${P} = python_core python-twisted-web google-api-python-client python-youtube-dl
+RDEPENDS_${P} = python_core python-twisted-web python-youtube-dl
 
 FILES_${P} = /usr/lib/enigma2/python/Plugins/Extensions/YouTube/*
 
