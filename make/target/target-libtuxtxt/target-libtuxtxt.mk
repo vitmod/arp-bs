@@ -11,7 +11,7 @@ PR_${P} = 2
 call[[ base ]]
 
 rule[[
-  nothing:git://git.code.sf.net/p/openpli/tuxtxt.git:sub=libtuxtxt
+  nothing:git://github.com/OpenPLi/tuxtxt.git:sub=libtuxtxt
   patch:file://${PN}.diff
 ]]rule
 
