@@ -53,8 +53,8 @@
  void (*resize)(const unsigned char *source, unsigned char *dest, int xsource, int ysource, int xdest, int ydest, int colors);
  void combine(unsigned char *output, const unsigned char *video, const unsigned char *osd, int vleft, int vtop, int vwidth, int vheight, int xres, int yres);
  
--static enum {UNKNOWN, PALLAS, VULCAN, XILLEON, BRCM7400, BRCM7401, BRCM7405, BRCM7325, BRCM7335, BRCM7358, BRCM7362, BRCM7241, BRCM7356, BRCM7424, BRCM7425} stb_type = UNKNOWN;
-+//static enum {UNKNOWN, PALLAS, VULCAN, XILLEON, BRCM7400, BRCM7401, BRCM7405, BRCM7325, BRCM7335, BRCM7358, BRCM7362, BRCM7241, BRCM7356, BRCM7424, BRCM7425} stb_type = UNKNOWN;
+-static enum {UNKNOWN, PALLAS, VULCAN, XILLEON, BRCM7400, BRCM7401, BRCM7405, BRCM7325, BRCM7335, BRCM7358, BRCM7362, BRCM7241, BRCM7356, BRCM7424, BRCM7425, BRCM7435, BRCM7552} stb_type = UNKNOWN;
++//static enum {UNKNOWN, PALLAS, VULCAN, XILLEON, BRCM7400, BRCM7401, BRCM7405, BRCM7325, BRCM7335, BRCM7358, BRCM7362, BRCM7241, BRCM7356, BRCM7424, BRCM7425, BRCM7435, BRCM7552} stb_type = UNKNOWN;
  
  static int chr_luma_stride = 0x40;
  static int chr_luma_register_offset = 0;
@@ -66,7 +66,7 @@
  	// detect STB
  	char buf[256];
  	FILE *fp = fopen("/proc/fb","r");
-@@ -287,6 +326,7 @@
+@@ -330,6 +369,7 @@
  		default:
  			break;
  	}
@@ -74,7 +74,7 @@
  
  	// process command line
  	while ((c = getopt (argc, argv, "dhj:lbnopqr:sv")) != -1)
-@@ -369,14 +409,17 @@
+@@ -412,14 +452,17 @@
  
  	int mallocsize=1920*1080;
  
@@ -93,7 +93,7 @@
  
  	output = (unsigned char *)malloc(mallocsize*4);
  
-@@ -392,6 +435,7 @@
+@@ -435,6 +478,7 @@
  		getvideo(video,&xres_v,&yres_v);
  	}
  
@@ -101,7 +101,7 @@
  	// get aspect ratio
  	if (stb_type == VULCAN || stb_type == PALLAS)
  	{
-@@ -406,6 +450,10 @@
+@@ -449,6 +493,10 @@
  	else
  	{
  		fp = fopen("/proc/stb/vmpeg/0/aspect", "r");
@@ -112,7 +112,7 @@
  		if (fp)
  		{
  			while (fgets(buf,sizeof(buf), fp))
-@@ -442,7 +490,10 @@
+@@ -485,7 +533,10 @@
  		}
  		if (dst_width == 720) dst_width = 0;
  		if (dst_height == 576) dst_height = 0;
@@ -123,7 +123,7 @@
  
  	// resizing
   	if (video_only)
-@@ -724,6 +775,15 @@
+@@ -767,6 +818,15 @@
  	int stride = 0;
  	FILE *fp;
  	char buf[256];
@@ -139,7 +139,7 @@
  
  	if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0)
  	{
-@@ -731,6 +791,219 @@
+@@ -774,6 +834,219 @@
  		return;
  	}
  
@@ -359,7 +359,7 @@
  	if (stb_type > XILLEON)
  	{
  		// grab bcm pic from decoder memory
-@@ -1094,6 +1367,7 @@
+@@ -1137,6 +1410,7 @@
  
  		free(memory_tmp);
  	}
@@ -367,7 +367,7 @@
  
  	close(mem_fd);
  
-@@ -1119,22 +1393,26 @@
+@@ -1162,22 +1436,26 @@
  			int GV=yuv2rgbtable_gv[V];
  			int BV=yuv2rgbtable_bv[V];
  
@@ -394,7 +394,7 @@
  			video[out1+rgbstride]=CLAMP((Y + RU)>>16);
  			video[out1+1+rgbstride]=CLAMP((Y - GV - GU)>>16);
  			video[out1+2+rgbstride]=CLAMP((Y + BV)>>16);
-@@ -1144,12 +1422,14 @@
+@@ -1187,12 +1465,14 @@
  
  			Y=yuv2rgbtable_y[luma[pos]];
  
@@ -409,7 +409,7 @@
  			video[out1+rgbstride]=CLAMP((Y + RU)>>16);
  			video[out1+1+rgbstride]=CLAMP((Y - GV - GU)>>16);
  			video[out1+2+rgbstride]=CLAMP((Y + BV)>>16);
-@@ -1272,6 +1552,7 @@
+@@ -1315,6 +1595,7 @@
  			return;
  		}
  
@@ -417,7 +417,7 @@
  		if (stb_type == VULCAN) // DM500/5620 stores the colors as a 16bit word with yuv values, so we have to convert :(
  		{
  			unsigned short yuv;
-@@ -1312,6 +1593,7 @@
+@@ -1355,6 +1636,7 @@
  			fprintf(stderr, "unsupported framebuffermode\n");
  			return;
  		}
