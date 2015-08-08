@@ -17,5 +17,12 @@ if [ -f /lib/modules/$(uname -r)/kernel/fs/yaffs2/yaffs.ko ]; then
 	fi
 fi
 
+#
+# copy picon directories
+#
+echo "Copy picons from /media/usb to tmp..."
+[ -f /media/usb/picon_tmp.tar ] && tar -xf /media/usb/picon_tmp.tar -C /tmp
+[ ! -d /tmp/piconProv ] && [ -d /media/usb/piconProv ] && cp -R /media/usb/piconProv /tmp
+
 exit 0
-$
+
