@@ -119,7 +119,7 @@ ifdef CONFIG_ENIGMA2_SRC_LAST
   git://github.com/OpenAR-P/enigma2-pli-arp.git;b=last
 endif
 ifdef CONFIG_ENIGMA2_SRC_MAX
-  git://git.code.sf.net/p/openpli/enigma2.git;b=master;r=20a8c5
+  git://github.com/OpenPLi/enigma2.git;b=master;r=20a8c5
   patch:file://enigma2-pli-nightly.0.diff
 endif
 ifdef CONFIG_ENIGMA2_SRC_TESTING
