@@ -5,7 +5,7 @@ package[[ target_libreadline
 
 BDEPENDS_${P} = $(target_glibc) $(target_ncurses)
 
-PV_${P} = 6.2
+PV_${P} = 6.3
 PR_${P} = 1
 
 DIR_${P} = ${WORK}/readline-${PV}
