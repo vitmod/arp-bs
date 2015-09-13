@@ -1,0 +1,49 @@
+diff --git a/src/driver/rcinput.cpp b/src/driver/rcinput.cpp
+index 49a9131..c5a8ef5 100644
+--- a/src/driver/rcinput.cpp
++++ b/src/driver/rcinput.cpp
+@@ -72,11 +72,7 @@
+ #if HAVE_SPARK_HARDWARE
+ /* this relies on event0 being the AOTOM frontpanel driver device
+  * TODO: what if another input device is present? */
+-#ifdef BOXMODEL_SPARK
+-const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {"/dev/input/nevis_ir", "/dev/input/event0"};
+-#else
+-const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {"/dev/input/nevis_ir"};
+-#endif
++const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {"/dev/input/event0", "/dev/input/event1" , "/dev/input/event2"};
+ #elif HAVE_GENERIC_HARDWARE
+ /* the FIFO created by libstb-hal */
+ const char * const RC_EVENT_DEVICE[NUMBER_OF_EVENT_DEVICES] = {"/tmp/neutrino.input"};
+diff --git a/src/driver/rcinput.h b/src/driver/rcinput.h
+index e72d3bd..44ffe0c 100644
+--- a/src/driver/rcinput.h
++++ b/src/driver/rcinput.h
+@@ -148,11 +148,7 @@ class CRCInput
+ 		int 		fd_pipe_low_priority[2];
+ 		int         	fd_gamerc;
+ #if HAVE_SPARK_HARDWARE
+-#ifdef BOXMODEL_SPARK
+-#define NUMBER_OF_EVENT_DEVICES 2
+-#else
+-#define NUMBER_OF_EVENT_DEVICES 1
+-#endif
++#define NUMBER_OF_EVENT_DEVICES 3
+ #else
+ #ifdef HAVE_DUCKBOX_HARDWARE
+ #if defined (BOXMODEL_IPBOX9900) || defined (BOXMODEL_IPBOX99) || defined (BOXMODEL_IPBOX55)
+diff --git a/src/zapit/include/linux/dvb/video.h b/src/zapit/include/linux/dvb/video.h
+index d3d14a5..471c1e9 100644
+--- a/src/zapit/include/linux/dvb/video.h
++++ b/src/zapit/include/linux/dvb/video.h
+@@ -30,6 +30,10 @@
+ #include <time.h>
+ #endif
+ 
++#ifndef __user
++#define __user
++#endif
++
+ typedef enum {
+ 	VIDEO_FORMAT_4_3,     /* Select 4:3 format */
+ 	VIDEO_FORMAT_16_9,    /* Select 16:9 format. */
