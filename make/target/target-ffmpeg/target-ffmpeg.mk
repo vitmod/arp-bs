@@ -5,7 +5,10 @@ package[[ target_ffmpeg
 
 BDEPENDS_${P} = $(target_glibc) $(target_libbluray) $(target_rtmpdump)
 
-PV_${P} = 2.6.1
+PV_${P} = ${PV_MOJ}.${PV_MIN}
+PV_MOJ_${P} = 2.6
+PV_MIN_${P} = 3
+
 PR_${P} = 1
 
 DESCRIPTION_${P} = ffmpeg
@@ -14,7 +17,9 @@ call[[ base ]]
 
 rule[[
   extract:http://www.${PN}.org/releases/${PN}-${PV}.tar.gz
-  patch:file://${PN}.patch
+  patch:file://${PN}-${PV_MOJ}.patch
+  patch:file://${PN}-hds-${PV_MOJ}.patch
+  patch:file://${PN}-aac-${PV_MOJ}.patch
 ]]rule
 
 CONFIG_FLAGS_${P} = \
