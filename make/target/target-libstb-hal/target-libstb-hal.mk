@@ -5,7 +5,7 @@ ifeq ($(strip $(CONFIG_BUILD_NEUTRINO)),y)
 
 package[[ target_libstb_hal
 
-BDEPENDS_${P} = $(target_glibc) $(target_ffmpeg) $(target_libalsa) $(target_libpng) $(target_libass)
+BDEPENDS_${P} = $(target_glibc) $(target_ffmpeg) $(target_libalsa) $(target_libpng) $(target_libass) $(target_libopenthreads)
 
 PV_${P} = git
 PR_${P} = 1
@@ -15,11 +15,11 @@ call[[ base ]]
 rule[[
 
 ifdef CONFIG_NEUTRINO_SRC_MASTER
-  git://github.com/OpenAR-P/libstb-hal.git 
+  git://github.com/OpenAR-P/libstb-hal-cst-next.git;b=master
 endif
 
 ifdef CONFIG_NEUTRINO_SRC_MAX
-  git://github.com/Duckbox-Developers/libstb-hal-cst-next.git
+  git://github.com/Duckbox-Developers/libstb-hal-cst-next.git;b=master
 endif
 
 ]]rule
@@ -56,6 +56,7 @@ call[[ ipk ]]
 
 DESCRIPTION_${P} =  libstb-hal
 RDEPENDS_${P} = ffmpeg libpng16 libasound2
+FILES_${P} = /usr/lib/* /usr/bin/spark_fp
 
 call[[ ipkbox ]]
 
