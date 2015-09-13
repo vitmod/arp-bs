@@ -29,8 +29,8 @@ CONFIG_FLAGS_${P} = \
 		--with-configdir=/var/tuxbox/config \
 		--with-gamesdir=/var/tuxbox/games \
 		--with-plugindir=/var/plugins \
-		--with-stb-hal-includes=$(workprefix)/target_libstb_hal/libstb-hal-git/include \
-		--with-stb-hal-build=$(workprefix)/target_libstb_hal/libstb-hal-git \
+		--with-stb-hal-includes=$(DIR_target_libstb_hal)/include \
+		--with-stb-hal-build=$(DIR_target_libstb_hal) \
 		$(PLATFORM_CPPFLAGS) \
 		CXXFLAGS="$(CXXFLAGS_${P})" \
 		CPPFLAGS="$(CPPFLAGS_${P})"
@@ -38,17 +38,9 @@ CONFIG_FLAGS_${P} = \
 CXXFLAGS_${P} += -Wall -W -Wshadow -g0 -pipe -Os -fno-strict-aliasing -D__KERNEL_STRICT_NAMES -DCPU_FREQ
 CPPFLAGS_${P} += -I$(driverdir)/bpamem
 
-ifdef CONFIG_SPARK
+ifeq ($(CONFIG_SPARK)$(CONFIG_SPARK7162),y)
 CPPFLAGS_${P} += -I$(driverdir)/frontcontroller/aotom
 endif
-
-ifdef CONFIG_SPARK7162
-CPPFLAGS_${P} += -I$(driverdir)/frontcontroller/aotom
-endif
-
-#ifeq ($(CONFIG_SPARK)$(CONFIG_SPARK7162),y)
-#BOXTYPE = spark
-#endif
 
 # media framework
 ifdef CONFIG_GSTREAMER
@@ -71,11 +63,12 @@ call[[ base ]]
 rule[[
 
 ifdef CONFIG_NEUTRINO_SRC_MASTER
-  git://github.com/OpenAR-P/neutrino-mp.git;b=master
+  git://github.com/OpenAR-P/neutrino-mp-cst-next.git;b=master
 endif
 
 ifdef CONFIG_NEUTRINO_SRC_MAX
-  git://github.com/Duckbox-Developers/neutrino-mp-cst-next.git
+  git://github.com/Duckbox-Developers/neutrino-mp-cst-next.git;b=master
+  patch:file://include.patch
 endif
 
 ]]rule
@@ -129,7 +122,7 @@ PACKAGES_${P} = \
 	font_pakenham
 
 
-RDEPENDS_neutrino += neutrino-plugins neutrino-configs liblua libssl1 libcrypto1 libcurl4 libid3tag0 libmad0 libvorbisidec1 libpng16 libjpeg8 libgif4 font-md-khmurabi font-tuxtxt font-dejavulgcsansmono-bold font-micron font-micron-bold font-micron-italic font-neutrino font-pakenham libfreetype6 ffmpeg libdvbsi++1 libopenthreads libusb_1.0 libasound2 libstb_hal libc6 libsigc-2.3
+RDEPENDS_neutrino += neutrino-plugins neutrino-configs liblua libssl1 libcrypto1 libcurl4 libid3tag0 libmad0 libvorbisidec1 libpng16 libjpeg-turbo libgif4 font-md-khmurabi font-tuxtxt font-dejavulgcsansmono-bold font-micron font-micron-bold font-micron-italic font-neutrino font-pakenham libfreetype6 ffmpeg libdvbsi++1 libopenthreads libusb_1.0 libasound2 libstb_hal libc6 libsigc-2.3
 
 FILES_neutrino = /usr/bin/* /usr/sbin/*
 FILES_neutrino_plugins = /usr/share/tuxbox /usr/share/iso-codes/*
