@@ -5,7 +5,7 @@ package[[ target_libfribidi
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 0.19.5
+PV_${P} = 0.19.7
 PR_${P} = 1
 
 PN_${P} = fribidi
