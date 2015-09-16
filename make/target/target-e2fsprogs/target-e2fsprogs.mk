@@ -5,7 +5,7 @@ package[[ target_e2fsprogs
 
 BDEPENDS_${P} = $(target_glibc) $(target_util_linux)
 
-PV_${P} = 1.42.9
+PV_${P} = 1.42.13
 PR_${P} = 1
 
 call[[ base ]]
