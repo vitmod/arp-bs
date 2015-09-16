@@ -10,6 +10,11 @@ BDEPENDS_${P} = $(target_glibc) $(target_ffmpeg) $(target_libalsa) $(target_libp
 PV_${P} = git
 PR_${P} = 1
 
+ifdef CONFIG_GSTREAMER
+BDEPENDS_${P} += $(target_gstreamer)
+CONFIG_FLAGS_${P} += --enable-gstreamer
+endif
+
 call[[ base ]]
 
 rule[[
