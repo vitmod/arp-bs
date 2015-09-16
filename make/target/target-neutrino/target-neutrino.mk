@@ -4,7 +4,7 @@
 ifeq ($(strip $(CONFIG_BUILD_NEUTRINO)),y)
 package[[ target_neutrino
 
-BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libstb_hal) $(target_libopenthreads) $(target_lua) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc) $(target_ffmpeg) $(target_luaexpat)
+BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libstb_hal) $(target_libopenthreads) $(target_lua) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc) $(target_luaexpat)
 
 PV_${P} = git
 PR_${P} = 1
@@ -45,10 +45,10 @@ endif
 # media framework
 ifdef CONFIG_GSTREAMER
 BDEPENDS_${P} += $(target_gstreamer)
-CONFIG_FLAGS_${P} += --enable-mediafwgstreamer
+CONFIG_FLAGS_${P} += --enable-gstreamer
 endif
 ifdef CONFIG_EPLAYER3
-BDEPENDS_${P} += $(target_libeplayer3)
+BDEPENDS_${P} += $(target_libeplayer3) $(target_ffmpeg)
 CONFIG_FLAGS_${P} += --enable-libeplayer3 LIBEPLAYER3_CPPFLAGS="-I$(appsdir)/misc/tools/libeplayer3/include"
 RDEPENDS_${P} += libeplayer3
 endif
