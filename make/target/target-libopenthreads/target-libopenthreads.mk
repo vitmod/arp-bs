@@ -20,8 +20,7 @@ call[[ git ]]
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 	$(PREPARE_${P})
 	cd $(DIR_${P}) && \
-	git clone git://c00lstreamtech.de/cst-public-libraries-openthreads-src.git src; \
-	git clone git://c00lstreamtech.de/cst-public-libraries-openthreads-include.git include;
+		git submodule update --init --recursive
 	touch $@
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
