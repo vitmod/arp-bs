@@ -5,7 +5,7 @@ package[[ target_usb_modeswitch
 
 BDEPENDS_${P} = $(target_libusb) $(target_libusb_compat) $(target_usb_modeswitch_data)
 
-PV_${P} = 2.2.0
+PV_${P} = 2.2.5
 PR_${P} = 1
 
 call[[ base ]]
