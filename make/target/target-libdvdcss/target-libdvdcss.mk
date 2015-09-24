@@ -5,7 +5,7 @@ package[[ target_libdvdcss
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 1.2.12
+PV_${P} = 1.2.13
 PR_${P} = 1
 
 call[[ base ]]
