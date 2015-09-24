@@ -5,7 +5,7 @@ package[[ target_cairo
 
 BDEPENDS_${P} = $(target_libpng) $(target_pixman) $(target_expat) $(target_fontconfig)
 
-PV_${P} = 1.12.16
+PV_${P} = 1.12.18
 PR_${P} = 1
 
 call[[ base ]]
