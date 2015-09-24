@@ -5,7 +5,7 @@ package[[ target_libsoup
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 2.40.0
+PV_${P} = 2.50.0
 PR_${P} = 1
 
 call[[ base ]]
