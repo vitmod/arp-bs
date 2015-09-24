@@ -5,14 +5,14 @@ package[[ target_libdvdread
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 4.1.3
+PV_${P} = 4.9.9
 PR_${P} = 1
 
 call[[ base ]]
 
 rule[[
-  extract:http://www.mplayerhq.hu/MPlayer/releases/dvdnav-old/${PN}-${PV}.tar.bz2
-  patch:file://${PN}_${PV}-5.diff
+  extract:http://dvdnav.mplayerhq.hu/releases/${PN}-${PV}.tar.xz
+  patch:file://${PN}_${PV}.patch
 ]]rule
 
 
@@ -38,7 +38,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
 	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	
-	$(call rewrite_config, $(PKDIR)/usr/bin/dvdread-config)
+	#$(call rewrite_config, $(PKDIR)/usr/bin/dvdread-config)
 	touch $@
 
 call[[ ipk ]]
