@@ -43,10 +43,10 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--build=$(build) \
 			--prefix=/usr \
-			--enable-shared \
 			--with-target=cdk \
 			--with-boxtype=$(TARGET) \
 			$(PLATFORM_CPPFLAGS) \
+			CFLAGS="$(CXXFLAGS_target_neutrino)" \
 			CPPFLAGS="$(CPPFLAGS_target_neutrino)" \
 		&& \
 		$(run_make)
