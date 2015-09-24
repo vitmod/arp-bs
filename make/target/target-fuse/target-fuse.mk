@@ -5,7 +5,7 @@ package[[ target_fuse
 
 BDEPENDS_${P} = $(target_glibc) $(target_glib2)
 
-PV_${P} = 2.9.3
+PV_${P} = 2.9.4
 PR_${P} = 1
 
 call[[ base ]]
