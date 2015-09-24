@@ -4,7 +4,7 @@
 ifeq ($(strip $(CONFIG_BUILD_NEUTRINO)),y)
 package[[ target_neutrino
 
-BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libstb_hal) $(target_libopenthreads) $(target_lua) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc) $(target_luaexpat)
+BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libopenthreads) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc) $(target_lua) $(target_luaexpat) $(target_libstb_hal) 
 
 PV_${P} = git
 PR_${P} = 1
@@ -21,14 +21,16 @@ CONFIG_FLAGS_${P} = \
 		--enable-giflib \
 		--with-tremor \
 		--enable-ffmpegdec \
-		--enable-maintainer-mode \
 		--with-libdir=/usr/lib \
-		--bindir=/usr/bin \
 		--with-datadir=/usr/share/tuxbox \
 		--with-fontdir=/usr/share/fonts \
 		--with-configdir=/var/tuxbox/config \
 		--with-gamesdir=/var/tuxbox/games \
-		--with-plugindir=/var/plugins \
+		--with-plugindir=/var/tuxbox/plugins \
+		--with-iconsdir=/usr/share/tuxbox/neutrino/icons \
+		--with-localedir=/usr/share/tuxbox/neutrino/locale \
+		--with-private_httpddir=/usr/share/tuxbox/neutrino/httpd \
+		--with-themesdir=/usr/share/tuxbox/neutrino/themes \
 		--with-stb-hal-includes=$(DIR_target_libstb_hal)/include \
 		--with-stb-hal-build=$(DIR_target_libstb_hal) \
 		$(PLATFORM_CPPFLAGS) \
