@@ -198,7 +198,7 @@ endif
 #neutrino
 
 ifdef CONFIG_BUILD_NEUTRINO
-BDEPENDS_${P} += $(target_neutrino) $(target_libid3tag) $(target_libvorbisidec) $(target_libcap) $(target_libmad)
+BDEPENDS_${P} += $(target_libid3tag) $(target_libvorbisidec) $(target_libcap) $(target_libmad) $(target_neutrino)
 opkg_my_list += neutrino libblkid1
 endif
 
