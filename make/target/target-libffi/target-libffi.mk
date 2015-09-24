@@ -5,7 +5,7 @@ package[[ target_libffi
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 3.1
+PV_${P} = 3.2.1
 PR_${P} = 1
 
 DESCRIPTION_${P} = A portable foreign function interface library \
