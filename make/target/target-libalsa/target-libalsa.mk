@@ -5,7 +5,7 @@ package[[ target_libalsa
 
 BDEPENDS_${P} =
 
-PV_${P} = 1.0.26
+PV_${P} = 1.0.29
 PR_${P} = 1
 
 DIR_${P} = ${WORK}/alsa-lib-${PV}
