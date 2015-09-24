@@ -6,7 +6,7 @@ package[[ target_python_pycrypto
 BDEPENDS_${P} = $(target_python_setuptools)
 
 PV_${P} = 2.7a1
-PR_${P} = 1
+PR_${P} = 2
 
 DIR_${P} = $(WORK_${P})/pycrypto-${PV}
 
@@ -14,6 +14,7 @@ call[[ base ]]
 
 rule[[
   extract:http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto/pycrypto-${PV}.tar.gz
+  patch:file://pycrypto_use_malloc.diff
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
@@ -26,7 +27,9 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	./configure \
 		--build=$(build) \
 		--host=$(target) \
-		--prefix=/usr
+		--target=$(target) \
+		--prefix=/usr && \
+	$(python_build)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
