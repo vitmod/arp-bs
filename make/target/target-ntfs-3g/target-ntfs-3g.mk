@@ -5,7 +5,7 @@ package[[ target_ntfs_3g
 
 BDEPENDS_${P} = $(target_glibc) $(target_fuse)
 
-PV_${P} = 2014.2.15
+PV_${P} = 2015.3.14
 PR_${P} = 1
 PN_${P} = ntfs-3g_ntfsprogs
 
