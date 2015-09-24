@@ -3,7 +3,7 @@
 #
 package[[ target_ntpdate
 
-PV_${P} = 4.2.6p5
+PV_${P} = 4.2.8
 PR_${P} = 1
 DIR_${P} = ${WORK}/ntp-${PV}
 
