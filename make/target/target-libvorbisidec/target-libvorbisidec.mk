@@ -5,7 +5,7 @@ package[[ target_libvorbisidec
 
 BDEPENDS_${P} = $(target_glibc) $(target_libogg)
 
-PV_${P} = 1.0.2+svn16259
+PV_${P} = 1.0.2+svn18153
 PR_${P} = 1
 
 call[[ base ]]
@@ -21,6 +21,7 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
+		ACLOCAL_FLAGS="-I . -I $(targetprefix)/usr/share/aclocal" \
 		$(BUILDENV) \
 		./autogen.sh \
 			--build=$(build) \
