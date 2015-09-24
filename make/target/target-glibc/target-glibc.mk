@@ -8,7 +8,7 @@ BREMOVES_${P} = $(target_glibc_first)
 
 PR_${P} = 2
 
-PV_${P} := 2.14.1-54
+PV_${P} := 2.14.1-56
 ${P}_SPEC = stm-$(${P}).spec
 ${P}_SPEC_PATCH = $(${P}_SPEC).diff
 ${P}_PATCHES = make-versions-4.0-and-greater.patch
