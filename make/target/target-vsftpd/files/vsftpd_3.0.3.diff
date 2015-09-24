@@ -239,6 +239,16 @@
  /* For INT_MAX */
  #include <limits.h>
  
+@@ -165,6 +165,9 @@
+ #endif
+ /* END config */
+ 
++#undef VSF_SYSDEP_HAVE_CAPABILITIES
++#undef VSF_SYSDEP_HAVE_LIBCAP
++
+ /* PAM support - we include our own dummy version if the system lacks this */
+ #include <security/pam_appl.h>
+
 @@ -1262,11 +1267,36 @@ vsf_set_term_if_parent_dies()
  #endif
  }

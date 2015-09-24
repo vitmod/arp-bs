@@ -5,7 +5,7 @@ package[[ target_vsftpd
 
 BDEPENDS_${P} = $(target_glibc) $(target_zlib)
 
-PV_${P} = 3.0.2
+PV_${P} = 3.0.3
 PR_${P} = 1
 
 call[[ base ]]
