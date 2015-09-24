@@ -5,13 +5,13 @@ package[[ target_rtmpdump
 
 BDEPENDS_${P} = $(target_glibc) $(target_zlib) $(target_openssl)
 
-PV_${P} = 0.10.2
+PV_${P} = 2.4
 PR_${P} = 1
 
 call[[ base ]]
 
 rule[[
-  git://git.ffmpeg.org/${PN}.git
+  git://github.com/oe-alliance/${PN}.git
 ]]rule
 
 MAKE_FLAGS_${P} = \
