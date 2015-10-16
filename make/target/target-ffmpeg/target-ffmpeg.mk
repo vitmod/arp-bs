@@ -80,6 +80,7 @@ CONFIG_FLAGS_${P} += \
 		--enable-muxer=image2 \
 		--enable-muxer=mpeg1video \
 		--enable-muxer=mpeg2video \
+		--enable-muxer=mpegts \
 		--enable-muxer=ogg
 CONFIG_FLAGS_${P} += \
 		--disable-parsers \
