@@ -8,12 +8,16 @@ BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libopenthreads) $(target_curl)
 
 PV_${P} = git
 PR_${P} = 1
-PACKAGE_ARCH_${P} = $(box_arch)
+PACKAGE_ARCH_neutrino = $(box_arch)
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
 
-
+ifdef CONFIG_DEBUG_ARP
 CONFIG_FLAGS_${P} = \
+		--with-debug
+endif
+
+CONFIG_FLAGS_${P} += \
 		--enable-silent-rules \
 		--enable-freesatepg \
 		--with-boxtype=$(TARGET) \
@@ -38,6 +42,7 @@ CONFIG_FLAGS_${P} = \
 		CPPFLAGS="$(CPPFLAGS_${P})"
 
 CXXFLAGS_${P} += -Wall -W -Wshadow -g0 -pipe -Os -fno-strict-aliasing -D__KERNEL_STRICT_NAMES -DCPU_FREQ
+CXXFLAGS_${P} += -D__STDC_CONSTANT_MACROS
 CPPFLAGS_${P} += -I$(driverdir)/bpamem
 
 ifeq ($(CONFIG_SPARK)$(CONFIG_SPARK7162),y)
@@ -101,6 +106,8 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(target)-strip $(PKDIR)/usr/bin/neutrino
 	$(target)-strip $(PKDIR)/usr/bin/pzapit
 	$(target)-strip $(PKDIR)/usr/bin/sectionsdcontrol
+	$(INSTALL_DIR) $(PKDIR)/etc
+	echo "neutrino" > $(PKDIR)/etc/.gui
 	rm -f $(PKDIR)/usr/share/fonts/md_khmurabi_10.ttf
 	rm -f $(PKDIR)/usr/share/fonts/tuxtxt.ttf
 	rm -f $(PKDIR)/usr/share/fonts/tuxtxt.otb
@@ -126,7 +133,7 @@ PACKAGES_${P} = \
 
 RDEPENDS_neutrino += neutrino-plugins neutrino-configs liblua libssl1 libcrypto1 libcurl4 libid3tag0 libmad0 libvorbisidec1 libpng16 libjpeg-turbo libgif4 font-md-khmurabi font-tuxtxt font-dejavulgcsansmono-bold font-micron font-micron-bold font-micron-italic font-neutrino font-pakenham libfreetype6 ffmpeg libdvbsi++1 libopenthreads libusb_1.0 libasound2 libstb_hal libc6 libsigc-2.3
 
-FILES_neutrino = /usr/bin/* /usr/sbin/*
+FILES_neutrino = /usr/bin/* /usr/sbin/* /etc/.gui
 FILES_neutrino_plugins = /usr/share/tuxbox /usr/share/iso-codes/*
 FILES_neutrino_configs = /var
 
