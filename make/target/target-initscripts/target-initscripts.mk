@@ -46,7 +46,6 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && $(INSTALL_${P})
 
 	ln -sf ../init.d $(PKDIR)/etc/rc.d/init.d
-	touch $(PKDIR)/etc/.gui
 
 	touch $@
 

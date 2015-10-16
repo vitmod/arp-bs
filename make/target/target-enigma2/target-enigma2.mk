@@ -157,6 +157,8 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	cd $(DIR_${P}) && $(INSTALL_${P})
 
 	$(target)-strip $(PKDIR)/usr/bin/enigma2
+	$(INSTALL_DIR) $(PKDIR)/etc
+	echo "enigma" > $(PKDIR)/etc/.gui
 	rm -f $(PKDIR)/usr/share/fonts/ae_AlMateen.ttf
 	rm -f $(PKDIR)/usr/share/fonts/lcd.ttf
 	rm -f $(PKDIR)/usr/share/fonts/md_khmurabi_10.ttf
@@ -206,6 +208,7 @@ PACKAGES_${P} = \
 
 RDEPENDS_enigma2 += libgcc1 libpython2.7 python-threading libtuxtxt0 libbz2 libgif4 libfreetype6 python-core python-twisted-core libdvbsi++1 python-re font-ae-almateen font-andale font-lcd font-md-khmurabi font-tuxtxt font-nmsbd libpng16 font-valis-enigma libstdc++6 libglib libsigc-1.2 python-fcntl python-netclient python-netserver python-math python-codecs libcrypto1 libfribidi0 python-zopeinterface python-xml libtuxtxt32bpp0 python-pickle libxmlccwrap python-shell ethtool libdreamdvd0 python-twisted-web python-zlib python-crypt python-lang python-subprocess enigma2_meta python-compression e2fsprogs-e2fsck e2fsprogs-tune2fs libjpeg-turbo
 FILES_enigma2 = \
+	/etc/.gui \
 	/usr/bin \
 	/usr/lib/libopen.s* \
 	/usr/lib/enigma2/python/Components \
