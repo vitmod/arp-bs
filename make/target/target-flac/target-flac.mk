@@ -5,14 +5,14 @@ package[[ target_flac
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 1.3.0
+PV_${P} = 1.3.1
 PR_${P} = 1
 
 call[[ base ]]
 
 rule[[
   extract:http://downloads.xiph.org/releases/${PN}/${PN}-${PV}.tar.xz
-  patch:file://${PN}-${PV}.patch
+  patch:file://${PN}.patch
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
