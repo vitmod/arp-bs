@@ -5,13 +5,13 @@ package[[ target_minidlna
 
 BDEPENDS_${P} = $(target_ffmpeg) $(target_flac) $(target_sqlite) $(target_libogg) $(target_libid3tag) $(target_libvorbis) $(target_libexif)  $(target_libjpeg_turbo)
 
-PV_${P} = 1.0.25
+PV_${P} = 1.1.5
 PR_${P} = 1
 
 call[[ base ]]
 
 rule[[
-  extract:http://netcologne.dl.sourceforge.net/project/${PN}/${PN}/${PV}/${PN}_${PV}_src.tar.gz
+  extract:http://sourceforge.net/projects/${PN}/files/${PN}/${PV}/${PN}-${PV}.tar.gz
   patch:file://${PN}-${PV}.patch
   nothing:file://minidlna-init
 ]]rule
@@ -22,16 +22,15 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
-		libtoolize -f -c && \
 		$(BUILDENV) \
-		DESTDIR=$(targetprefix) \
-		make
-		PREFIX=$(targetprefix)/usr \
-		LIBDIR=$(targetprefix)/usr/lib \
-		SBINDIR=$(targetprefix)/usr/sbin \
-		INCDIR=$(targetprefix)/usr/include \
-		PAM_CAP=no \
-		LIBATTR=no
+		./autogen.sh && \
+		./configure \
+			--build=$(build) \
+			--host=$(target) \
+			--prefix=/usr \
+			--disable-nls \
+			&& \
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
