@@ -67,9 +67,9 @@
    stfbcontrol a 0
 
 	stfbcontrol a 255
-
+	
    # Enable swap in ram
    mkswap /dev/zram0
    swapon /dev/zram0
-
+   
 	echo " e2 "
