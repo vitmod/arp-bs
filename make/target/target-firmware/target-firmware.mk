@@ -44,7 +44,9 @@ endif
 NAME_${P} = firmware
 SRC_URI_${P} = stlinux.com
 FILES_${P} = /lib/firmware/component.fw /lib/firmware/fdvo0.fw
-
+ifdef CONFIG_HL101
+FILES_${P} += /lib/firmware/dvb-fe-avl2108.fw /lib/firmware/dvb-fe-stv6306.fw
+endif
 call[[ ipkbox ]]
 
 ]]package
