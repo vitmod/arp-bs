@@ -63,6 +63,10 @@ opkg_my_list += \
 	kernel-module-simu-button \
 	kernel-module-smartcard \
 	kernel-module-stgfb
+ifdef CONFIG_HL101
+opkg_my_list += \
+	kernel-module-cic
+endif
 
 #extras
 

@@ -135,6 +135,11 @@ PACKAGES_${P} = \
 	kernel_module_rtl871x \
 	kernel_module_rtl8188eu
 
+ifdef CONFIG_HL101
+PACKAGES_${P} += \
+	kernel_module_cic
+endif
+
 DESCRIPTION_kernel_module_avs = For av receiver without av switch. the e2_core in stmdvb need some functions \
 from avs module but fake_avs is not a real fake because it sets pio pins.
 FILES_kernel_module_avs = /lib/modules/$(KERNEL_VERSION)/extra/avs
@@ -144,6 +149,11 @@ FILES_kernel_module_bpamem = /lib/modules/$(KERNEL_VERSION)/extra/bpamem
 
 DESCRIPTION_kernel_module_cec = HdmiCEC  driver for multimedia devices control
 FILES_kernel_module_cec = /lib/modules/$(KERNEL_VERSION)/extra/cec
+
+ifdef CONFIG_HL101
+DESCRIPTION_kernel_module_cic = driver for control  devices
+FILES_kernel_module_cic = /lib/modules/$(KERNEL_VERSION)/extra/cic
+endif
 
 DESCRIPTION_kernel_module_compcache = The zram module creates RAM based block devices named /dev/zram<id>
 FILES_kernel_module_compcache = /lib/modules/$(KERNEL_VERSION)/extra/compcache
