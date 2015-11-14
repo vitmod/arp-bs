@@ -1,7 +1,8 @@
-diff -Nur python-2.6.6.org/Lib/gettext.py python-2.6.6/Lib/gettext.py
---- python-2.6.6.org/Lib/gettext.py	2006-02-19 14:26:36.000000000 +0100
-+++ python-2.6.6/Lib/gettext.py	2012-09-17 21:55:58.820875346 +0200
-@@ -53,6 +53,7 @@
+diff --git a/Lib/gettext.py b/Lib/gettext.py
+index 3f47580..ca3b8cb 100644
+--- a/Lib/gettext.py
++++ b/Lib/gettext.py
+@@ -53,6 +53,7 @@ from errno import ENOENT
  __all__ = ['NullTranslations', 'GNUTranslations', 'Catalog',
             'find', 'translation', 'install', 'textdomain', 'bindtextdomain',
             'dgettext', 'dngettext', 'gettext', 'ngettext',
@@ -9,7 +10,7 @@ diff -Nur python-2.6.6.org/Lib/gettext.py python-2.6.6/Lib/gettext.py
             ]
  
  _default_localedir = os.path.join(sys.prefix, 'share', 'locale')
-@@ -193,11 +194,21 @@
+@@ -193,11 +194,21 @@ class NullTranslations:
              return self._fallback.gettext(message)
          return message
  
@@ -31,7 +32,7 @@ diff -Nur python-2.6.6.org/Lib/gettext.py python-2.6.6/Lib/gettext.py
      def ngettext(self, msgid1, msgid2, n):
          if self._fallback:
              return self._fallback.ngettext(msgid1, msgid2, n)
-@@ -206,6 +217,14 @@
+@@ -206,6 +217,14 @@ class NullTranslations:
          else:
              return msgid2
  
@@ -46,7 +47,7 @@ diff -Nur python-2.6.6.org/Lib/gettext.py python-2.6.6/Lib/gettext.py
      def lngettext(self, msgid1, msgid2, n):
          if self._fallback:
              return self._fallback.lngettext(msgid1, msgid2, n)
-@@ -227,6 +246,14 @@
+@@ -227,6 +246,14 @@ class NullTranslations:
          else:
              return unicode(msgid2)
  
@@ -61,7 +62,7 @@ diff -Nur python-2.6.6.org/Lib/gettext.py python-2.6.6/Lib/gettext.py
      def info(self):
          return self._info
  
-@@ -252,13 +279,22 @@
+@@ -252,13 +279,22 @@ class NullTranslations:
                  __builtin__.__dict__['lgettext'] = self.lgettext
              if "lngettext" in names:
                  __builtin__.__dict__['lngettext'] = self.lngettext
@@ -85,7 +86,7 @@ diff -Nur python-2.6.6.org/Lib/gettext.py python-2.6.6/Lib/gettext.py
      def _parse(self, fp):
          """Override this method to support alternative .mo formats."""
          unpack = struct.unpack
-@@ -354,6 +390,21 @@
+@@ -354,6 +390,21 @@ class GNUTranslations(NullTranslations):
              return tmsg.encode(self._charset)
          return tmsg
  
@@ -107,7 +108,7 @@ diff -Nur python-2.6.6.org/Lib/gettext.py python-2.6.6/Lib/gettext.py
      def lgettext(self, message):
          missing = object()
          tmsg = self._catalog.get(message, missing)
-@@ -365,6 +416,18 @@
+@@ -365,6 +416,18 @@ class GNUTranslations(NullTranslations):
              return tmsg.encode(self._output_charset)
          return tmsg.encode(locale.getpreferredencoding())
  
@@ -126,7 +127,7 @@ diff -Nur python-2.6.6.org/Lib/gettext.py python-2.6.6/Lib/gettext.py
      def ngettext(self, msgid1, msgid2, n):
          try:
              tmsg = self._catalog[(msgid1, self.plural(n))]
-@@ -381,6 +444,23 @@
+@@ -381,6 +444,23 @@ class GNUTranslations(NullTranslations):
              else:
                  return msgid2
  
@@ -150,7 +151,7 @@ diff -Nur python-2.6.6.org/Lib/gettext.py python-2.6.6/Lib/gettext.py
      def lngettext(self, msgid1, msgid2, n):
          try:
              tmsg = self._catalog[(msgid1, self.plural(n))]
-@@ -416,6 +496,21 @@
+@@ -416,6 +496,21 @@ class GNUTranslations(NullTranslations):
                  tmsg = unicode(msgid2)
          return tmsg
  
@@ -172,7 +173,7 @@ diff -Nur python-2.6.6.org/Lib/gettext.py python-2.6.6/Lib/gettext.py
  
  # Locate a .mo file using the gettext strategy
  def find(domain, localedir=None, languages=None, all=0):
-@@ -532,6 +627,14 @@
+@@ -532,6 +627,14 @@ def dgettext(domain, message):
          return message
      return t.gettext(message)
  
@@ -187,7 +188,7 @@ diff -Nur python-2.6.6.org/Lib/gettext.py python-2.6.6/Lib/gettext.py
  def ldgettext(domain, message):
      try:
          t = translation(domain, _localedirs.get(domain, None),
-@@ -540,6 +643,14 @@
+@@ -540,6 +643,14 @@ def ldgettext(domain, message):
          return message
      return t.lgettext(message)
  
@@ -202,7 +203,7 @@ diff -Nur python-2.6.6.org/Lib/gettext.py python-2.6.6/Lib/gettext.py
  def dngettext(domain, msgid1, msgid2, n):
      try:
          t = translation(domain, _localedirs.get(domain, None),
-@@ -551,6 +662,17 @@
+@@ -551,6 +662,17 @@ def dngettext(domain, msgid1, msgid2, n):
              return msgid2
      return t.ngettext(msgid1, msgid2, n)
  
@@ -220,7 +221,7 @@ diff -Nur python-2.6.6.org/Lib/gettext.py python-2.6.6/Lib/gettext.py
  def ldngettext(domain, msgid1, msgid2, n):
      try:
          t = translation(domain, _localedirs.get(domain, None),
-@@ -562,18 +684,41 @@
+@@ -562,18 +684,41 @@ def ldngettext(domain, msgid1, msgid2, n):
              return msgid2
      return t.lngettext(msgid1, msgid2, n)
  
@@ -262,9 +263,10 @@ diff -Nur python-2.6.6.org/Lib/gettext.py python-2.6.6/Lib/gettext.py
  # dcgettext() has been deemed unnecessary and is not implemented.
  
  # James Henstridge's Catalog constructor from GNOME gettext.  Documented usage
-diff -Nur python-2.6.6.org/Tools/i18n/msgfmt.py python-2.6.6/Tools/i18n/msgfmt.py
---- python-2.6.6.org/Tools/i18n/msgfmt.py	2006-04-06 08:44:33.000000000 +0200
-+++ python-2.6.6/Tools/i18n/msgfmt.py	2012-09-17 21:55:58.820875346 +0200
+diff --git a/Tools/i18n/msgfmt.py b/Tools/i18n/msgfmt.py
+index 5dd5430..510ecda 100755
+--- a/Tools/i18n/msgfmt.py
++++ b/Tools/i18n/msgfmt.py
 @@ -6,7 +6,8 @@
  
  This program converts a textual Uniforum-style message catalog (.po file) into
@@ -275,7 +277,7 @@ diff -Nur python-2.6.6.org/Tools/i18n/msgfmt.py python-2.6.6/Tools/i18n/msgfmt.p
  
  Usage: msgfmt.py [OPTIONS] filename.po
  
-@@ -31,7 +32,7 @@
+@@ -32,7 +33,7 @@
  import struct
  import array
  
@@ -284,7 +286,7 @@ diff -Nur python-2.6.6.org/Tools/i18n/msgfmt.py python-2.6.6/Tools/i18n/msgfmt.p
  
  MESSAGES = {}
  
-@@ -45,11 +46,14 @@
+@@ -46,11 +47,14 @@
  
  
  
@@ -301,7 +303,7 @@ diff -Nur python-2.6.6.org/Tools/i18n/msgfmt.py python-2.6.6/Tools/i18n/msgfmt.p
  
  
  
-@@ -99,6 +103,7 @@
+@@ -100,6 +104,7 @@
  def make(filename, outfile):
      ID = 1
      STR = 2
@@ -309,7 +311,7 @@ diff -Nur python-2.6.6.org/Tools/i18n/msgfmt.py python-2.6.6/Tools/i18n/msgfmt.p
  
      # Compute .mo name from .po name and arguments
      if filename.endswith('.po'):
-@@ -114,7 +119,7 @@
+@@ -115,7 +120,7 @@
          print >> sys.stderr, msg
          sys.exit(1)
  
@@ -318,7 +320,7 @@ diff -Nur python-2.6.6.org/Tools/i18n/msgfmt.py python-2.6.6/Tools/i18n/msgfmt.p
      fuzzy = 0
  
      # Parse the catalog
-@@ -123,8 +128,8 @@
+@@ -124,8 +129,8 @@
          lno += 1
          # If we get a comment line after a msgstr, this is a new entry
          if l[0] == '#' and section == STR:
@@ -329,12 +331,12 @@ diff -Nur python-2.6.6.org/Tools/i18n/msgfmt.py python-2.6.6/Tools/i18n/msgfmt.p
              fuzzy = 0
          # Record a fuzzy mark
          if l[:2] == '#,' and 'fuzzy' in l:
-@@ -132,10 +137,16 @@
+@@ -133,10 +138,16 @@
          # Skip comments
          if l[0] == '#':
              continue
 -        # Now we are in a msgid section, output previous section
--        if l.startswith('msgid'):
+-        if l.startswith('msgid') and not l.startswith('msgid_plural'):
 +        # Now we are in a msgid or msgctxt section, output previous section
 +        if l.startswith("msgctxt"):
 +            if section == STR:
@@ -349,10 +351,10 @@ diff -Nur python-2.6.6.org/Tools/i18n/msgfmt.py python-2.6.6/Tools/i18n/msgfmt.p
              section = ID
              l = l[5:]
              msgid = msgstr = ''
-@@ -149,7 +160,9 @@
+@@ -172,7 +183,9 @@
+         if not l:
              continue
-         # XXX: Does this always follow Python escape semantics?
-         l = eval(l)
+         l = ast.literal_eval(l)
 -        if section == ID:
 +        if section == CTXT:
 +            msgctxt += l
@@ -360,7 +362,7 @@ diff -Nur python-2.6.6.org/Tools/i18n/msgfmt.py python-2.6.6/Tools/i18n/msgfmt.p
              msgid += l
          elif section == STR:
              msgstr += l
-@@ -160,7 +173,7 @@
+@@ -183,7 +196,7 @@
              sys.exit(1)
      # Add last entry
      if section == STR:
@@ -369,4 +371,3 @@ diff -Nur python-2.6.6.org/Tools/i18n/msgfmt.py python-2.6.6/Tools/i18n/msgfmt.p
  
      # Compute output
      output = generate()
-

@@ -12,12 +12,29 @@ PR_${P} = 2
 call[[ base ]]
 
 rule[[
-  extract:http://www.${PN}.org/ftp/${PN}/${PV}/Python-${PV}.tar.bz2
+  extract:http://www.${PN}.org/ftp/${PN}/${PV}/Python-${PV}.tgz
   pmove:Python-${PV}:${PN}-${PV}
-  patch:file://${PN}_${PV}.diff
-  patch:file://${PN}_${PV}-ctypes-libffi-fix-configure.diff
-  patch:file://${PN}_${PV}-pgettext.diff
-  patch:file://${PN}-fix-configure-Wformat.diff
+  patch:file://01-use-proper-tools-for-cross-build.patch
+  patch:file://03-fix-tkinter-detection.patch
+  patch:file://06-avoid_usr_lib_termcap_path_in_linking.patch
+  patch:file://multilib.patch
+  patch:file://cgi_py.patch
+  patch:file://setup_py_skip_cross_import_check.patch
+  patch:file://add-md5module-support.patch
+  patch:file://host_include_contamination.patch
+  patch:file://fix_for_using_different_libdir.patch
+  patch:file://setuptweaks.patch
+  patch:file://check-if-target-is-64b-not-host.patch
+  patch:file://search_db_h_in_inc_dirs_and_avoid_warning.patch
+  patch:file://avoid_warning_about_tkinter.patch
+  patch:file://avoid_warning_for_sunos_specific_module.patch
+  patch:file://${PN}-remove-bsdb-rpath.patch
+  patch:file://fix-makefile-for-ptest.patch
+  patch:file://parallel-makeinst-create-bindir.patch
+  patch:file://use_sysroot_ncurses_instead_of_host.patch
+  patch:file://avoid_parallel_make_races_on_pgen.patch
+  patch:file://${PN}.diff
+  patch:file://${PN}-pgettext.diff
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
@@ -42,16 +59,9 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--with-pymalloc \
 			--with-signal-module \
 			--with-wctype-functions \
-			HOSTPYTHON=$(crossprefix)/bin/python \
-		&& \
-		$(run_make) $(MAKE_ARGS) \
-			HOSTPYTHON=$(crossprefix)/bin/python \
-			HOSTPGEN=$(crossprefix)/bin/pgen \
-			CROSS_COMPILE=$(target) \
-			CROSS_COMPILE_TARGET=yes \
 			ac_sys_system=Linux \
 			ac_sys_release=2 \
-			ac_cv_file__dev_ptmx=yes \
+			ac_cv_file__dev_ptmx=no \
 			ac_cv_file__dev_ptc=no \
 			ac_cv_no_strict_aliasing_ok=yes \
 			ac_cv_pthread=yes \
@@ -61,6 +71,13 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			ac_cv_have_lchflags=no \
 			ac_cv_py_format_size_t=yes \
 			ac_cv_broken_sem_getvalue=no \
+			HOSTPYTHON=$(crossprefix)/bin/python \
+		&& \
+		$(MAKE) $(MAKE_ARGS) \
+			HOSTPYTHON=$(crossprefix)/bin/python \
+			HOSTPGEN=$(crossprefix)/bin/pgen \
+			CROSS_COMPILE=$(target) \
+			CROSS_COMPILE_TARGET=yes \
 			MACHDEP=linux2 \
 			HOSTARCH=$(target) \
 			BUILDARCH=$(build) \
