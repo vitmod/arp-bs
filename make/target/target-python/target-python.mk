@@ -5,19 +5,20 @@ package[[ target_python
 
 BDEPENDS_${P} = $(target_glibc) $(cross_python) $(target_zlib) $(target_openssl) $(target_libffi) $(target_libbz2) $(target_libreadline) $(target_sqlite)
 
-PR_${P} = 2
+PR_${P} = 4
 
 #FIXME: add /usr/include/python2.7/pyconfig.h
 
 call[[ base ]]
 
 rule[[
-  extract:http://www.${PN}.org/ftp/${PN}/${PV}/Python-${PV}.tar.bz2
+  extract:http://www.${PN}.org/ftp/${PN}/${PV}/Python-${PV}.tgz
   pmove:Python-${PV}:${PN}-${PV}
-  patch:file://${PN}_${PV}.diff
-  patch:file://${PN}_${PV}-ctypes-libffi-fix-configure.diff
-  patch:file://${PN}_${PV}-pgettext.diff
-  patch:file://${PN}-fix-configure-Wformat.diff
+  patch:file://01-use-proper-tools-for-cross-build.patch
+  patch:file://revert_use_of_sysconfigdata.patch
+  patch:file://${PN}.diff
+  patch:file://${PN}-pgettext.diff
+  patch:file://disable-certificate-verification.patch
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
@@ -42,16 +43,9 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--with-pymalloc \
 			--with-signal-module \
 			--with-wctype-functions \
-			HOSTPYTHON=$(crossprefix)/bin/python \
-		&& \
-		$(run_make) $(MAKE_ARGS) \
-			HOSTPYTHON=$(crossprefix)/bin/python \
-			HOSTPGEN=$(crossprefix)/bin/pgen \
-			CROSS_COMPILE=$(target) \
-			CROSS_COMPILE_TARGET=yes \
 			ac_sys_system=Linux \
 			ac_sys_release=2 \
-			ac_cv_file__dev_ptmx=yes \
+			ac_cv_file__dev_ptmx=no \
 			ac_cv_file__dev_ptc=no \
 			ac_cv_no_strict_aliasing_ok=yes \
 			ac_cv_pthread=yes \
@@ -61,6 +55,13 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			ac_cv_have_lchflags=no \
 			ac_cv_py_format_size_t=yes \
 			ac_cv_broken_sem_getvalue=no \
+			HOSTPYTHON=$(crossprefix)/bin/python \
+		&& \
+		$(MAKE) $(MAKE_ARGS) \
+			HOSTPYTHON=$(crossprefix)/bin/python \
+			HOSTPGEN=$(crossprefix)/bin/pgen \
+			CROSS_COMPILE=$(target) \
+			CROSS_COMPILE_TARGET=yes \
 			MACHDEP=linux2 \
 			HOSTARCH=$(target) \
 			BUILDARCH=$(build) \
@@ -96,6 +97,7 @@ PACKAGES_${P} = \
 	python_2to3 \
 	python_lang \
 	python_re \
+	python_argparse \
 	python_audio \
 	python_codecs \
 	python_compile \
@@ -240,6 +242,11 @@ FILES_python_re = \
   $(PYTHON_DIR)/sre_compile.* \
   $(PYTHON_DIR)/sre_constants.* \
   $(PYTHON_DIR)/sre_parse.*
+
+DESCRIPTION_python_argparse = Python Parser for command-line options, arguments and sub-commands
+RDEPENDS_python_argparse = python_core python_lang python_textutils python_re python_codecs
+FILES_python_argparse = \
+  $(PYTHON_DIR)/argparse.*
 
 DESCRIPTION_python_audio = Python Audio Handling
 RDEPENDS_python_audio = python_core libpython$(PYTHON_VERSION) libc6
@@ -410,7 +417,7 @@ FILES_python_image = \
   $(PYTHON_DIR)/imghdr.*
 
 DESCRIPTION_python_io =  Python Low-Level I/O
-RDEPENDS_python_io = libpython$(PYTHON_VERSION) libcrypto1 python_core libssl1 libc6
+RDEPENDS_python_io = libpython$(PYTHON_VERSION) libcrypto1 python_core python_textutils libssl1 libc6
 FILES_python_io = \
   $(PYTHON_DIR)/lib-dynload/_io.so \
   $(PYTHON_DIR)/lib-dynload/_socket.so \
@@ -478,7 +485,6 @@ FILES_python_misc = \
   $(PYTHON_DIR)/__phello__.foo.* \
   $(PYTHON_DIR)/aifc.* \
   $(PYTHON_DIR)/antigravity.* \
-  $(PYTHON_DIR)/argparse.* \
   $(PYTHON_DIR)/ast.* \
   $(PYTHON_DIR)/asynchat.* \
   $(PYTHON_DIR)/asyncore.* \
