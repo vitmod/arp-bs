@@ -5,7 +5,7 @@ package[[ target_python
 
 BDEPENDS_${P} = $(target_glibc) $(cross_python) $(target_zlib) $(target_openssl) $(target_libffi) $(target_libbz2) $(target_libreadline) $(target_sqlite)
 
-PR_${P} = 3
+PR_${P} = 4
 
 #FIXME: add /usr/include/python2.7/pyconfig.h
 
@@ -15,26 +15,10 @@ rule[[
   extract:http://www.${PN}.org/ftp/${PN}/${PV}/Python-${PV}.tgz
   pmove:Python-${PV}:${PN}-${PV}
   patch:file://01-use-proper-tools-for-cross-build.patch
-  patch:file://03-fix-tkinter-detection.patch
-  patch:file://06-avoid_usr_lib_termcap_path_in_linking.patch
-  patch:file://multilib.patch
-  patch:file://cgi_py.patch
-  patch:file://setup_py_skip_cross_import_check.patch
-  patch:file://add-md5module-support.patch
-  patch:file://host_include_contamination.patch
-  patch:file://fix_for_using_different_libdir.patch
-  patch:file://setuptweaks.patch
-  patch:file://check-if-target-is-64b-not-host.patch
-  patch:file://search_db_h_in_inc_dirs_and_avoid_warning.patch
-  patch:file://avoid_warning_about_tkinter.patch
-  patch:file://avoid_warning_for_sunos_specific_module.patch
-  patch:file://${PN}-remove-bsdb-rpath.patch
-  patch:file://fix-makefile-for-ptest.patch
-  patch:file://parallel-makeinst-create-bindir.patch
-  patch:file://use_sysroot_ncurses_instead_of_host.patch
-  patch:file://avoid_parallel_make_races_on_pgen.patch
+  patch:file://revert_use_of_sysconfigdata.patch
   patch:file://${PN}.diff
   patch:file://${PN}-pgettext.diff
+  patch:file://disable-certificate-verification.patch
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
@@ -113,6 +97,7 @@ PACKAGES_${P} = \
 	python_2to3 \
 	python_lang \
 	python_re \
+	python_argparse \
 	python_audio \
 	python_codecs \
 	python_compile \
@@ -257,6 +242,11 @@ FILES_python_re = \
   $(PYTHON_DIR)/sre_compile.* \
   $(PYTHON_DIR)/sre_constants.* \
   $(PYTHON_DIR)/sre_parse.*
+
+DESCRIPTION_python_argparse = Python Parser for command-line options, arguments and sub-commands
+RDEPENDS_python_argparse = python_core python_lang python_textutils python_re python_codecs
+FILES_python_argparse = \
+  $(PYTHON_DIR)/argparse.*
 
 DESCRIPTION_python_audio = Python Audio Handling
 RDEPENDS_python_audio = python_core libpython$(PYTHON_VERSION) libc6
@@ -495,7 +485,6 @@ FILES_python_misc = \
   $(PYTHON_DIR)/__phello__.foo.* \
   $(PYTHON_DIR)/aifc.* \
   $(PYTHON_DIR)/antigravity.* \
-  $(PYTHON_DIR)/argparse.* \
   $(PYTHON_DIR)/ast.* \
   $(PYTHON_DIR)/asynchat.* \
   $(PYTHON_DIR)/asyncore.* \
