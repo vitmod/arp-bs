@@ -5,7 +5,7 @@ package[[ target_python
 
 BDEPENDS_${P} = $(target_glibc) $(cross_python) $(target_zlib) $(target_openssl) $(target_libffi) $(target_libbz2) $(target_libreadline) $(target_sqlite)
 
-PR_${P} = 2
+PR_${P} = 3
 
 #FIXME: add /usr/include/python2.7/pyconfig.h
 
@@ -427,7 +427,7 @@ FILES_python_image = \
   $(PYTHON_DIR)/imghdr.*
 
 DESCRIPTION_python_io =  Python Low-Level I/O
-RDEPENDS_python_io = libpython$(PYTHON_VERSION) libcrypto1 python_core libssl1 libc6
+RDEPENDS_python_io = libpython$(PYTHON_VERSION) libcrypto1 python_core python_textutils libssl1 libc6
 FILES_python_io = \
   $(PYTHON_DIR)/lib-dynload/_io.so \
   $(PYTHON_DIR)/lib-dynload/_socket.so \
