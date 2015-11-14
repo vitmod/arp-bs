@@ -11,7 +11,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  extract:ftp://ftp.gwdg.de/linux/handhelds/packages/${PN}/${PN}-${PV}.tar.gz
+  extract:ftp://ftp.gwdg.de/pub/linux/handhelds/packages/${PN}/${PN}-${PV}.tar.gz
   patch:file://${PN}.diff
 ]]rule
 
