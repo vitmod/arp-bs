@@ -7,7 +7,7 @@ package[[ target_enigma2
 BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif)
 
 PV_${P} = git
-PR_${P} = 8
+PR_${P} = 9
 PACKAGE_ARCH_${P} = $(box_arch)
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -177,6 +177,10 @@ PACKAGES_${P} = \
 	enigma2 \
 	enigma2_meta \
 	font_andale \
+	font_liberationsans_b \
+	font_liberationsans_bl \
+	font_liberationsans_i \
+	font_liberationsans_r \
 	enigma2_plugin_extensions_cutlisteditor \
 	enigma2_plugin_extensions_dvdplayer \
 	enigma2_plugin_extensions_graphmultiepg \
@@ -206,7 +210,7 @@ PACKAGES_${P} = \
 	enigma2_plugin_systemplugins_videomode \
 	enigma2_plugin_systemplugins_wirelesslan
 
-RDEPENDS_enigma2 += libgcc1 libpython2.7 python-threading libtuxtxt0 libbz2 libgif4 libfreetype6 python-core python-twisted-core libdvbsi++1 python-re font-ae-almateen font-andale font-lcd font-md-khmurabi font-tuxtxt font-nmsbd libpng16 font-valis-enigma libstdc++6 libglib libsigc-1.2 python-fcntl python-netclient python-netserver python-math python-codecs libcrypto1 libfribidi0 python-zopeinterface python-xml libtuxtxt32bpp0 python-pickle libxmlccwrap python-shell ethtool libdreamdvd0 python-twisted-web python-zlib python-crypt python-lang python-subprocess enigma2_meta python-compression e2fsprogs-e2fsck e2fsprogs-tune2fs libjpeg-turbo
+RDEPENDS_enigma2 += libgcc1 libpython2.7 python-threading libtuxtxt0 libbz2 libgif4 libfreetype6 python-core python-twisted-core libdvbsi++1 python-re font-ae-almateen font-andale font-lcd font-md-khmurabi font-tuxtxt font-nmsbd libpng16 font-liberationsans-b font-liberationsans-bl font-liberationsans-i font-liberationsans-r libstdc++6 libglib libsigc-1.2 python-fcntl python-netclient python-netserver python-math python-codecs libcrypto1 libfribidi0 python-zopeinterface python-xml libtuxtxt32bpp0 python-pickle libxmlccwrap python-shell ethtool libdreamdvd0 python-twisted-web python-zlib python-crypt python-lang python-subprocess enigma2_meta python-compression e2fsprogs-e2fsck e2fsprogs-tune2fs libjpeg-turbo
 FILES_enigma2 = \
 	/etc/.gui \
 	/usr/bin \
@@ -235,18 +239,6 @@ FILES_enigma2_meta = /usr/share/meta
 DESCRIPTION_font_andale = ttf fonts
 FILES_font_andale = /usr/share/fonts/andale.ttf
 
-ifdef CONFIG_ENIGMA2_SRC_TESTING
-PACKAGES_${P} += \
-	font_liberationsans_b \
-	font_liberationsans_bl \
-	font_liberationsans_i \
-	font_liberationsans_r
-RDEPENDS_enigma2 += \
-	font_liberationsans_b \
-	font_liberationsans_bl \
-	font_liberationsans_i \
-	font_liberationsans_r
-
 DESCRIPTION_font_liberationsans_b = ttf fonts
 FILES_font_verdana = /usr/share/fonts/LiberationSans-Bold.ttf
 
@@ -258,7 +250,6 @@ FILES_font_verdanai = /usr/share/fonts/LiberationSans-Italic.ttf
 
 DESCRIPTION_font_liberationsans_r = ttf fonts
 FILES_font_verdanaz = /usr/share/fonts/LiberationSans-Regular.ttf
-endif
 
 ifdef CONFIG_ENIGMA2_SRC_MAX
 PACKAGES_${P} += \
