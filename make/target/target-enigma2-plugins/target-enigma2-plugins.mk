@@ -13,7 +13,6 @@ call[[ base ]]
 
 rule[[
   git://github.com/OpenAR-P/enigma2-plugins-sh4.git
-  patch:file://mytube-remove-dreambox-validation.patch
 ]]rule
 
 call[[ git ]]
