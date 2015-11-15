@@ -11,7 +11,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  nothing:git://projects.vdr-developer.org/${PN}-base.git:r=1e01a8963f9ab95ba40ddb44a6c166b8e546053d:b=touchcol
+  git://projects.vdr-developer.org/${PN}-base.git;b=touchcol
   patch:file://${PN}.patch
   patch:file://${PN}_add_dynload_support.patch
   patch:file://${PN}_support_libusb1.0.patch
