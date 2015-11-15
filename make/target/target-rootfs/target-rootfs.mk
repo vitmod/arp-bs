@@ -190,6 +190,7 @@ opkg_my_list += enigma2-plugin-skin-metropolishd
 endif
 
 ifdef CONFIG_ENIGMA2_EXTENSION_ALTSOFTCAM
+BDEPENDS_${P} += $(target_plugin_alternativesoftcammanager)
 opkg_my_list += enigma2-plugin-extensions-alternativesoftcammanager
 endif
 
