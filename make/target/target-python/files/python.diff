@@ -1,4 +1,3 @@
-diff -urN Python-2.7.3/configure ltib/rpm/BUILD/Python-2.7.3/configure
 --- Python-2.7.3/configure	2011-06-11 11:46:28.000000000 -0400
 +++ ltib/rpm/BUILD/Python-2.7.3/configure	2011-11-14 12:10:41.011373524 -0500
 @@ -14485,7 +14485,7 @@
@@ -21,6 +20,15 @@ diff -urN Python-2.7.3/configure ltib/rpm/BUILD/Python-2.7.3/configure
  
  AC_REVISION($Revision$)
  AC_INIT(python, PYTHON_VERSION, http://bugs.python.org/)
+@@ -3335,7 +3335,7 @@
+ 
+ AC_MSG_RESULT($ac_cv_buggy_getaddrinfo)
+ 
+-if test $have_getaddrinfo = no -o "$ac_cv_buggy_getaddrinfo" = yes
++if test $have_getaddrinfo = no -o "$ac_cv_buggy_getaddrinfo" = yes -a x"$cross_compiling" != "xyes"
+ then
+ 	if test $ipv6 = yes
+ 	then
 --- python-2.7.3.org/Include/pyport.h	2012-04-10 01:07:29.000000000 +0200
 +++ python-2.7.3/Include/pyport.h	2012-11-18 13:32:01.396962900 +0100
 @@ -883,7 +883,7 @@
@@ -90,7 +98,6 @@ diff -urN Python-2.7.3/configure ltib/rpm/BUILD/Python-2.7.3/configure
  
          """Walk the list of source files in 'sources', looking for SWIG
          interface (.i) files.  Run SWIG on all that are found, and
-
 --- Python-2.7.3.orig//Lib/plat-linux3/regen 1970-01-01 01:00:00.000000000 +0100
 +++ Python-2.7.3/Lib/plat-linux3/regen 2001-08-09 14:48:17.000000000 +0200
 @@ -0,0 +1,8 @@
@@ -103,8 +110,8 @@ diff -urN Python-2.7.3/configure ltib/rpm/BUILD/Python-2.7.3/configure
 +set -v
 +h2py -i '(u_long)' /usr/include/sys/types.h /usr/include/netinet/in.h /usr/include/dlfcn.h
 diff -Nur '--exclude-from=diff-ignore' python-2.7.3.org/Lib/sitecustomize.py python-2.7.3/Lib/sitecustomize.py
---- python-2.7.3.org/sitecustomize.py	1970-01-01 01:00:00.000000000 +0100
-+++ python-2.7.3/sitecustomize.py	2012-04-08 23:23:39.000000000 +0200
+--- python-2.7.3.org/Lib/sitecustomize.py	1970-01-01 01:00:00.000000000 +0100
++++ python-2.7.3/Lib/sitecustomize.py	2012-04-08 23:23:39.000000000 +0200
 @@ -0,0 +1,45 @@
 +# OpenEmbedded sitecustomize.py (C) 2002-2008 Michael 'Mickey' Lauer <mlauer@vanille-media.de>
 +# GPLv2 or later
@@ -183,6 +190,37 @@ diff -Nur '--exclude-from=diff-ignore' python-2.7.3.org/Modules/_ctypes/libffi/f
  
 -ffi_cflags = '@CFLAGS@'
 +ffi_cflags = '@CFLAGS@ -DPIC'
+diff -urN Python-2.7.3/Makefile.pre.in ltib/rpm/BUILD/Python-2.7.3/Makefile.pre.in
+--- Python-2.7.3/Makefile.pre.in	2011-06-11 11:46:26.000000000 -0400
++++ ltib/rpm/BUILD/Python-2.7.3/Makefile.pre.in	2011-11-14 12:10:41.013373444 -0500
+@@ -194,6 +194,7 @@
+ 
+ PYTHON=		python$(EXE)
+ BUILDPYTHON=	python$(BUILDEXE)
++HOSTPYTHON=     ./$(BUILDPYTHON)
+ 
+ PYTHON_FOR_BUILD=@PYTHON_FOR_BUILD@
+ _PYTHON_HOST_PLATFORM=@_PYTHON_HOST_PLATFORM@
+@@ -475,7 +476,7 @@
+ 	esac; \
+ 	$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' \
+ 		_TCLTK_INCLUDES='$(TCLTK_INCLUDES)' _TCLTK_LIBS='$(TCLTK_LIBS)' \
+-		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build
++		PYTHONXCPREFIX='$(DESTDIR)$(prefix)' $(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build
+ 
+ # Build static library
+ # avoid long command lines, same as LIBRARY_OBJS
+@@ -1176,7 +1177,9 @@
+ # Install the dynamically loadable modules
+ # This goes into $(exec_prefix)
+ sharedinstall: sharedmods
+-	$(RUNSHARED) $(PYTHON_FOR_BUILD) $(srcdir)/setup.py install \
++	CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' \
++	$(RUNSHARED) $(PYTHON_FOR_BUILD) $(srcdir)/setup.py install \
++	   	--skip-build \
+ 	   	--prefix=$(prefix) \
+ 		--install-scripts=$(BINDIR) \
+ 		--install-platlib=$(DESTSHARED) \
 diff -Nur python-2.7.3.org/Python/compile.c python-2.7.3/Python/compile.c
 --- python-2.7.3.org/Python/compile.c	2010-06-22 23:47:04.000000000 +0200
 +++ python-2.7.3/Python/compile.c	2012-09-17 21:55:58.776875344 +0200
@@ -211,9 +249,10 @@ diff -Nur '--exclude-from=diff-ignore' python-2.7.3.org/Modules/termios.c python
  
  /* HP-UX requires that this be included to pick up MDCD, MCTS, MDSR,
   * MDTR, MRI, and MRTS (appearantly used internally by some things
---- a/setup.py	2015-04-29 21:05:55.590154262 +0300
-+++ b/setup.py	2015-04-29 22:16:07.447039730 +0300
-@@ -174,6 +174,7 @@
+diff -urN Python-2.7.3/setup.py ltib/rpm/BUILD/Python-2.7.3/setup.py
+--- Python-2.7.3/setup.py	2011-06-11 11:46:28.000000000 -0400
++++ ltib/rpm/BUILD/Python-2.7.3/setup.py	2011-11-14 12:13:02.175758583 -0500
+@@ -159,6 +159,7 @@
      def __init__(self, dist):
          build_ext.__init__(self, dist)
          self.failed = []
@@ -221,7 +260,22 @@ diff -Nur '--exclude-from=diff-ignore' python-2.7.3.org/Modules/termios.c python
  
      def build_extensions(self):
  
-@@ -472,11 +473,18 @@
+@@ -294,6 +295,14 @@
+                           (ext.name, sys.exc_info()[1]))
+             self.failed.append(ext.name)
+             return
++
++        # Import check will not work when cross-compiling.
++        if os.environ.has_key('PYTHONXCPREFIX'):
++            self.announce(
++                'WARNING: skipping import check for cross-compiled: "%s"' %
++                ext.name)
++            return
++
+         # Workaround for Mac OS X: The Carbon-based modules cannot be
+         # reliably imported into a command-line Python
+         if 'Carbon' in ext.extra_link_args:
+@@ -440,11 +449,18 @@
  
      def detect_modules(self):
          # Ensure that /usr/local is always used
@@ -245,7 +299,17 @@ diff -Nur '--exclude-from=diff-ignore' python-2.7.3.org/Modules/termios.c python
          self.add_multiarch_paths()
  
          # Add paths specified in the environment variables LDFLAGS and
-@@ -531,18 +531,22 @@
+@@ -482,7 +498,8 @@
+                         add_dir_to_list(dir_list, directory)
+ 
+         if os.path.normpath(sys.prefix) != '/usr' \
+-                and not sysconfig.get_config_var('PYTHONFRAMEWORK'):
++                and not sysconfig.get_config_var('PYTHONFRAMEWORK') \
++                and not self.cross_compile:
+             # OSX note: Don't add LIBDIR and INCLUDEDIR to building a framework
+             # (PYTHONFRAMEWORK is set) to avoid # linking problems when
+             # building a framework with different architectures than
+@@ -500,18 +517,22 @@
          # lib_dirs and inc_dirs are used to search for files;
          # if a file is found in one of those directories, it can
          # be assumed that no additional -I,-L directives are needed.
@@ -278,7 +342,7 @@ diff -Nur '--exclude-from=diff-ignore' python-2.7.3.org/Modules/termios.c python
          exts = []
          missing = []
  
-@@ -551,6 +568,18 @@
+@@ -520,6 +541,18 @@
  
          srcdir = sysconfig.get_config_var('srcdir')
  
@@ -297,7 +361,7 @@ diff -Nur '--exclude-from=diff-ignore' python-2.7.3.org/Modules/termios.c python
          # Check for AtheOS which has libraries in non-standard locations
          if host_platform == 'atheos':
              lib_dirs += ['/system/libs', '/atheos/autolnk/lib']
-@@ -1134,7 +1163,14 @@
+@@ -1106,7 +1139,14 @@
                               '/usr/local/include/sqlite3',
                             ]
          if cross_compiling:
@@ -313,7 +377,7 @@ diff -Nur '--exclude-from=diff-ignore' python-2.7.3.org/Modules/termios.c python
          MIN_SQLITE_VERSION_NUMBER = (3, 0, 8)
          MIN_SQLITE_VERSION = ".".join([str(x)
                                      for x in MIN_SQLITE_VERSION_NUMBER])
-@@ -1174,12 +1210,22 @@
+@@ -1146,12 +1186,22 @@
                      print "sqlite: %s had no SQLITE_VERSION"%(f,)
  
          if sqlite_incdir:
@@ -342,7 +406,7 @@ diff -Nur '--exclude-from=diff-ignore' python-2.7.3.org/Modules/termios.c python
              sqlite_libfile = self.compiler.find_library_file(
                                  sqlite_dirs_to_check + lib_dirs, 'sqlite3')
              if sqlite_libfile:
-@@ -2047,8 +2093,14 @@
+@@ -2029,8 +2079,14 @@
  
                  # Pass empty CFLAGS because we'll just append the resulting
                  # CFLAGS to Python's; -g or -O2 is to be avoided.
@@ -359,33 +423,3 @@ diff -Nur '--exclude-from=diff-ignore' python-2.7.3.org/Modules/termios.c python
  
                  res = os.system(cmd)
                  if res or not os.path.exists(ffi_configfile):
---- a/Makefile.pre.in	2015-04-29 23:21:27.846479949 +0300
-+++ b/Makefile.pre.in	2015-04-29 23:27:31.836284875 +0300
-@@ -195,6 +195,7 @@
- 
- PYTHON=		python$(EXE)
- BUILDPYTHON=	python$(BUILDEXE)
-+HOSTPYTHON=     ./$(BUILDPYTHON)
- 
- PYTHON_FOR_BUILD=@PYTHON_FOR_BUILD@
- _PYTHON_HOST_PLATFORM=@_PYTHON_HOST_PLATFORM@
-@@ -476,7 +477,7 @@
- 	esac; \
- 	$(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' \
- 		_TCLTK_INCLUDES='$(TCLTK_INCLUDES)' _TCLTK_LIBS='$(TCLTK_LIBS)' \
--		$(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build
-+		PYTHONXCPREFIX='$(DESTDIR)$(prefix)' $(PYTHON_FOR_BUILD) $(srcdir)/setup.py $$quiet build
- 
- # Build static library
- # avoid long command lines, same as LIBRARY_OBJS
-@@ -1181,7 +1182,9 @@
- # Install the dynamically loadable modules
- # This goes into $(exec_prefix)
- sharedinstall: sharedmods
--	$(RUNSHARED) $(PYTHON_FOR_BUILD) $(srcdir)/setup.py install \
-+	CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' \
-+	$(RUNSHARED) $(PYTHON_FOR_BUILD) $(srcdir)/setup.py install \
-+	   	--skip-build \
- 	   	--prefix=$(prefix) \
- 		--install-scripts=$(BINDIR) \
- 		--install-platlib=$(DESTSHARED) \
