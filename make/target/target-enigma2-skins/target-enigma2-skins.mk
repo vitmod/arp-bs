@@ -4,7 +4,7 @@
 ifeq ($(strip $(CONFIG_BUILD_ENIGMA2)),y)
 package[[ target_enigma2_skins
 
-BDEPENDS_${P} = $(target_enigma2) $(target_enigma2_skins_magic) $(target_enigma2_skins_plihd) $(target_enigma2_skins_metropolishd)
+BDEPENDS_${P} = $(target_enigma2)
 
 PV_${P} = git
 PR_${P} = 1
