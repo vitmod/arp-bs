@@ -63,6 +63,15 @@ opkg_my_list += \
 	kernel-module-simu-button \
 	kernel-module-smartcard \
 	kernel-module-stgfb
+
+ifneq (,$(wildcard $(ipkbox)/kernel-module-ptinp*))
+opkg_my_list += \
+	kernel-module-ptinp
+else
+opkg_my_list += \
+	kernel-module-pti
+endif
+
 ifdef CONFIG_HL101
 opkg_my_list += \
 	kernel-module-cic
@@ -224,7 +233,7 @@ PV_${P} = 0.1
 PR_${P} = 7
 
 RM_WORK_${P} = $(false)
-
+$(info AAAA $(wildcard $(ipkbox)/kernel-module-ptinp*))
 call[[ base ]]
 #overwrite workdir
 WORK_${P} = $(prefix)/release
