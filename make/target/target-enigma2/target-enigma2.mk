@@ -240,16 +240,16 @@ DESCRIPTION_font_andale = ttf fonts
 FILES_font_andale = /usr/share/fonts/andale.ttf
 
 DESCRIPTION_font_liberationsans_b = ttf fonts
-FILES_font_verdana = /usr/share/fonts/LiberationSans-Bold.ttf
+FILES_font_liberationsans_b = /usr/share/fonts/LiberationSans-Bold.ttf
 
 DESCRIPTION_font_liberationsans_bl = ttf fonts
-FILES_font_verdanab = /usr/share/fonts/LiberationSans-BoldItalic.ttf
+FILES_font_liberationsans_bl = /usr/share/fonts/LiberationSans-BoldItalic.ttf
 
 DESCRIPTION_font_liberationsans_i = ttf fonts
-FILES_font_verdanai = /usr/share/fonts/LiberationSans-Italic.ttf
+FILES_font_liberationsans_i = /usr/share/fonts/LiberationSans-Italic.ttf
 
 DESCRIPTION_font_liberationsans_r = ttf fonts
-FILES_font_verdanaz = /usr/share/fonts/LiberationSans-Regular.ttf
+FILES_font_liberationsans_r = /usr/share/fonts/LiberationSans-Regular.ttf
 
 ifdef CONFIG_ENIGMA2_SRC_MAX
 PACKAGES_${P} += \
