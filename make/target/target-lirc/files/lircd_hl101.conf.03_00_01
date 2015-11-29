@@ -1,16 +1,3 @@
-# Please make this file available to others
-# by sending it to <lirc@bartelmus.de>
-#
-# this config file was automatically generated
-# using lirc-0.8.6(default) on Sun Nov 29 12:25:52 2015
-#
-# contributed by 
-#
-# brand:                       SpiderBox_HL101
-# model no. of remote control: 
-# devices being controlled by this remote:
-#
-
 begin remote
 
   name  SpiderBox_HL101
@@ -28,6 +15,8 @@ begin remote
   pre_data       0xC03F
   gap          107913
   toggle_bit_mask 0x0
+  
+# STi7101_03000100_YUMATU-BAFF  
 
       begin codes
 
