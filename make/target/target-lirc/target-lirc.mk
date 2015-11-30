@@ -5,7 +5,7 @@ package[[ target_lirc
 
 BDEPENDS_${P} = $(target_glibc) $(target_linux_kernel_headers)
 PV_${P} = 0.9.0
-PR_${P} = 3
+PR_${P} = 4
 
 call[[ base ]]
 
@@ -13,6 +13,7 @@ rule[[
   extract:http://prdownloads.sourceforge.net/${PN}/${PN}-${PV}.tar.gz
   patch:file://${PN}.diff
   nothing:file://lircd_hl101.conf
+  nothing:file://lircd_hl101.conf.03_00_01
   nothing:file://lircd_hl101.conf.03_00_02
   nothing:file://lircd_hl101.conf.03_00_07
   nothing:file://lircd_spark7162.conf
@@ -56,6 +57,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(INSTALL_DIR) $(PKDIR)/var/run/lirc/
 	$(INSTALL_FILE) ${DIR}/lircd_$(TARGET).conf $(PKDIR)/etc/lircd.conf
 ifdef CONFIG_HL101
+	$(INSTALL_FILE) ${DIR}/lircd_hl101.conf.03_00_01 $(PKDIR)/etc/lircd.conf.03_00_01
 	$(INSTALL_FILE) ${DIR}/lircd_hl101.conf.03_00_02 $(PKDIR)/etc/lircd.conf.03_00_02
 	$(INSTALL_FILE) ${DIR}/lircd_hl101.conf.03_00_07 $(PKDIR)/etc/lircd.conf.03_00_07
 endif
@@ -87,6 +89,7 @@ endef
 else
 define conffiles_${P}
 /etc/lircd.conf
+/etc/lircd.conf.03_00_01
 /etc/lircd.conf.03_00_02
 /etc/lircd.conf.03_00_07
 endef
