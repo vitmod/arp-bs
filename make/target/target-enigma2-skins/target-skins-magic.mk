@@ -11,7 +11,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  git://git.code.sf.net/p/openpli/skin-magic
+  git://github.com/OpenPLi/enigma2-plugin-skins-magic.git
 ]]rule
 
 call[[ git ]]
