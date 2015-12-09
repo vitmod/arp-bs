@@ -30,6 +30,20 @@ rule[[
 
 call[[ git ]]
 
+ifeq (,$(wildcard $(driverdir)/pti_np))
+ifeq (,$(wildcard $(archivedir)/ptinp))
+# build pti source
+BUILD_PTI_NP := NO
+else
+# bin_copy
+BUILD_PTI_NP := BINCOPY
+endif 		#(,$(wildcard $(archivedir)/ptinp))
+else #(,$(wildcard $(driverdir})/pti_np))
+# build pti_np source
+BUILD_PTI_NP := SRCBUILD
+endif 		#(,$(wildcard $(driverdir})/pti_np))
+$(info PTI---> $(BUILD_PTI_NP))
+
 MAKE_FLAGS_${P} = \
 	ARCH=sh \
 	CROSS_COMPILE=$(target)- \
@@ -67,7 +81,6 @@ ifdef CONFIG_MULTICOM406
 endif
 	touch $@
 
-
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && $(run_make) $(MAKE_FLAGS_${P})
 	touch $@
@@ -76,22 +89,17 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
 	cd $(DIR_${P}) && $(run_make) $(MAKE_FLAGS_${P}) install
 
-ifneq (,$(wildcard $(DIR_${P})/pti_np))
-# build pti_np source
-else #(,$(wildcard $(DIR_${P})/pti_np))
-ifeq (,$(wildcard $(archivedir)/ptinp))
-# build pti source
-else #(,$(wildcard $(archivedir)/ptinp))
+ifeq ($(BUILD_PTI_NP), BINCOPY)
 # copy binary  from $(archivedir)/ptinp
 	install -d $(PKDIR)/lib/modules/$(KERNEL_VERSION)/extra/pti_np
 ifeq ($(CONFIG_HL101)$(CONFIG_SPARK),y)
-	cp -dp $(archivedir)/ptinp/pti_$(KERNEL_RELEASE).ko $(PKDIR)/lib/modules/$(KERNEL_VERSION)/extra/pti_np/pti.ko
+	cp -dp $(archivedir)/ptinp/pti_$(KERNEL_RELEASE).ko $(PKDIR)/lib/modules/$(KERNEL_VERSION)/extra/pti_np/pti.ko	
 endif #($(CONFIG_HL101)$(CONFIG_SPARK),y)
 ifdef CONFIG_SPARK7162
 	cp -dp $(archivedir)/ptinp/pti_$(KERNEL_RELEASE)s2.ko $(PKDIR)/lib/modules/$(KERNEL_VERSION)/extra/pti_np/pti.ko
+
 endif #CONFIG_SPARK7162
-endif 		#(,$(wildcard $(archivedir)/ptinp))
-endif 		#(,$(wildcard $(DIR_${P})/pti_np))
+endif #($(BUILD_PTI_NP),bin_copy)
 
 #	install -d $(PKDIR)/lib/modules/$(KERNEL_VERSION)/extra/encrypt
 #	cp -dp $(buildprefix)/root/release/encrypt_$(TARGET)_stm24_$(KERNEL_LABEL).ko
@@ -130,17 +138,12 @@ PACKAGES_${P} = \
 	kernel_module_rtl871x \
 	kernel_module_rtl8188eu
 
-ifneq (,$(wildcard $(DIR_${P})/pti_np))
-PACKAGES_${P} += \
-	kernel_module_ptinp
-else
-ifeq (,$(wildcard $(archivedir)/ptinp))
+ifeq ($(BUILD_PTI_NP), NO)
 PACKAGES_${P} += \
 	kernel_module_pti
 else
 PACKAGES_${P} += \
 	kernel_module_ptinp
-endif
 endif
 
 ifdef CONFIG_HL101
