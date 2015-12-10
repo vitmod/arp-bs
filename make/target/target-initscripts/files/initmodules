@@ -1,0 +1,113 @@
+#!/bin/sh
+#
+# Load all necessary st modules
+# 
+# chkconfig: S 9 0
+#
+
+MODEL=`cat /proc/stb/info/model`
+
+echo "init frontpanel"
+if [ $MODEL = hl101 ]; then
+      modprobe proton
+else
+      modprobe aotom
+fi
+      modprobe simu_button
+      modprobe e2_proc
+
+
+echo "init stmfb"
+if [ $MODEL = spark ]; then
+      modprobe stmcore-display-sti7111
+elif [ $MODEL = spark7162 ]; then
+      modprobe stmcore-display-sti7105
+elif [ $MODEL = hl101 ]; then
+      modprobe stmcore-display-stx7109c3
+fi
+      modprobe stmfb display0=1280x720-32@50:15m:pal:yuv:yuv
+
+echo "LOADING MODULES"   
+echo "LOAD" > /dev/vfd
+
+if [ ! -e /lib/firmware/audio.elf ]; then
+echo "FW MISSING!!!"
+fi
+if [ -e /lib/modules/ics.ko ]; then
+      modprobe /lib/modules/ics.ko firmware=1:video.elf,2:audio.elf bpa2_part=LMI_IO
+      modprobe /lib/modules/embx.ko
+      modprobe /lib/modules/embxmailbox.ko mailbox0=0xb9211000:136:set2 mailbox1=0xb9212000:137:set2
+#      modprobe /lib/modules/embxmailbox.ko mailbox0=0xFE211000:136:set2 mailbox1=0xFE212000:137:set2
+      modprobe /lib/modules/mme.ko pool_size=524288
+      modprobe /lib/modules/mme_user.ko
+else
+      /bin/ustslave /dev/st231-1 /lib/firmware/audio.elf
+echo "load v firmware"
+      /bin/ustslave /dev/st231-0 /lib/firmware/video.elf
+echo "init embx"
+      modprobe embxshell
+ if [ $MODEL = hl101 ]; then
+      modprobe embxmailbox mailbox0=0xb9211000:136:set2 mailbox1=0xb9212000:0 ;
+      modprobe embxshm mailbox0=shm:0:7:0x60000000:0:256:256:0:1024:0xa4000000:0x10000000 ;
+ else
+      modprobe embxmailbox mailbox0=0xfe211000:136:set2 mailbox1=0xfe212000:0 ;
+      modprobe embxshm mailbox0=shm:0:7:0x60000000:0:256:256:0:512:0x40000000:0x10000000 ;
+ fi
+      modprobe mme_host transport0=shm
+fi
+
+echo "init AVS"
+if [ $MODEL = hl101 ]; then
+      modprobe avs type=stv6418
+else
+      modprobe avs type=avs_pio
+fi
+player=`cat /proc/stb/player/version | awk '{ print substr( $0, length($0) - 2, length($0) ) }'`
+echo "init player $player"
+
+      modprobe mmelog
+      modprobe ksound
+      modprobe p2div64
+      modprobe stm_v4l2
+      modprobe pseudocard
+echo "starting frontend-spark"
+if [ $MODEL = spark ]; then
+      modprobe stv090x
+elif [ $MODEL = spark7162 ]; then
+      modprobe spark7162
+elif [ $MODEL = hl101 ]; then
+      #modprobe fe-core demod=stb090x tuner=stb6110x
+      #modprobe fe-core demod=stv090x tuner=sharp7306
+      modprobe fe-core demod=stb0899 tuner=stb6100
+fi
+      modprobe pti waitMS=20 videoMem=4096
+      modprobe stmdvb
+      modprobe stm_monitor
+      modprobe player2 discardlateframe=0
+      modprobe sth264pp
+      modprobe stmalloc
+      modprobe platform
+      modprobe silencegen
+      modprobe smartcard
+      modprobe bpamem
+
+      # Load module for swap in ram
+      mem_by_cpu=$(($(grep MemTotal /proc/meminfo | awk ' { print $2 } ')*256))
+      modprobe zram num_devices=1
+      echo $mem_by_cpu > /sys/block/zram0/disksize
+
+if [ ! `grep 'hdmicec.enabled=false' /etc/enigma2/settings` ]; then
+      modprobe cec
+fi
+      echo "1" > /proc/sys/kernel/printk #for more log change level or  remake line
+      cat /etc/videomode > /proc/stb/video/videomode
+      showiframe -p /boot/bootlogo.mvi &
+      stfbcontrol a 0
+
+      stfbcontrol a 255
+
+      # Enable swap in ram
+      mkswap /dev/zram0
+      swapon /dev/zram0
+
+      echo " e2 "
