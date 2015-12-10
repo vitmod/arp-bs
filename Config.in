@@ -141,6 +141,9 @@ mainmenu "global config"
 
 		config IPTABLES_SUPPORT
 		bool "Iptables support"
+		
+		config EXTERNAL_LCD
+		bool  "External USB GraphLCD "
 
 endmenu
 
@@ -242,9 +245,6 @@ menu "GUI Configuration"
 		
 		config OSCAM
 		bool  "enigma2-plugin-cams-oscam"
-
-		config EXTERNAL_LCD
-		bool  "External USB GraphLCD "
 
 	config ENIGMA2_SKINS
 	bool "enigma2-skins-extra"
