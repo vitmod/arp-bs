@@ -20,7 +20,7 @@ rule[[
   install_file:$(PKDIR)/etc:file://inittab
   install_bin:$(PKDIR)/etc/init.d:file://hostname
   install_bin:$(PKDIR)/etc/init.d:file://inetd
-  install_bin:$(PKDIR)/etc/init.d/initmodules:file://initmodules_$(TARGET)
+  install_bin:$(PKDIR)/etc/init.d/initmodules:file://initmodules
   install_bin:$(PKDIR)/etc/init.d/halt:file://halt_$(TARGET)
   install_bin:$(PKDIR)/etc/init.d:file://mountall
   install_bin:$(PKDIR)/etc/init.d:file://mountsysfs
