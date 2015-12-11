@@ -133,7 +133,7 @@ PACKAGES_${P} = \
 	font_pakenham
 
 
-RDEPENDS_neutrino += neutrino-plugins neutrino-configs aio-grab liblua libssl1 libcrypto1 libcurl4 libid3tag0 libmad0 libvorbisidec1 libpng16 libjpeg-turbo libgif4 font-md-khmurabi font-tuxtxt font-dejavulgcsansmono-bold font-micron font-micron-bold font-micron-italic font-neutrino font-pakenham libfreetype6 ffmpeg libdvbsi++1 libopenthreads libusb_1.0 libasound2 libstb_hal libc6 libsigc-2.3
+RDEPENDS_neutrino += neutrino-plugins neutrino-configs aio-grab liblua libssl1 libcrypto1 libcurl4 libid3tag0 libmad0 libvorbisidec1 libpng16 libjpeg-turbo libgif4 font-md-khmurabi font-tuxtxt font-dejavulgcsansmono-bold font-micron font-micron-bold font-micron-italic font-neutrino font-pakenham libfreetype6 ffmpeg libdvbsi++1 libopenthreads libusb_1.0 libasound2 libstb_hal libc6 libsigc-2.3 config-timezone
 
 FILES_neutrino = /usr/bin/* /usr/sbin/* /etc/.gui
 FILES_neutrino_plugins = /usr/share/tuxbox /usr/share/iso-codes/*
