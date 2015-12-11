@@ -63,7 +63,7 @@ endif
 # ???? lcd
 ifdef CONFIG_EXTERNAL_LCD
 BDEPENDS_${P} += $(target_graphlcd)
-CONFIG_FLAGS_${P} += --with-graphlcd
+CONFIG_FLAGS_${P} += --enable-graphlcd
 RDEPENDS_neutrino += libgraphlcd
 endif
 
