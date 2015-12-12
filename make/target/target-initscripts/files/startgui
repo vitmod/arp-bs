@@ -2,9 +2,7 @@
 
 STARTUP=`grep -c 'neutrino' /etc/.gui`
 	if [ "$STARTUP" -eq "1" ]; then
-		sleep 5
-		killall showiframe &
-		/usr/bin/neutrino
+		/usr/bin/neutrino.sh
 	else
 		/usr/bin/enigma2.sh
 	fi
