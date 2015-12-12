@@ -6,7 +6,7 @@ package[[ target_tuxbox_configs
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = 0.1
-PR_${P} = 5
+PR_${P} = 6
 PACKAGE_ARCH_${P} = all
 
 call[[ base ]]
@@ -27,6 +27,7 @@ rule[[
   install_file:$(PKDIR)/etc/tuxbox:file://satellites.xml
   install_file:$(PKDIR)/etc/tuxbox:file://cables.xml
   install_file:$(PKDIR)/etc/tuxbox:file://terrestrial.xml
+  install_file:$(PKDIR)/etc:file://timezone.xml
   install_file:$(PKDIR)/usr/share/zoneinfo/Africa:file://zoneinfo/Africa/*
   install_file:$(PKDIR)/usr/share/zoneinfo/America:file://zoneinfo/America/*
   install_file:$(PKDIR)/usr/share/zoneinfo/Asia:file://zoneinfo/Asia/*
@@ -70,7 +71,7 @@ DESCRIPTION_config_satellites = satellites.xml config
 FILES_config_satellites = /etc/tuxbox/satellites.xml
 
 DESCRIPTION_config_timezone = timezones
-FILES_config_timezone = /usr/share/zoneinfo/*
+FILES_config_timezone = /usr/share/zoneinfo/* /etc/timezone.xml
 
 call[[ ipkbox ]]
 
