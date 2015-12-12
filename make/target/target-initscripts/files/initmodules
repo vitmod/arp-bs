@@ -41,8 +41,11 @@ if [ -e /lib/modules/ics.ko ]; then
       modprobe /lib/modules/mme.ko pool_size=524288
       modprobe /lib/modules/mme_user.ko
 else
+echo "load audio firmware"
+      /bin/dd if=/dev/zero of=/dev/st231-1 bs=1024 count=4096
       /bin/ustslave /dev/st231-1 /lib/firmware/audio.elf
-echo "load v firmware"
+echo "load video firmware"
+      /bin/dd if=/dev/zero of=/dev/st231-0 bs=1024 count=4096
       /bin/ustslave /dev/st231-0 /lib/firmware/video.elf
 echo "init embx"
       modprobe embxshell
