@@ -1,5 +1,5 @@
 --- a/main.c.orig	2015-12-13 11:08:22.101489624 +0200
-+++ b/main.c	2015-12-13 11:41:44.855420745 +0200
++++ b/main.c	2015-12-13 11:52:15.854549701 +0200
 @@ -37,10 +37,48 @@
  #include <sys/mman.h>
  #include <linux/types.h>
@@ -123,10 +123,11 @@
  
  	// resizing
   	if (video_only)
-@@ -776,6 +827,15 @@
+@@ -776,7 +827,16 @@
  	int stride = 0;
  	FILE *fp;
  	char buf[256];
+-
 +	int yblock, xblock, iyblock, ixblock, yblockoffset, offset, layer_offset, OUTITER, OUTINC, OUTITERoffset;
 +	int stride_half;
 +	unsigned char *out = NULL;
@@ -136,10 +137,19 @@
 +	char bpa_mem_device[30];
 +	char *decode_surface;
 +	int delay;
- 
++#if 0
  	if (stb_type == BRCM7366ARM)
  	{
-@@ -799,6 +859,219 @@
+ 		int fd_video = open("/dev/dvb/adapter0/video0", O_RDONLY);
+@@ -792,13 +852,226 @@
+ 		*yres = 1080;
+ 		return;
+ 	}
+-
++#endif
+ 	if ((mem_fd = open("/dev/mem", O_RDWR|O_SYNC) ) < 0)
+ 	{
+ 		fprintf(stderr, "Mainmemory: can't open /dev/mem \n");
  		return;
  	}
  
