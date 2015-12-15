@@ -7,7 +7,7 @@ package[[ target_neutrino
 BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libopenthreads) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc) $(target_lua) $(target_luaexpat) $(target_libstb_hal) $(target_aio_grab) $(target_tuxbox_configs)
 
 PV_${P} = git
-PR_${P} = 2
+PR_${P} = 3
 PACKAGE_ARCH_neutrino = $(box_arch)
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -74,12 +74,16 @@ rule[[
 ifdef CONFIG_NEUTRINO_SRC_MASTER
   git://github.com/OpenAR-P/neutrino-mp-cst-next.git;b=master
   nothing:file://neutrino.sh
+  nothing:file://post-wlan0.sh
+  nothing:file://pre-wlan0.sh
 endif
 
 ifdef CONFIG_NEUTRINO_SRC_MAX
   git://github.com/Duckbox-Developers/neutrino-mp-cst-next.git;b=master
   patch:file://include.patch
   nothing:file://neutrino.sh
+  nothing:file://post-wlan0.sh
+  nothing:file://pre-wlan0.sh
 endif
 
 ]]rule
@@ -111,6 +115,9 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(target)-strip $(PKDIR)/usr/bin/pzapit
 	$(target)-strip $(PKDIR)/usr/bin/sectionsdcontrol
 	$(INSTALL_DIR) $(PKDIR)/etc
+	$(INSTALL_DIR) $(PKDIR)/etc/network
+	$(INSTALL_BIN) $(DIR_${P})/pre-wlan0.sh $(PKDIR)/etc/network/pre-wlan0.sh
+	$(INSTALL_BIN) $(DIR_${P})/post-wlan0.sh $(PKDIR)/etc/network/post-wlan0.sh
 	$(INSTALL_BIN) $(DIR_${P})/neutrino.sh $(PKDIR)/usr/bin/neutrino.sh
 	echo "neutrino" > $(PKDIR)/etc/.gui
 	rm -f $(PKDIR)/usr/share/fonts/md_khmurabi_10.ttf
@@ -138,7 +145,7 @@ PACKAGES_${P} = \
 
 RDEPENDS_neutrino += neutrino-plugins neutrino-configs aio-grab liblua libssl1 libcrypto1 libcurl4 libid3tag0 libmad0 libvorbisidec1 libpng16 libjpeg-turbo libgif4 font-md-khmurabi font-tuxtxt font-dejavulgcsansmono-bold font-micron font-micron-bold font-micron-italic font-neutrino font-pakenham libfreetype6 ffmpeg libdvbsi++1 libopenthreads libusb_1.0 libasound2 libstb_hal libc6 libsigc-2.3 config-timezone
 
-FILES_neutrino = /usr/bin/* /usr/sbin/* /etc/.gui
+FILES_neutrino = /usr/bin/* /usr/sbin/* /etc/.gui /etc/network/*
 FILES_neutrino_plugins = /usr/share/tuxbox /usr/share/iso-codes/*
 FILES_neutrino_configs = /var
 
