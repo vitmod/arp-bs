@@ -25,6 +25,7 @@ CONFIG_FLAGS_${P} += \
 		--enable-giflib \
 		--with-tremor \
 		--enable-ffmpegdec \
+		--enable-lua \
 		--with-libdir=/usr/lib \
 		--with-datadir=/usr/share/tuxbox \
 		--with-fontdir=/usr/share/fonts \
