@@ -1,0 +1,110 @@
+diff --git a/tuxwetter/gif.c b/tuxwetter/gif.c
+index 5e94758..4467646 100644
+--- a/tuxwetter/gif.c
++++ b/tuxwetter/gif.c
+@@ -40,10 +40,10 @@
+ #define FH_ERROR_MALLOC 3	/* error during malloc */
+ #define min(a,b) ((a) < (b) ? (a) : (b))
+ #define gflush return(FH_ERROR_FILE);
+-#define grflush { DGifCloseFile(gft); return(FH_ERROR_FORMAT); }
+-#define mgrflush { free(lb); free(slb); DGifCloseFile(gft); return(FH_ERROR_FORMAT); }
++#define grflush { int err; DGifCloseFile(gft, &err); return(FH_ERROR_FORMAT); }
++#define mgrflush { free(lb); free(slb); DGifCloseFile(gft, &err); return(FH_ERROR_FORMAT); }
+ #define agflush return(FH_ERROR_FORMAT);
+-#define agrflush { DGifCloseFile(gft); return(FH_ERROR_FORMAT); }
++#define agrflush { DGifCloseFile(gft, &err); return(FH_ERROR_FORMAT); }
+ 
+ int fh_gif_id(const char *name)
+ {
+@@ -111,6 +111,7 @@ int fh_gif_load(const char *name,unsigned char *buffer,int x,int y)
+ 					{
+ 						for(i=0;i<py;i++,fbptr+=px*3)
+ 						{
++							int err;
+ 							if(DGifGetLine(gft,slb,px)==GIF_ERROR)	mgrflush;
+ 							m_rend_gif_decodecolormap(slb,lb,cmap,cmaps,px);
+ 							memcpy(fbptr,lb,px*3);
+@@ -123,6 +124,7 @@ int fh_gif_load(const char *name,unsigned char *buffer,int x,int y)
+ 							fbptr=buffer;
+ 							for(i=0;i<py;i++,fbptr+=px*3)
+ 							{
++								int err;
+ 								if(DGifGetLine(gft,slb,px)==GIF_ERROR)	mgrflush;
+ 								m_rend_gif_decodecolormap(slb,lb,cmap,cmaps,px);
+ 								memcpy(fbptr,lb,px*3);
+@@ -143,7 +145,8 @@ int fh_gif_load(const char *name,unsigned char *buffer,int x,int y)
+ 		}  
+ 	}
+ 	while( rt!= TERMINATE_RECORD_TYPE );
+-	DGifCloseFile(gft);
++	int err;
++	DGifCloseFile(gft, &err);
+ 	return(FH_ERROR_OK);
+ }
+ int fh_gif_getsize(const char *name,int *x,int *y, int wanted_width, int wanted_height)
+@@ -171,7 +174,8 @@ int fh_gif_getsize(const char *name,int *x,int *y, int wanted_width, int wanted_
+ 				px=gft->Image.Width;
+ 				py=gft->Image.Height;
+ 				*x=px; *y=py;
+-				DGifCloseFile(gft);
++				int err;
++				DGifCloseFile(gft, &err);
+ 				return(FH_ERROR_OK);
+ 				break;
+ 			case EXTENSION_RECORD_TYPE:
+@@ -184,6 +188,7 @@ int fh_gif_getsize(const char *name,int *x,int *y, int wanted_width, int wanted_
+ 		}  
+ 	}
+ 	while( rt!= TERMINATE_RECORD_TYPE );
+-	DGifCloseFile(gft);
++	int err;
++	DGifCloseFile(gft, &err);
+ 	return(FH_ERROR_FORMAT);
+ }
+diff --git a/tuxwetter/gifdecomp.c b/tuxwetter/gifdecomp.c
+index 2fada67..0061868 100644
+--- a/tuxwetter/gifdecomp.c
++++ b/tuxwetter/gifdecomp.c
+@@ -154,9 +154,10 @@ int i;
+    	 }
+   	  while (RecordType != TERMINATE_RECORD_TYPE);
+ 
+-  	  if (DGifCloseFile(GifFileIn) == GIF_ERROR)
++	  int err;
++  	  if (DGifCloseFile(GifFileIn, &err) == GIF_ERROR)
+ 		QuitGifError(GifFileIn, GifFileOut);
+-  	  if (EGifCloseFile(GifFileOut) == GIF_ERROR)
++  	  if (EGifCloseFile(GifFileOut, &err) == GIF_ERROR)
+ 		QuitGifError(GifFileIn, GifFileOut);
+                
+ #ifdef ENABLE_GIFLIB
+@@ -237,7 +238,7 @@ int i;
+ 		while (RecordType != IMAGE_DESC_RECORD_TYPE &&
+ 	               RecordType != TERMINATE_RECORD_TYPE);
+ 
+-		if (EGifCloseFile(GifFileOut) == GIF_ERROR)
++		if (EGifCloseFile(GifFileOut, &err) == GIF_ERROR)
+ 	    	    QuitGifError(GifFileIn, GifFileOut);
+ 		if (FileEmpty) {
+ 	  	  /* Might happen on last file - delete it if so: */
+@@ -246,7 +247,7 @@ int i;
+   	 }
+     	while (RecordType != TERMINATE_RECORD_TYPE);
+ 
+-    	if (DGifCloseFile(GifFileIn) == GIF_ERROR)
++    	if (DGifCloseFile(GifFileIn, &err) == GIF_ERROR)
+ 		QuitGifError(GifFileIn, GifFileOut);
+    	FileNum=FileNum-1; 
+   	}
+@@ -261,8 +262,9 @@ void QuitGifError(GifFileType *GifFileIn, GifFileType *GifFileOut)
+ #ifndef ENABLE_GIFLIB
+     PrintGifError();
+ #endif
+-    if (GifFileIn != NULL) DGifCloseFile(GifFileIn);
+-    if (GifFileOut != NULL) EGifCloseFile(GifFileOut);
++    int err;
++    if (GifFileIn != NULL) DGifCloseFile(GifFileIn, &err);
++    if (GifFileOut != NULL) EGifCloseFile(GifFileOut, &err);
+ //    exit(EXIT_FAILURE);
+ }
+ 
