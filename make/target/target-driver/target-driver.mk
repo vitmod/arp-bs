@@ -131,6 +131,7 @@ PACKAGES_${P} = \
 	kernel_module_simu_button \
 	kernel_module_smartcard \
 	kernel_module_stgfb \
+	kernel_module_mt7601u \
 	kernel_module_rt2870sta \
 	kernel_module_rt3070sta \
 	kernel_module_rt5370sta \
@@ -218,6 +219,10 @@ FILES_kernel_module_smartcard = /lib/modules/$(KERNEL_VERSION)/extra/smartcard
 DESCRIPTION_kernel_module_stgfb = stgfb driver for control  devices
 #RDEPENDS_kernel_module_stgfb = stfbcontrol
 FILES_kernel_module_stgfb = /lib/modules/$(KERNEL_VERSION)/extra/stgfb
+
+DESCRIPTION_kernel_module_mt7601u = mt7601u frontends driver for control wireless devices
+FILES_kernel_module_mt7601u = /lib/modules/$(KERNEL_VERSION)/extra/wireless/mt7601u
+RDEPENDS_kernel_module_mt7601u = firmware_mt7601u
 
 DESCRIPTION_kernel_module_rt2870sta = rt2870sta frontends driver for control wireless devices
 FILES_kernel_module_rt2870sta = /lib/modules/$(KERNEL_VERSION)/extra/wireless/rt2870sta

@@ -83,6 +83,7 @@ ifdef CONFIG_WLAN_SUPPORT
 BDEPENDS_${P} += $(target_wireless_tools) $(target_firmware_wlan) $(target_compat_wireless)
 opkg_my_list += \
 	wireless-tools \
+	kernel-module-mt7601u \
 	kernel-module-rt2870sta \
 	kernel-module-rt3070sta \
 	kernel-module-rt5370sta \
