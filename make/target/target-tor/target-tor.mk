@@ -5,7 +5,7 @@ package[[ target_tor
 
 BDEPENDS_${P} = $(target_glibc) $(target_libevent)
 
-PV_${P} = 0.2.4.22
+PV_${P} = 0.2.7.6
 PR_${P} = 1
 
 call[[ base ]]
@@ -28,6 +28,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix= \
 			--datarootdir=/usr/share \
 			--disable-asciidoc \
+			--disable-tool-name-check \
 		&& \
 		$(run_make)
 	touch $@
