@@ -9,7 +9,7 @@ PV_${P} = ${PV_MOJ}.${PV_MIN}
 PV_MOJ_${P} = 2.6
 PV_MIN_${P} = 3
 
-PR_${P} = 1
+PR_${P} = 2
 
 DESCRIPTION_${P} = ffmpeg
 
@@ -172,6 +172,7 @@ CONFIG_FLAGS_${P} += \
 		--enable-demuxer=wav
 CONFIG_FLAGS_${P} += \
 		--disable-protocols \
+		--enable-protocol=bluray \
 		--enable-protocol=file \
 		--enable-protocol=http \
 		--enable-protocol=mmsh \
@@ -221,7 +222,8 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		$(BUILDENV) \
 		./configure \
-			--prefix=/usr \
+			--extra-cflags="-I$(targetprefix)/usr/include -ffunction-sections -fdata-sections" \
+			--extra-ldflags="-L$(targetprefix)/usr/lib -Wl,--gc-sections,-lrt" \
 			$(CONFIG_FLAGS_${P}) \
 		&& \
 		$(run_make)
