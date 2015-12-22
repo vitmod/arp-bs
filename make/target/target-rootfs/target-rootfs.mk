@@ -217,11 +217,6 @@ BDEPENDS_${P} += $(target_libid3tag) $(target_libvorbisidec) $(target_libcap) $(
 opkg_my_list += neutrino libblkid1
 endif
 
-#ifdef CONFIG_BUILD_HYBRID
-#CONFIG_BUILD_ENIGMA2=y
-#CONFIG_BUILD_NEUTRINO=y
-#endif
-
 ########################################################################################
 #xbmc
 ifdef CONFIG_BUILD_XBMC
