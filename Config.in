@@ -199,23 +199,15 @@ menu "GUI Configuration"
 		  default ENIGMA2_SRC_MASTER
 
 		  config ENIGMA2_SRC_MASTER 
-		  bool "non-public branch master"
+		  bool "public branch master"
 		  depends on BUILD_ENIGMA2
 
 		  config ENIGMA2_SRC_STAGING
-		  bool "non-public branch staging"
+		  bool "public branch staging"
 		  depends on BUILD_ENIGMA2
 
 		  config ENIGMA2_SRC_LAST
 		  bool "non-public branch last"
-		  depends on BUILD_ENIGMA2
-
-		  config ENIGMA2_SRC_MAX
-		  bool "public enigma2 max10  diff0"
-		  depends on BUILD_ENIGMA2
-
-		  config ENIGMA2_SRC_TESTING
-		  bool "public enigma2 ARP testing"
 		  depends on BUILD_ENIGMA2
 
 		endchoice

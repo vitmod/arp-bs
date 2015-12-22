@@ -118,13 +118,6 @@ endif
 ifdef CONFIG_ENIGMA2_SRC_LAST
   git://github.com/OpenAR-P/enigma2-pli-arp.git;b=last
 endif
-ifdef CONFIG_ENIGMA2_SRC_MAX
-  git://github.com/OpenPLi/enigma2.git;b=master;r=20a8c5
-  patch:file://enigma2-pli-nightly.0.diff
-endif
-ifdef CONFIG_ENIGMA2_SRC_TESTING
-  git://github.com:schpuntik/amiko-e2-pli.git;b=testing;protocol=ssh
-endif
 
   install:-d:$(PKDIR)/usr/share/enigma2/
   install_file:$(PKDIR)/usr/share/enigma2/keymap.xml:file://$(keymap_${P})
@@ -250,31 +243,6 @@ FILES_font_liberationsans_i = /usr/share/fonts/LiberationSans-Italic.ttf
 
 DESCRIPTION_font_liberationsans_r = ttf fonts
 FILES_font_liberationsans_r = /usr/share/fonts/LiberationSans-Regular.ttf
-
-ifdef CONFIG_ENIGMA2_SRC_MAX
-PACKAGES_${P} += \
-	font_verdana \
-	font_verdanab \
-	font_verdanai \
-	font_verdanaz
-RDEPENDS_enigma2 += \
-	font_verdana \
-	font_verdanab \
-	font_verdanai \
-	font_verdanaz
-
-DESCRIPTION_font_verdana = ttf fonts
-FILES_font_verdana = /usr/share/fonts/verdana.ttf
-
-DESCRIPTION_font_verdanab = ttf fonts
-FILES_font_verdanab = /usr/share/fonts/verdanab.ttf
-
-DESCRIPTION_font_verdanai = ttf fonts
-FILES_font_verdanai = /usr/share/fonts/verdanai.ttf
-
-DESCRIPTION_font_verdanaz = ttf fonts
-FILES_font_verdanaz = /usr/share/fonts/verdanaz.ttf
-endif
 
 DESCRIPTION_enigma2_plugin_extensions_cutlisteditor = CutListEditor allows you to edit your movies
 RDEPENDS_enigma2_plugin_extensions_cutlisteditor = enigma2
