@@ -186,7 +186,6 @@ menu "GUI Configuration"
 		string "URL for nonfree plugins"
 		default "src/gz non-free-feed http://nonfree.sat-universum.de"
 
-  choice
 	prompt "Apps:"
 	default BUILD_ENIGMA2
 
@@ -284,7 +283,5 @@ menu "GUI Configuration"
 
 	config BUILD_VDR
 		tristate "VDR"
-
-  endchoice
 
 endmenu
