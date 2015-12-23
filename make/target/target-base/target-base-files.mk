@@ -6,7 +6,7 @@ package[[ target_base_files
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = 0.2
-PR_${P} = 2
+PR_${P} = 3
 PACKAGE_ARCH_${P} = $(box_arch)
 
 DESCRIPTION_${P} = Miscellaneous files for the base system.
@@ -74,7 +74,11 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	ln -sf /proc/mounts $(PKDIR)/etc/mtab
 	echo "$(TARGET)" > $(PKDIR)/etc/hostname
 	echo "576i50" > $(PKDIR)/etc/videomode
-
+ifdef CONFIG_BUILD_ENIGMA2
+	echo "enigma" > $(PKDIR)/etc/.gui
+else
+	echo "neutrino" > $(PKDIR)/etc/.gui
+endif
 	touch $@
 
 call[[ ipkbox ]]
