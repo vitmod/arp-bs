@@ -6,12 +6,12 @@ package[[ target_openwebif
 BDEPENDS_${P} = $(target_python_setuptools) $(target_aio_grab) $(target_python_cheetah)
 
 PV_${P} = git
-PR_${P} = 2
+PR_${P} = 3
 
 call[[ base ]]
 
 rule[[
-  nothing:git://github.com/OpenAR-P/e2openplugin-OpenWebif.git
+  nothing:git://github.com/E2OpenPlugins/e2openplugin-OpenWebif.git
 ]]rule
 
 call[[ git ]]
