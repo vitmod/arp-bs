@@ -5,7 +5,7 @@ package[[ target_lirc
 
 BDEPENDS_${P} = $(target_glibc) $(target_linux_kernel_headers)
 PV_${P} = 0.9.0
-PR_${P} = 4
+PR_${P} = 5
 
 call[[ base ]]
 
@@ -71,15 +71,22 @@ endif
 
 call[[ ipk ]]
 
+PACKAGES_${P} = \
+	lirc \
+	lirc_dev
+
 DESCRIPTION_${P} = lirc
 FILES_lirc = \
 	/usr/bin/lircd \
 	/usr/lib/*.so.* \
 	/etc/lircd* \
-	/var/run/lirc/
+	/var/run/lirc/*
+
+FILES_lirc_dev = /usr/bin/ir*
+
 
 ifeq ($(CONFIG_SPARK)$(CONFIG_SPARK7162),y)
-define conffiles_${P}
+define conffiles_lirc
 /etc/lircd.conf
 /etc/lircd.conf.09_00_0B
 /etc/lircd.conf.09_00_07
@@ -87,7 +94,7 @@ define conffiles_${P}
 /etc/lircd.conf.09_00_1D
 endef
 else
-define conffiles_${P}
+define conffiles_lirc
 /etc/lircd.conf
 /etc/lircd.conf.03_00_01
 /etc/lircd.conf.03_00_02
