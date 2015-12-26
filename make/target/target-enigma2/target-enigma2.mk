@@ -7,8 +7,8 @@ package[[ target_enigma2
 BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif)
 
 PV_${P} = git
-PR_${P} = 15
-PACKAGE_ARCH_${P} = $(box_arch)
+PR_${P} = 16
+PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
 
@@ -156,13 +156,6 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	cd $(DIR_${P}) && $(INSTALL_${P})
 
 	$(target)-strip $(PKDIR)/usr/bin/enigma2
-	rm -f $(PKDIR)/usr/share/fonts/ae_AlMateen.ttf
-	rm -f $(PKDIR)/usr/share/fonts/lcd.ttf
-	rm -f $(PKDIR)/usr/share/fonts/md_khmurabi_10.ttf
-	rm -f $(PKDIR)/usr/share/fonts/nmsbd.ttf
-	rm -f $(PKDIR)/usr/share/fonts/valis_enigma.ttf
-	rm -f $(PKDIR)/usr/share/fonts/tuxtxt.ttf
-	
 	touch $@
 
 call[[ ipk ]]
@@ -173,11 +166,15 @@ call[[ ipk ]]
 PACKAGES_${P} = \
 	enigma2 \
 	enigma2_meta \
+	font_ae_almateen \
 	font_andale \
+	font_lcd \
 	font_liberationsans_b \
 	font_liberationsans_bl \
 	font_liberationsans_i \
 	font_liberationsans_r \
+	font_md_khmurabi \
+	font_nmsbd \
 	enigma2_plugin_extensions_cutlisteditor \
 	enigma2_plugin_extensions_dvdplayer \
 	enigma2_plugin_extensions_graphmultiepg \
@@ -207,7 +204,8 @@ PACKAGES_${P} = \
 	enigma2_plugin_systemplugins_videomode \
 	enigma2_plugin_systemplugins_wirelesslan
 
-RDEPENDS_enigma2 += libgcc1 libpython2.7 python-threading libtuxtxt0 libbz2 libgif4 libfreetype6 python-core python-twisted-core libdvbsi++1 python-re font-ae-almateen font-andale font-lcd font-md-khmurabi font-tuxtxt font-valis-enigma font-nmsbd libpng16 font-liberationsans-b font-liberationsans-bl font-liberationsans-i font-liberationsans-r libstdc++6 libglib python-fcntl python-netclient python-netserver python-math python-codecs libcrypto1 libfribidi0 python-zopeinterface python-xml libtuxtxt32bpp0 python-pickle libxmlccwrap python-shell ethtool libdreamdvd0 python-twisted-web python-zlib python-crypt python-lang python-subprocess enigma2_meta python-compression e2fsprogs-e2fsck e2fsprogs-tune2fs libjpeg-turbo
+PACKAGE_ARCH_enigma2 = $(box_arch)
+RDEPENDS_enigma2 += libgcc1 libpython2.7 python-threading libtuxtxt0 libbz2 libgif4 libfreetype6 python-core python-twisted-core libdvbsi++1 python-re font-ae-almateen font-andale font-lcd font-md-khmurabi font-tuxtxt font-nmsbd libpng16 font-liberationsans-b font-liberationsans-bl font-liberationsans-i font-liberationsans-r libstdc++6 libglib python-fcntl python-netclient python-netserver python-math python-codecs libcrypto1 libfribidi0 python-zopeinterface python-xml libtuxtxt32bpp0 python-pickle libxmlccwrap python-shell ethtool libdreamdvd0 python-twisted-web python-zlib python-crypt python-lang python-subprocess enigma2_meta python-compression e2fsprogs-e2fsck e2fsprogs-tune2fs libjpeg-turbo
 FILES_enigma2 = \
 	/usr/bin \
 	/usr/lib/libopen.s* \
@@ -232,8 +230,14 @@ DESCRIPTION_enigma2_meta = meta files for  enigma2
 RDEPENDS_enigma2_meta = enigma2
 FILES_enigma2_meta = /usr/share/meta
 
+DESCRIPTION_font_ae_almateen = ttf fonts
+FILES_font_ae_almateen = /usr/share/fonts/ae_AlMateen.ttf
+
 DESCRIPTION_font_andale = ttf fonts
 FILES_font_andale = /usr/share/fonts/andale.ttf
+
+DESCRIPTION_font_lcd = ttf fonts
+FILES_font_lcd = /usr/share/fonts/lcd.ttf
 
 DESCRIPTION_font_liberationsans_b = ttf fonts
 FILES_font_liberationsans_b = /usr/share/fonts/LiberationSans-Bold.ttf
@@ -246,6 +250,12 @@ FILES_font_liberationsans_i = /usr/share/fonts/LiberationSans-Italic.ttf
 
 DESCRIPTION_font_liberationsans_r = ttf fonts
 FILES_font_liberationsans_r = /usr/share/fonts/LiberationSans-Regular.ttf
+
+DESCRIPTION_font_md_khmurabi = ttf fonts
+FILES_font_md_khmurabi = /usr/share/fonts/md_khmurabi_10.ttf
+
+DESCRIPTION_font_nmsbd = ttf fonts
+FILES_font_nmsbd = /usr/share/fonts/nmsbd.ttf
 
 DESCRIPTION_enigma2_plugin_extensions_cutlisteditor = CutListEditor allows you to edit your movies
 RDEPENDS_enigma2_plugin_extensions_cutlisteditor = enigma2
@@ -375,6 +385,7 @@ FILES_enigma2_plugin_systemplugins_wirelesslan = /usr/lib/enigma2/python/Plugins
 endif
 
 ifdef CONFIG_SPARK7162
+PACKAGE_ARCH_enigma2_plugin_systemplugins_uniontunertype = $(box_arch)
 PACKAGES_${P} += \
 	enigma2_plugin_systemplugins_uniontunertype
 DESCRIPTION_enigma2_plugin_systemplugins_uniontunertype = The Tuner mode switch  DVB-T to DVB-C
