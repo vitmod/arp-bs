@@ -7,8 +7,8 @@ package[[ target_neutrino
 BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libopenthreads) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc) $(target_lua) $(target_luaexpat) $(target_libstb_hal) $(target_aio_grab) $(target_tuxbox_configs)
 
 PV_${P} = git
-PR_${P} = 4
-PACKAGE_ARCH_neutrino = $(box_arch)
+PR_${P} = 5
+PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
 
@@ -144,8 +144,10 @@ PACKAGES_${P} = \
 
 RDEPENDS_neutrino += neutrino-plugins neutrino-configs aio-grab liblua libssl1 libcrypto1 libcurl4 libid3tag0 libmad0 libvorbisidec1 libpng16 libjpeg-turbo libgif4 font-md-khmurabi font-tuxtxt font-dejavulgcsansmono-bold font-micron font-micron-bold font-micron-italic font-neutrino font-pakenham libfreetype6 ffmpeg libdvbsi++1 libopenthreads libusb_1.0 libasound2 libstb_hal libc6 libsigc-2.3 config-timezone
 
+PACKAGE_ARCH_neutrino = $(box_arch)
 FILES_neutrino = /usr/bin/* /usr/sbin/* /etc/network/*
 FILES_neutrino_plugins = /usr/share/tuxbox /usr/share/iso-codes/*
+PACKAGE_ARCH_neutrino = $(box_arch)
 FILES_neutrino_configs = /var
 
 FILES_font_dejavulgcsansmono_bold = /usr/share/fonts/DejaVuLGCSansMono-Bold.ttf
