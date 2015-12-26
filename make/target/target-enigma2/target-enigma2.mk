@@ -7,7 +7,7 @@ package[[ target_enigma2
 BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif)
 
 PV_${P} = git
-PR_${P} = 11
+PR_${P} = 15
 PACKAGE_ARCH_${P} = $(box_arch)
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -128,8 +128,7 @@ endif
 
   install:-d:$(PKDIR)/usr/share/enigma2/
   install_file:$(PKDIR)/usr/share/enigma2/keymap.xml:file://$(keymap_${P})
-  install_file:$(PKDIR)/usr/share/enigma2/keymap_amiko.xml:file://keymap_amiko.xml
-
+  install_file:$(PKDIR)/usr/share/enigma2/skin_display_perl.xml:file://skin_display_perl.xml
 ]]rule
 
 call[[ git ]]
