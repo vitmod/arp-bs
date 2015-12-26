@@ -254,12 +254,24 @@ $(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
 	export OPKG_OFFLINE_ROOT=$(DIR_${P}) && \
 	$(opkg_rootfs) update && \
 	$(opkg_rootfs) install --force-postinstall $(opkg_my_list)
-#	add version
+ifdef CONFIG_BUILD_NEUTRINO
+#	add version enigma2
 	echo "version=OpenAR-P_`date +%d-%m-%y-%T`_git-`git rev-list --count HEAD`" > $(DIR_${P})/etc/image-version
 	echo "----------------------------------------------------------" >>          $(DIR_${P})/etc/image-version
 	echo "----------------------------------------------------------" >>          $(DIR_${P})/etc/image-version
 	cat $(buildprefix)/.config |grep -v '^#' |tr ' ' '\n' >>                      $(DIR_${P})/etc/image-version
 	echo "OpenAR-P \n \l" > $(DIR_${P})/etc/issue
+endif
+ifdef CONFIG_BUILD_NEUTRINO
+#	add version neutrino
+	echo "imagename=Neutrino" > $(DIR_${P})/etc/.version
+	echo "homepage=https://github.com/OpenAR-P" >> $(DIR_${P})/etc/.version
+	echo "creator=`id -un`" >> $(DIR_${P})/etc/.version
+	echo "docs=https://github.com/OpenAR-P/neutrino-mp-cst-next/wiki" >> $(DIR_${P})/etc/.version
+	echo "forum=http://www.allrussian.info/index.php?page=Board&boardID=204" >> $(DIR_${P})/etc/.version
+	echo "version=OpenAR-P_`date +%d-%m-%y-%T`_git-`git rev-list --count HEAD`" >> $(DIR_${P})/etc/.version
+	echo "git=`git describe --all`" >> $(DIR_${P})/etc/.version
+endif
 	touch $@
 
 $(TARGET_${P}): $(TARGET_${P}).do_install
