@@ -18,7 +18,7 @@ opkg_my_list = \
 	initscripts \
 	update-rc.d \
 	busybox \
-	vsftpd \
+	busybox-cron \
 	base-passwd \
 	base-files \
 	netbase \
