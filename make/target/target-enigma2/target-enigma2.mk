@@ -7,7 +7,7 @@ package[[ target_enigma2
 BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif)
 
 PV_${P} = git
-PR_${P} = 11
+PR_${P} = 12
 PACKAGE_ARCH_${P} = $(box_arch)
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -82,20 +82,6 @@ CONFIG_FLAGS_${P} += --enable-libeplayer3
 RDEPENDS_enigma2 += libeplayer3
 endif
 
-# box type
-ifdef CONFIG_SPARK
-CONFIG_FLAGS_${P} += --enable-spark
-keymap_${P} = keymap_spark.xml
-endif
-ifdef CONFIG_SPARK7162
-CONFIG_FLAGS_${P} += --enable-spark7162
-keymap_${P} = keymap_spark.xml
-endif
-ifdef CONFIG_HL101
-CONFIG_FLAGS_${P} += --enable-hl101
-keymap_${P} = keymap_hl101.xml
-endif
-
 ifdef CONFIG_EXTERNAL_LCD
 BDEPENDS_${P} += $(target_graphlcd)
 CONFIG_FLAGS_${P} += --with-graphlcd
@@ -125,11 +111,6 @@ endif
 ifdef CONFIG_ENIGMA2_SRC_LAST
   git://github.com/OpenAR-P/enigma2-pli-arp.git;b=last
 endif
-
-  install:-d:$(PKDIR)/usr/share/enigma2/
-  install_file:$(PKDIR)/usr/share/enigma2/keymap.xml:file://$(keymap_${P})
-  install_file:$(PKDIR)/usr/share/enigma2/keymap_amiko.xml:file://keymap_amiko.xml
-
 ]]rule
 
 call[[ git ]]
