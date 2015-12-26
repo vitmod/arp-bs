@@ -129,7 +129,6 @@ opkg_my_list += \
 	enigma2-plugin-systemplugins-diseqctester \
 	enigma2-plugin-systemplugins-hdmicec \
 	enigma2-plugin-systemplugins-hotplug \
-	enigma2-plugin-systemplugins-keymapmanager \
 	enigma2-plugin-systemplugins-networkwizard \
 	enigma2-plugin-systemplugins-osd3dsetup \
 	enigma2-plugin-systemplugins-osdpositionsetup \

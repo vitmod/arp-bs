@@ -7,7 +7,7 @@ package[[ target_enigma2
 BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif)
 
 PV_${P} = git
-PR_${P} = 12
+PR_${P} = 13
 PACKAGE_ARCH_${P} = $(box_arch)
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -173,7 +173,6 @@ PACKAGES_${P} = \
 	enigma2_plugin_systemplugins_fastscan \
 	enigma2_plugin_systemplugins_hdmicec \
 	enigma2_plugin_systemplugins_hotplug \
-	enigma2_plugin_systemplugins_keymapmanager \
 	enigma2_plugin_systemplugins_networkwizard \
 	enigma2_plugin_systemplugins_osd3dsetup \
 	enigma2_plugin_systemplugins_osdpositionsetup \
@@ -289,11 +288,6 @@ FILES_enigma2_plugin_systemplugins_hdmicec = /usr/lib/enigma2/python/Plugins/Sys
 DESCRIPTION_enigma2_plugin_systemplugins_hotplug = Hotplugging for removeable devices The Hotplug plugin notifies your system of newly added or removed devices.
 RDEPENDS_enigma2_plugin_systemplugins_hotplug = enigma2
 FILES_enigma2_plugin_systemplugins_hotplug = /usr/lib/enigma2/python/Plugins/SystemPlugins/Hotplug
-
-DESCRIPTION_enigma2_plugin_systemplugins_keymapmanager = The KeymapManager plugin setup for optional keymaps.
-RDEPENDS_enigma2_plugin_systemplugins_keymapmanager = enigma2
-FILES_enigma2_plugin_systemplugins_keymapmanager = /usr/lib/enigma2/python/Plugins/SystemPlugins/KeymapManager \
-	$(buildprefix)/root/usr/local/share/enigma2/keymap_amiko.xml
 
 DESCRIPTION_enigma2_plugin_systemplugins_networkwizard = With the network wizard you can easily configure your network step by step.
 RDEPENDS_enigma2_plugin_systemplugins_networkwizard = enigma2
