@@ -3,7 +3,7 @@
 #
 package[[ target_lua
 
-BDEPENDS_${P} = $(target_glibc) $(target_ncurses)
+BDEPENDS_${P} = $(target_glibc) $(target_ncurses) $(target_curl)
 
 PV_${P} = 5.2.3
 PR_${P} = 1
