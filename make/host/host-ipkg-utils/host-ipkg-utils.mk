@@ -6,7 +6,7 @@ package[[ host_ipkg_utils
 BDEPENDS_${P} = $(host_filesystem)
 
 PV_${P} = 050831
-PR_${P} = 1
+PR_${P} = 2
 
 call[[ base ]]
 
