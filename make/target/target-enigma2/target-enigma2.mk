@@ -7,7 +7,7 @@ package[[ target_enigma2
 BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif)
 
 PV_${P} = git
-PR_${P} = 17
+PR_${P} = 18
 PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -108,6 +108,7 @@ ifdef CONFIG_ENIGMA2_SRC_MASTER
 endif
 ifdef CONFIG_ENIGMA2_SRC_STAGING
   git://github.com/OpenAR-P/enigma2-pli-arp.git;b=staging
+  patch:file://keymap_$(box_arch).patch
 endif
 ifdef CONFIG_ENIGMA2_SRC_LAST
   git://github.com/OpenAR-P/enigma2-pli-arp.git;b=last
