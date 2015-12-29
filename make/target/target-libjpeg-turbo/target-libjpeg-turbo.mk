@@ -5,7 +5,7 @@ package[[ target_libjpeg_turbo
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 1.4.0
+PV_${P} = 1.4.2
 PR_${P} = 1
 
 PN_${P} = libjpeg-turbo
