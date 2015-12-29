@@ -6,7 +6,7 @@ package[[ target_tuxbox_configs
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = 0.1
-PR_${P} = 6
+PR_${P} = 7
 PACKAGE_ARCH_${P} = all
 
 call[[ base ]]
