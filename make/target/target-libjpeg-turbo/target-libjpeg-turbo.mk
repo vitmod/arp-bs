@@ -6,7 +6,7 @@ package[[ target_libjpeg_turbo
 BDEPENDS_${P} = $(target_glibc)
 
 PV_${P} = 1.4.2
-PR_${P} = 1
+PR_${P} = 2
 
 PN_${P} = libjpeg-turbo
 
@@ -26,6 +26,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
+			--with-jpeg8 \
 			--prefix=/usr \
 		&& \
 		$(run_make) all
