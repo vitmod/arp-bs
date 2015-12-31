@@ -19,7 +19,7 @@ endif
 function[[ target_linux_kernel_in
 
 PV_${P} = $(KERNEL_VERSION)
-PR_${P} = 7
+PR_${P} = 8
 
 DIR_${P} = $(WORK_target_linux_kernel)/linux-$(KERNEL_MAJOR)
 PACKAGE_ARCH_${P} = $(box_arch)
@@ -53,6 +53,7 @@ ${P}_patches = \
 	bpa2_procfs_stm24_$(KERNEL_LABEL).patch \
 	linux-ftdi_sio.c_stm24_$(KERNEL_LABEL).patch \
 	linux-sh4-lzma-fix_stm24_$(KERNEL_LABEL).patch \
+	linux-sh4-linux_yaffs2.patch \
 	perf-warning-fix.diff
 
 ifeq ($(CONFIG_KERNEL_0211),y)
@@ -101,12 +102,8 @@ ifdef CONFIG_SPARK
   ${P}_patches += bpa2-ignore-bigphysarea-kernel-parameter.patch
   ${P}_patches += af901x-NXP-TDA18218.patch
   ${P}_patches += dvb-as102.patch
-
-ifeq ($(CONFIG_KERNEL_0211)$(CONFIG_KERNEL_0215),y)
-  ${P}_patches += \
-	linux-sh4-lirc_stm_stm24_$(KERNEL_LABEL).patch \
-	linux-sh4-fix-crash-usb-reboot_stm24_0211.diff
-endif
+  ${P}_patches += linux-sh4-lirc_stm_stm24_$(KERNEL_LABEL).patch
+  ${P}_patches += linux-sh4-fix-crash-usb-reboot_stm24_0211.diff
 endif #CONFIG_SPARK
 
 ifdef CONFIG_SPARK7162
@@ -114,9 +111,7 @@ ifdef CONFIG_SPARK7162
   ${P}_patches += bpa2-ignore-bigphysarea-kernel-parameter.patch
   ${P}_patches += linux-sh4-lmb_stm24_$(KERNEL_LABEL).patch
   ${P}_patches += linux-sh4-spark7162_setup_stm24_$(KERNEL_LABEL).patch
-ifeq ($(CONFIG_KERNEL_0211)$(CONFIG_KERNEL_0215),y)
   ${P}_patches += linux-sh4-fix-crash-usb-reboot_stm24_0211.diff
-endif
 endif #CONFIG_SPARK7162
 
 #############################################################################
