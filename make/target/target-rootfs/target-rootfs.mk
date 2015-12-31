@@ -109,7 +109,8 @@ endif
 #########################################################################################
 # enigma2
 ifdef CONFIG_BUILD_ENIGMA2
-BDEPENDS_${P} += $(target_enigma2) $(target_python) $(target_tuxbox_configs) $(target_hotplug_e2_helper) $(target_python_pycrypto)
+BDEPENDS_${P} += $(target_enigma2) $(target_python) $(target_tuxbox_configs) $(target_hotplug_e2_helper) $(target_python_pycrypto) $(target_fakelocale) $(target_plugin_youtube) \
+$(target_plugin_alternativesoftcammanager) $(target_python_requests) $(target_python_serviceidentity) $(target_streamripper) $(target_python_futures) $(target_python_livestreamer)
 opkg_my_list += \
 	config-satellites \
 	config-cables \
@@ -212,7 +213,7 @@ endif
 #neutrino
 
 ifdef CONFIG_BUILD_NEUTRINO
-BDEPENDS_${P} += $(target_libid3tag) $(target_libvorbisidec) $(target_libcap) $(target_libmad) $(target_neutrino)
+BDEPENDS_${P} += $(target_libid3tag) $(target_libvorbisidec) $(target_libcap) $(target_libmad) $(target_neutrino) $(target_neutrino_plugins)
 opkg_my_list += neutrino libblkid1
 endif
 
