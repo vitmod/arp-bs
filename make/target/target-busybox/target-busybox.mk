@@ -5,15 +5,17 @@ package[[ target_busybox
 
 BDEPENDS_${P} = $(target_glibc) $(target_zlib) $(target_libffi)
 
-PV_${P} = git
-PR_${P} = 1
+PV_${P} = 1.24.1
+PR_${P} = 2
 
 DESCRIPTION_${P} = Tiny versions of many common UNIX utilities in a single small executable.
 
 call[[ base ]]
 
 rule[[
-  git://git.busybox.net/${PN}.git
+  extract:http://busybox.net/downloads/${PN}-${PV}.tar.bz2
+  patch:https://busybox.net/downloads/fixes-${PV}/busybox-1.24.1-unzip.patch
+  patch:https://busybox.net/downloads/fixes-${PV}/busybox-1.24.1-unzip-regression.patch
   nothing:file://${PN}.config
   nothing:file://busybox-cron
   nothing:file://syslog.busybox
@@ -21,7 +23,7 @@ rule[[
   pmove:${DIR}/${PN}.config:${DIR}/.config
 ]]rule
 
-call[[ git ]]
+#call[[ git ]]
 
 MAKE_FLAGS_${P} = \
 	CROSS_COMPILE=$(target)- \
