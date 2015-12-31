@@ -138,11 +138,12 @@ $(TARGET_${P}).do_%: $(TARGET_${P}).do_prepare
 	`which colordiff || which diff` -u $(DIR_${P})/.config.old $(DIR_${P})/.config; \
 	  test $$? -ne 2
 	@echo ----------------------------------------------------------------------------
-	@echo You might have to COPY
+	@echo All changes are saved here
 	@echo ${DIR}/.config
 	@echo to
 	@echo ${SDIR}/$(if ${CONFIG},${CONFIG},???.config)
-	@echo to make changes permanent !!!
+	@echo Check changes !!!
+	cp -a ${DIR}/.config ${SDIR}/$(if ${CONFIG},${CONFIG},???.config)
 	@echo ----------------------------------------------------------------------------
 ]]function
 
