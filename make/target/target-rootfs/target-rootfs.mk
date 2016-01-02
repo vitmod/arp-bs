@@ -75,6 +75,9 @@ endif
 ifdef CONFIG_HL101
 opkg_my_list += \
 	kernel-module-cic
+else
+opkg_my_list += \
+	mountspark
 endif
 
 #extras
@@ -117,6 +120,8 @@ opkg_my_list += \
 	config-terrestrial \
 	config-timezone \
 	hotplug-e2-helper \
+	fakelocale \
+	python-json \
 	enigma2 \
 	enigma2-plugin-extensions-cutlisteditor \
 	enigma2-plugin-extensions-dvdplayer \
@@ -254,7 +259,7 @@ $(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
 	export OPKG_OFFLINE_ROOT=$(DIR_${P}) && \
 	$(opkg_rootfs) update && \
 	$(opkg_rootfs) install --force-postinstall $(opkg_my_list)
-ifdef CONFIG_BUILD_NEUTRINO
+ifdef CONFIG_BUILD_ENIGMA2
 #	add version enigma2
 	echo "version=OpenAR-P_`date +%d-%m-%y-%T`_git-`git rev-list --count HEAD`" > $(DIR_${P})/etc/image-version
 	echo "----------------------------------------------------------" >>          $(DIR_${P})/etc/image-version
