@@ -34,6 +34,7 @@ rule[[
   git://github.com/Duckbox-Developers/neutrino-mp-plugins.git;b=master
   patch:file://giflib.patch
   patch:file://font.patch
+  patch:file://hl101.patch
 ]]rule
 
 call[[ git ]]
