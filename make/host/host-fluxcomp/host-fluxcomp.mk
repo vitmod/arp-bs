@@ -11,7 +11,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  nothing:git://git.directfb.org/git/directfb/core/flux.git
+  nothing:git://github.com/Distrotech/flux.git
 ]]rule
 
 call[[ git ]]
