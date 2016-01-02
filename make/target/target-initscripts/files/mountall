@@ -35,4 +35,14 @@ ln -sf /tmp /var/
 #
 swapon -a 2> /dev/null
 
+#
+# copy picon directories
+# if used mountspark then copy picons from sprk root in mountspark
+#
+if [ ! -f /etc/init.d/mountspark ]; then
+	echo "Copy picons from /media/hdd to tmp..."
+	[ -f /media/hdd/picon_tmp.tar ] && tar -xf /media/hdd/picon_tmp.tar -C /tmp
+	[ ! -d /tmp/piconProv ] && [ -d /media/hdd/piconProv ] && cp -R /media/hdd/piconProv /tmp
+fi
+
 : exit 0

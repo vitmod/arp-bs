@@ -21,3 +21,7 @@ call[[ header ]]
 package[[ target_plugin_alternativesoftcammanager
 call[[ header ]]
 ]]package
+
+package[[ target_plugin_youtube
+call[[ header ]]
+]]package

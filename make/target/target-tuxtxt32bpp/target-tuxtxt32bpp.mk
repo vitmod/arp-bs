@@ -11,7 +11,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  git://git.code.sf.net/p/openpli/tuxtxt.git:sub=tuxtxt
+  git://github.com/OpenPLi/tuxtxt.git:sub=tuxtxt
   patch:file://${PN}-1.0-fix_dbox_headers.diff
   install:-m644:-D:$(PKDIR)/etc/tuxtxt/tuxtxt2.conf:file://tuxtxt2.conf
 ]]rule

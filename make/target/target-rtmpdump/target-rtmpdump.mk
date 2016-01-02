@@ -6,12 +6,13 @@ package[[ target_rtmpdump
 BDEPENDS_${P} = $(target_glibc) $(target_zlib) $(target_openssl)
 
 PV_${P} = 2.4
-PR_${P} = 1
+PR_${P} = 2
 
 call[[ base ]]
 
 rule[[
   git://github.com/oe-alliance/${PN}.git
+  patch:file://${PN}.patch
 ]]rule
 
 MAKE_FLAGS_${P} = \

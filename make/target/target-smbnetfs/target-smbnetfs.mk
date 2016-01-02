@@ -5,8 +5,8 @@ package[[ target_smbnetfs
 
 BDEPENDS_${P} = $(target_fuse) $(target_samba)
 
-PV_${P} = 0.5.3b
-PR_${P} = 1
+PV_${P} = 0.6.0
+PR_${P} = 3
 
 call[[ base ]]
 
@@ -46,7 +46,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 call[[ ipk ]]
 
 DESCRIPTION_${P} = SMBNetFS is a Linux/FreeBSD filesystem that allow you to use samba/microsoft network in the same manner as the network neighborhood in Microsoft Windows.
-RDEPENDS_${P} = 
+RDEPENDS_${P} = curl fuse-utils samba-lib
 
 define preinst_${P}
 #!/bin/sh
@@ -59,11 +59,11 @@ update-rc.d -r $$OPKG_OFFLINE_ROOT/ smbnetfs start 30 3 . stop 30 0 .
 endef
 define prerm_${P}
 #!/bin/sh
-update-rc.d -r $$OPKG_OFFLINE_ROOT/ smbnetfs remove
+update-rc.d -f -r $$OPKG_OFFLINE_ROOT/ smbnetfs remove
 endef
 
 FILES_${P} = /etc \
-/usr/lib
+/usr/bin
 
 call[[ ipkbox ]]
 

@@ -34,6 +34,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 call[[ ipk ]]
 
 DESCRIPTION_${P} = setuptools
+RDEPENDS_${P} = python_pkgutil
 FILES_${P} = \
 	$(PYTHON_DIR)/site-packages/*.py \
 	$(PYTHON_DIR)/site-packages/*.pyo \

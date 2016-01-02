@@ -2,12 +2,17 @@ diff -Nur ta/tuxtxt_common.h b/tuxtxt_common.h
 --- a/tuxtxt_common.h	2012-03-21 03:53:24.000000000 -0700
 +++ b/tuxtxt_common.h	2012-03-21 05:01:34.008166144 -0700
 
-@@ -23,6 +23,67 @@
+@@ -23,6 +23,72 @@
  
  #include <linux/input.h>
  
 +#if defined(__sh__)
 +#include <linux/stmfb.h>
++
++#ifdef DEBUG
++#undef DEBUG
++#endif
++#define DEBUG 0
 +
 +void blit(tstRenderInfo* renderinfo)
 +{
@@ -170,3 +175,18 @@ diff -Nur a/tuxtxt_def.h b/tuxtxt_def.h
  	int TTFWidthFactor16, TTFHeightFactor16, TTFShiftX, TTFShiftY; /* parameters for adapting to various TTF fonts */
  	int fontheight, fontwidth, fontwidth_normal, fontwidth_small, fontwidth_topmenumain, fontwidth_topmenusmall, ascender;
  	int displaywidth;
+--- a/libtuxtxt.c	2014-02-06 22:09:01.750470275 +0200
++++ b/libtuxtxt.c	2015-02-26 22:59:26.976425279 +0200
+@@ -18,12 +18,6 @@
+  *                                                                            *
+  ******************************************************************************/
+ 
+-#ifdef DEBUG
+-#undef DEBUG
+-#endif
+-
+-#define DEBUG 0
+-
+ #include <sys/ioctl.h>
+ #include <fcntl.h>
+ 
