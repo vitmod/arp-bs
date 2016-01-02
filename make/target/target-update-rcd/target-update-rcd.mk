@@ -6,7 +6,7 @@ package[[ target_update_rcd
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = 0.1
-PR_${P} = 2
+PR_${P} = 3
 
 call[[ base ]]
 
@@ -15,6 +15,7 @@ rule[[
   patch:file://update-rc-add-verbose.patch
   patch:file://update-rc-check-if-symlinks-are-valid.patch
   patch:file://update-rc-use-cmdline.patch
+  patch:file://update-rc.d.-dont-use-force-for-remove.patch
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})

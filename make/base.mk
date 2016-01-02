@@ -138,11 +138,12 @@ $(TARGET_${P}).do_%: $(TARGET_${P}).do_prepare
 	`which colordiff || which diff` -u $(DIR_${P})/.config.old $(DIR_${P})/.config; \
 	  test $$? -ne 2
 	@echo ----------------------------------------------------------------------------
-	@echo You might have to COPY
+	@echo All changes are saved here
 	@echo ${DIR}/.config
 	@echo to
 	@echo ${SDIR}/$(if ${CONFIG},${CONFIG},???.config)
-	@echo to make changes permanent !!!
+	@echo Check changes !!!
+	cp -a ${DIR}/.config ${SDIR}/$(if ${CONFIG},${CONFIG},???.config)
 	@echo ----------------------------------------------------------------------------
 ]]function
 
@@ -481,7 +482,7 @@ $(TARGET_${P}): $(TARGET_${P}).do_ipkbox
 # git staff related constants
 # you need first 'cd' to interesting directory
 git_log_srcrev := git log -1 --format=%H HEAD -- .
-git_log_version := echo `git rev-list --count HEAD -- .`-`git log -1 --format=%h HEAD -- .`
+git_log_version := echo `git rev-list --count HEAD -- .`
 
 help::
 	@echo run \'make all-update\' if you want to check all git/svn packages for updates

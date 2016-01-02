@@ -7,7 +7,7 @@ package[[ target_enigma2
 BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif)
 
 PV_${P} = git
-PR_${P} = 17
+PR_${P} = 18
 PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -83,20 +83,6 @@ CONFIG_FLAGS_${P} += --enable-libeplayer3
 RDEPENDS_enigma2 += libeplayer3
 endif
 
-# box type
-ifdef CONFIG_SPARK
-CONFIG_FLAGS_${P} += --enable-spark
-keymap_${P} = keymap_spark.xml
-endif
-ifdef CONFIG_SPARK7162
-CONFIG_FLAGS_${P} += --enable-spark7162
-keymap_${P} = keymap_spark.xml
-endif
-ifdef CONFIG_HL101
-CONFIG_FLAGS_${P} += --enable-hl101
-keymap_${P} = keymap_hl101.xml
-endif
-
 ifdef CONFIG_EXTERNAL_LCD
 BDEPENDS_${P} += $(target_graphlcd)
 CONFIG_FLAGS_${P} += --with-graphlcd --with-lcddev=/dev/fb1
@@ -122,13 +108,14 @@ ifdef CONFIG_ENIGMA2_SRC_MASTER
 endif
 ifdef CONFIG_ENIGMA2_SRC_STAGING
   git://github.com/OpenAR-P/enigma2-pli-arp.git;b=staging
+  patch:file://keymap_$(box_arch).patch
 endif
 ifdef CONFIG_ENIGMA2_SRC_LAST
   git://github.com/OpenAR-P/enigma2-pli-arp.git;b=last
 endif
 
   install:-d:$(PKDIR)/usr/share/enigma2/
-  install_file:$(PKDIR)/usr/share/enigma2/keymap.xml:file://$(keymap_${P})
+  install_file:$(PKDIR)/usr/share/enigma2/keytranslation.xml:file://keytranslation.xml
   install_file:$(PKDIR)/usr/share/enigma2/skin_display_perl.xml:file://skin_display_perl.xml
 ]]rule
 
@@ -189,7 +176,6 @@ PACKAGES_${P} = \
 	enigma2_plugin_systemplugins_fastscan \
 	enigma2_plugin_systemplugins_hdmicec \
 	enigma2_plugin_systemplugins_hotplug \
-	enigma2_plugin_systemplugins_keymapmanager \
 	enigma2_plugin_systemplugins_networkwizard \
 	enigma2_plugin_systemplugins_osd3dsetup \
 	enigma2_plugin_systemplugins_osdpositionsetup \
@@ -318,11 +304,6 @@ FILES_enigma2_plugin_systemplugins_hdmicec = /usr/lib/enigma2/python/Plugins/Sys
 DESCRIPTION_enigma2_plugin_systemplugins_hotplug = Hotplugging for removeable devices The Hotplug plugin notifies your system of newly added or removed devices.
 RDEPENDS_enigma2_plugin_systemplugins_hotplug = enigma2
 FILES_enigma2_plugin_systemplugins_hotplug = /usr/lib/enigma2/python/Plugins/SystemPlugins/Hotplug
-
-DESCRIPTION_enigma2_plugin_systemplugins_keymapmanager = The KeymapManager plugin setup for optional keymaps.
-RDEPENDS_enigma2_plugin_systemplugins_keymapmanager = enigma2
-FILES_enigma2_plugin_systemplugins_keymapmanager = /usr/lib/enigma2/python/Plugins/SystemPlugins/KeymapManager \
-	$(buildprefix)/root/usr/local/share/enigma2/keymap_amiko.xml
 
 DESCRIPTION_enigma2_plugin_systemplugins_networkwizard = With the network wizard you can easily configure your network step by step.
 RDEPENDS_enigma2_plugin_systemplugins_networkwizard = enigma2

@@ -75,6 +75,9 @@ endif
 ifdef CONFIG_HL101
 opkg_my_list += \
 	kernel-module-cic
+else
+opkg_my_list += \
+	mountspark
 endif
 
 #extras
@@ -109,13 +112,16 @@ endif
 #########################################################################################
 # enigma2
 ifdef CONFIG_BUILD_ENIGMA2
-BDEPENDS_${P} += $(target_enigma2) $(target_python) $(target_tuxbox_configs) $(target_hotplug_e2_helper) $(target_python_pycrypto)
+BDEPENDS_${P} += $(target_enigma2) $(target_python) $(target_tuxbox_configs) $(target_hotplug_e2_helper) $(target_python_pycrypto) $(target_fakelocale) $(target_plugin_youtube) \
+$(target_plugin_alternativesoftcammanager) $(target_python_requests) $(target_python_serviceidentity) $(target_streamripper) $(target_python_futures) $(target_python_livestreamer)
 opkg_my_list += \
 	config-satellites \
 	config-cables \
 	config-terrestrial \
 	config-timezone \
 	hotplug-e2-helper \
+	fakelocale \
+	python-json \
 	enigma2 \
 	enigma2-plugin-extensions-cutlisteditor \
 	enigma2-plugin-extensions-dvdplayer \
@@ -129,7 +135,6 @@ opkg_my_list += \
 	enigma2-plugin-systemplugins-diseqctester \
 	enigma2-plugin-systemplugins-hdmicec \
 	enigma2-plugin-systemplugins-hotplug \
-	enigma2-plugin-systemplugins-keymapmanager \
 	enigma2-plugin-systemplugins-networkwizard \
 	enigma2-plugin-systemplugins-osd3dsetup \
 	enigma2-plugin-systemplugins-osdpositionsetup \
@@ -213,7 +218,7 @@ endif
 #neutrino
 
 ifdef CONFIG_BUILD_NEUTRINO
-BDEPENDS_${P} += $(target_libid3tag) $(target_libvorbisidec) $(target_libcap) $(target_libmad) $(target_neutrino)
+BDEPENDS_${P} += $(target_libid3tag) $(target_libvorbisidec) $(target_libcap) $(target_libmad) $(target_neutrino) $(target_neutrino_plugins)
 opkg_my_list += neutrino libblkid1
 endif
 
@@ -254,7 +259,7 @@ $(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
 	export OPKG_OFFLINE_ROOT=$(DIR_${P}) && \
 	$(opkg_rootfs) update && \
 	$(opkg_rootfs) install --force-postinstall $(opkg_my_list)
-ifdef CONFIG_BUILD_NEUTRINO
+ifdef CONFIG_BUILD_ENIGMA2
 #	add version enigma2
 	echo "version=OpenAR-P_`date +%d-%m-%y-%T`_git-`git rev-list --count HEAD`" > $(DIR_${P})/etc/image-version
 	echo "----------------------------------------------------------" >>          $(DIR_${P})/etc/image-version

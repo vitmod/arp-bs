@@ -11,7 +11,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  nothing:git://git.code.sf.net/p/openpli/hotplug-e2-helper
+  nothing:git://github.com/OpenPLi/hotplug-e2-helper.git
   patch:file://${PN}-support_fw_upload.patch
 ]]rule
 

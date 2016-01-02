@@ -5,7 +5,7 @@ package[[ target_libaacs
 
 BDEPENDS_${P} = $(target_glibc) $(target_libgcrypt)
 
-PV_${P} = 0.7.1
+PV_${P} = 0.8.1
 PR_${P} = 1
 
 call[[ base ]]

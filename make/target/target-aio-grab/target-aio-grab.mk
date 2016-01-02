@@ -11,9 +11,8 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  nothing:git://git.code.sf.net/p/openpli/${PN}.git:r=ef31eca61832b31f28f69157dfe5f850a3cab916
-  patch:file://${PN}-ADD_ST_SUPPORT.patch
-  patch:file://${PN}-ADD_ST_FRAMESYNC_SUPPORT.patch
+  nothing:git://github.com/OpenPLi/${PN}.git
+  patch:file://${PN}.patch
 ]]rule
 
 call[[ git ]]

@@ -1,0 +1,12 @@
+--- jpeg-9a/config.sub	2014-01-03 12:20:53.000000000 +0100
++++ jpeg-9a/config.sub	2014-10-19 00:01:51.926228437 +0200
+@@ -1082,6 +1082,9 @@
+ 		basic_machine=sparclite-wrs
+ 		os=-vxworks
+ 		;;
++	sh4)
++		basic_machine=sh4-linux
++		;;
+ 	sps7)
+ 		basic_machine=m68k-bull
+ 		os=-sysv2
