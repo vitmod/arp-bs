@@ -156,15 +156,11 @@ call[[ ipk ]]
 PACKAGES_${P} = \
 	enigma2 \
 	enigma2_meta \
-	font_ae_almateen \
 	font_andale \
-	font_lcd \
 	font_liberationsans_b \
 	font_liberationsans_bl \
 	font_liberationsans_i \
 	font_liberationsans_r \
-	font_md_khmurabi \
-	font_nmsbd \
 	enigma2_plugin_extensions_cutlisteditor \
 	enigma2_plugin_extensions_dvdplayer \
 	enigma2_plugin_extensions_graphmultiepg \
@@ -219,14 +215,8 @@ DESCRIPTION_enigma2_meta = meta files for  enigma2
 RDEPENDS_enigma2_meta = enigma2
 FILES_enigma2_meta = /usr/share/meta
 
-DESCRIPTION_font_ae_almateen = ttf fonts
-FILES_font_ae_almateen = /usr/share/fonts/ae_AlMateen.ttf
-
 DESCRIPTION_font_andale = ttf fonts
 FILES_font_andale = /usr/share/fonts/andale.ttf
-
-DESCRIPTION_font_lcd = ttf fonts
-FILES_font_lcd = /usr/share/fonts/lcd.ttf
 
 DESCRIPTION_font_liberationsans_b = ttf fonts
 FILES_font_liberationsans_b = /usr/share/fonts/LiberationSans-Bold.ttf
@@ -239,12 +229,6 @@ FILES_font_liberationsans_i = /usr/share/fonts/LiberationSans-Italic.ttf
 
 DESCRIPTION_font_liberationsans_r = ttf fonts
 FILES_font_liberationsans_r = /usr/share/fonts/LiberationSans-Regular.ttf
-
-DESCRIPTION_font_md_khmurabi = ttf fonts
-FILES_font_md_khmurabi = /usr/share/fonts/md_khmurabi_10.ttf
-
-DESCRIPTION_font_nmsbd = ttf fonts
-FILES_font_nmsbd = /usr/share/fonts/nmsbd.ttf
 
 DESCRIPTION_enigma2_plugin_extensions_cutlisteditor = CutListEditor allows you to edit your movies
 RDEPENDS_enigma2_plugin_extensions_cutlisteditor = enigma2
