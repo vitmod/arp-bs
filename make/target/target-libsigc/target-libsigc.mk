@@ -5,7 +5,7 @@ package[[ target_libsigc
 
 BDEPENDS_${P} = $(target_gcc_lib)
 
-ifdef CONFIG_BUILD_NEUTRINO
+ifdef CONFIG_SIGC2
 PV_${P} = 2.3.2
 PR_${P} = 1
 DV_${P} = 2.3
@@ -21,7 +21,7 @@ DIR_${P} = $(WORK_${P})/libsigc++-${PV}
 call[[ base ]]
 
 rule[[
-ifdef CONFIG_BUILD_NEUTRINO
+ifdef CONFIG_SIGC2
   extract:http://ftp.gnome.org/pub/GNOME/sources/libsigc++/${DV}/libsigc++-${PV}.tar.xz
 else
   extract:http://ftp.gnome.org/pub/GNOME/sources/libsigc++/${DV}/libsigc++-${PV}.tar.gz
