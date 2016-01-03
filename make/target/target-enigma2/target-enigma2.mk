@@ -88,7 +88,7 @@ BDEPENDS_${P} += $(target_graphlcd)
 CONFIG_FLAGS_${P} += --with-graphlcd --with-lcddev=/dev/fb1
 RDEPENDS_enigma2 += libgraphlcd
 endif
-ifdef CONFIG_BUILD_NEUTRINO
+ifdef CONFIG_SIGC2
 CONFIG_FLAGS_${P} += --enable-sigc2 CXXFLAGS="-std=c++11"
 RDEPENDS_enigma2 += libsigc-2.3
 else
