@@ -209,6 +209,10 @@ menu "GUI Configuration"
 		  bool "non-public branch last"
 		  depends on BUILD_ENIGMA2
 
+		  config ENIGMA2_TAAPAT
+		  bool "enigma2 taapat on bitbucket"
+		  depends on BUILD_ENIGMA2
+
 		endchoice
 
 	config ENIGMA2_PLUGINS
