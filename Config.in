@@ -261,6 +261,9 @@ menu "GUI Configuration"
 
 	endif
 
+		config SIGC2
+		bool  "experemental  sigc++ 2.0 "
+
 	config BUILD_NEUTRINO
 		bool
 		prompt "Neutrino"
@@ -273,10 +276,12 @@ menu "GUI Configuration"
 			config NEUTRINO_SRC_MASTER
 			bool "public branch master"
 			depends on BUILD_NEUTRINO
+			select SIGC2
 
 			config NEUTRINO_SRC_MAX
 			bool "public branch Max"
 			depends on BUILD_NEUTRINO
+			select SIGC2
 
 		      endchoice
 		endif
