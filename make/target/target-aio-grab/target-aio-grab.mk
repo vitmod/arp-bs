@@ -3,7 +3,7 @@
 #
 package[[ target_aio_grab
 
-BDEPENDS_${P} = $(target_glibc) $(target_libjpeg_turbo)
+BDEPENDS_${P} = $(target_glibc) $(target_libjpeg_turbo) $(target_libpng)
 
 PV_${P} = git
 PR_${P} = 1
