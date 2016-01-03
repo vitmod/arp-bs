@@ -88,14 +88,12 @@ BDEPENDS_${P} += $(target_graphlcd)
 CONFIG_FLAGS_${P} += --with-graphlcd --with-lcddev=/dev/fb1
 RDEPENDS_enigma2 += libgraphlcd
 endif
-
 ifdef CONFIG_BUILD_NEUTRINO
 CONFIG_FLAGS_${P} += --enable-sigc2 CXXFLAGS="-std=c++11"
 RDEPENDS_enigma2 += libsigc-2.3
 else
 RDEPENDS_enigma2 += libsigc-1.2
 endif
-
 call[[ base ]]
 
 CONFIGS_${P} = CONFIG_ENIGMA2_%
@@ -109,14 +107,18 @@ endif
 ifdef CONFIG_ENIGMA2_SRC_STAGING
   git://github.com/OpenAR-P/enigma2-pli-arp.git;b=staging
   patch:file://keymap_$(box_arch).patch
+  install:-d:$(PKDIR)/usr/share/enigma2/
+  install_file:$(PKDIR)/usr/share/enigma2/keytranslation.xml:file://keytranslation.xml
+  install_file:$(PKDIR)/usr/share/enigma2/skin_display_perl.xml:file://skin_display_perl.xml
 endif
 ifdef CONFIG_ENIGMA2_SRC_LAST
   git://github.com/OpenAR-P/enigma2-pli-arp.git;b=last
 endif
+ifdef CONFIG_ENIGMA2_TAAPAT
+   git://bitbucket.org/Taapat/enigma2-pli-arp-taapat.git;b=master;protocol=https
+   patch:file://enigma2-taapat.patch
+endif
 
-  install:-d:$(PKDIR)/usr/share/enigma2/
-  install_file:$(PKDIR)/usr/share/enigma2/keytranslation.xml:file://keytranslation.xml
-  install_file:$(PKDIR)/usr/share/enigma2/skin_display_perl.xml:file://skin_display_perl.xml
 ]]rule
 
 call[[ git ]]

@@ -1,0 +1,169 @@
+diff --git a/configure.ac b/configure.ac
+index caaaf8b..99da942 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -65,6 +65,16 @@ if test "$enable_minimal" = "yes"; then
+ fi
+ AM_CONDITIONAL(ENABLE_MINIMAL, test "$enable_minimal" = "yes")
+ 
++AC_ARG_ENABLE(sigc2,
++	[  --enable-sigc2         enable sigc2 config],
++	[AC_DEFINE(ENABLE_SIGC2, 1, [enable sigc2 config])])
++
++if ! test "$enable_sigc2" = "yes"; then
++SIGC_MAJORMINOR=1.2
++else
++SIGC_MAJORMINOR=2.0
++fi
++
+ if ! test "$enable_libeplayer3" = "yes"; then
+ dnl versions of gstreamer and plugins-base
+ AC_ARG_WITH(gstversion,
+@@ -74,7 +84,7 @@ AC_ARG_WITH(gstversion,
+ PKG_CHECK_MODULES(GSTREAMER, gstreamer-$GST_MAJORMINOR gstreamer-pbutils-$GST_MAJORMINOR)
+ PKG_CHECK_MODULES(BASE, [freetype2 fribidi gstreamer-$GST_MAJORMINOR gstreamer-pbutils-$GST_MAJORMINOR libdvbsi++ libpng libxml-2.0 sigc++-1.2 libssl libcrypto glib-2.0])
+ else
+-PKG_CHECK_MODULES(BASE, [freetype2 fribidi libdvbsi++ libpng libxml-2.0 sigc++-1.2 libssl libcrypto glib-2.0])
++PKG_CHECK_MODULES(BASE, [freetype2 fribidi libdvbsi++ libpng libxml-2.0 sigc++-$SIGC_MAJORMINOR libssl libcrypto glib-2.0])
+ fi
+ 
+ AM_CONDITIONAL(HAVE_LIBDDVD, test "$HAVE_LIBDDVD" = "yes")
+@@ -241,6 +251,7 @@ fi
+ 
+ ENIGMA2_CFLAGS="-fno-rtti -fno-exceptions"
+ AC_SUBST(ENIGMA2_CFLAGS)
++AC_SUBST(SIGC_MAJORMINOR)
+ 
+ CPPFLAGS="$CPPFLAGS $PYTHON_CPPFLAGS"
+ CFLAGS="$CFLAGS $DEBUG_CFLAGS -Wall"
+diff --git a/enigma2.pc.in b/enigma2.pc.in
+index f34d904..b1da2aa 100644
+--- a/enigma2.pc.in
++++ b/enigma2.pc.in
+@@ -7,4 +7,4 @@ Name: enigma2
+ Description: Enigma2
+ Version: @VERSION@
+ Cflags: -I${includedir}/enigma2 @ENIGMA2_CFLAGS@
+-Requires.private: sigc++-1.2
++Requires.private: sigc++-@SIGC_MAJORMINOR@
+diff --git a/include/libsig_comp.h b/include/libsig_comp.h
+index 83550ed..6418b7d 100644
+--- a/include/libsig_comp.h
++++ b/include/libsig_comp.h
+@@ -8,6 +8,69 @@
+ using namespace SigC;
+ #endif
+ 
++#ifdef ENABLE_SIGC2
++
++//wrap sigc++2.0 for sigc++1.2
++typedef sigc::trackable Object;
++typedef sigc::connection Connection;
++template<class R> using Signal0 = sigc::signal<R>;
++template<class R, typename A1> using Signal1 = sigc::signal<R, A1>;
++template<class R, typename A1, typename A2> using Signal2 = sigc::signal<R, A1, A2>;
++template<class R, typename A1, typename A2, typename A3> using Signal3 = sigc::signal<R, A1, A2, A3>;
++template<class R, typename A1, typename A2, typename A3, typename A4> using Signal4 = sigc::signal<R, A1, A2, A3, A4>;
++template<class R> using Slot0 = sigc::slot<R>;
++template<class R, typename A1> using Slot1 = sigc::slot<R, A1>;
++template<class R, typename A1, typename A2> using Slot2 = sigc::slot<R, A1, A2>;
++
++template<class T_return >
++inline Slot0<T_return> slot (T_return(*  _A_func))
++    {
++      return sigc::ptr_fun(_A_func);
++    }
++template<class T_return, class T_obj1, class T_obj2>
++inline Slot0<T_return>  slot (T_obj1& _A_obj, T_return(T_obj2::* _A_func)())
++    {
++      return sigc::mem_fun(_A_obj, _A_func);
++    }
++template<class T_return, class T_obj>
++inline Slot0<T_return> slot (T_return(T_obj::* _A_func)())
++    {
++      return sigc::mem_fun(_A_func);
++    }
++
++template<class T_return, class T_arg1>
++inline Slot1<T_return, T_arg1> slot (T_return(*  _A_func)(T_arg1))
++    {
++      return sigc::ptr_fun(_A_func);
++    }
++template<class T_return, class T_obj, class T_arg1>
++inline Slot1<T_return, T_arg1> slot (T_return(T_obj::* _A_func)(T_arg1))
++    {
++      return sigc::mem_fun(_A_func);
++    }
++template<class T_return, class T_arg1, class T_obj1, class T_obj2>
++inline Slot1<T_return, T_arg1>  slot (T_obj1& _A_obj, T_return(T_obj2::* _A_func)(T_arg1))
++    {
++      return sigc::mem_fun(_A_obj, _A_func);
++    }
++
++template<class T_return, class T_arg1, class T_arg2>
++inline Slot2<T_return, T_arg1, T_arg2> slot (T_return(*  _A_func)(T_arg1, T_arg2))
++    {
++      return sigc::ptr_fun(_A_func);
++    }
++template<class T_return, class T_obj, class T_arg1, class T_arg2>
++inline Slot2<T_return, T_arg1, T_arg2> slot (T_return(T_obj::* _A_func)(T_arg1, T_arg2))
++    {
++      return sigc::mem_fun(_A_func);
++    }
++template<class T_return, class T_arg1, class T_arg2, class T_obj1, class T_obj2>
++inline Slot2<T_return, T_arg1, T_arg2>  slot (T_obj1& _A_obj, T_return(T_obj2::* _A_func)(T_arg1, T_arg2))
++    {
++      return sigc::mem_fun(_A_obj, _A_func);
++    }
++#define CONNECT(SENDER, EMPFAENGER) SENDER.connect(sigc::mem_fun(*this, &EMPFAENGER))
++#else
+ #define CONNECT(SENDER, EMPFAENGER) SENDER.connect(slot(*this, &EMPFAENGER))
+ // use this Makro to connect with a method
+ // void bla::foo(int x);
+@@ -16,6 +79,7 @@ using namespace SigC;
+ //
+ // CONNECT(testSig, bla::foo);
+ // signal and method (slot) must have the same signature
++#endif //SIGC2
+ 
+ #define CONNECT_1_0(SENDER, EMPFAENGER, PARAM) SENDER.connect( bind( slot(*this, &EMPFAENGER) ,PARAM ) )
+ // use this for connect with a method
+diff --git a/lib/service/servicelibpl.h b/lib/service/servicelibpl.h
+index 231b183..20785c3 100755
+--- a/lib/service/servicelibpl.h
++++ b/lib/service/servicelibpl.h
+@@ -14,8 +14,8 @@ extern "C"
+ #  define __STDC_CONSTANT_MACROS
+ #  define UINT64_C
+ #endif
+-#include <libeplayer3/include/common.h>
+-#include <libeplayer3/include/subtitle.h>
++#include <libeplayer/common.h>
++#include <libeplayer/subtitle.h>
+ }
+ 
+ #define gint int
+diff --git a/main/bsod.cpp b/main/bsod.cpp
+index a7a8118..35a67b3 100644
+--- a/main/bsod.cpp
++++ b/main/bsod.cpp
+@@ -65,7 +65,7 @@ static const std::string getLogBuffer()
+ 		return std::string(ringbuffer + begin, RINGBUFFER_SIZE - begin) + std::string(ringbuffer, ringbuffer_head);
+ }
+ 
+-static void addToLogbuffer(int level, const std::string &log)
++static void addToLogbuffer1(int level, const std::string &log)
+ {
+ 	addToLogbuffer(log.c_str(), log.size());
+ }
+@@ -323,5 +323,9 @@ void bsodCatchSignals()
+ 
+ void bsodLogInit()
+ {
+-	logOutput.connect(addToLogbuffer);
++#ifdef ENABLE_SIGC2
++	logOutput.connect(sigc::ptr_fun(addToLogbuffer1));
++#else
++	logOutput.connect(addToLogbuffer1);
++#endif
+ }
