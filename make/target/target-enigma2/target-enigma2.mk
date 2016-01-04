@@ -144,8 +144,9 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
 	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	cd $(DIR_${P}) && $(INSTALL_${P})
-
+ifndef CONFIG_DEBUG_ARP
 	$(target)-strip $(PKDIR)/usr/bin/enigma2
+endif
 	touch $@
 
 call[[ ipk ]]
