@@ -58,7 +58,7 @@ fi
 cp -f $tmpkerneldir/uImage $outdir/uImage
 
 # --- ROOT ---
-# Size 64MB !
+# Size 96MB !
 echo "MKFSJFFS2 --qUfv -e0x20000 -r $tmprootdir -o $curdir/mtd_root.bin"
 $MKFSJFFS2 -qUfv -e0x20000 -r $tmprootdir -o $curdir/mtd_root.bin
 echo "SUMTOOL -v -p -e 0x20000 -i $curdir/mtd_root.bin -o $curdir/mtd_root.sum.pad.bin"
@@ -77,8 +77,8 @@ fi
 
 SIZE=`stat mtd_root.sum.pad.bin -t --format %s`
 SIZE=`printf "0x%x" $SIZE`
-if [[ $SIZE > "0x4000000" ]]; then
-	echo "ROOT TO BIG. $SIZE instead of 0x4000000"  >&2
+if [[ $SIZE > "0x6000000" ]]; then
+	echo "ROOT TO BIG. $SIZE instead of 0x6000000"  >&2
 	exit 1
 fi
 
