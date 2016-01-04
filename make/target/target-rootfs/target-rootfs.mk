@@ -122,6 +122,7 @@ opkg_my_list += \
 	hotplug-e2-helper \
 	fakelocale \
 	python-json \
+	python-readline \
 	enigma2 \
 	enigma2-plugin-extensions-cutlisteditor \
 	enigma2-plugin-extensions-dvdplayer \
