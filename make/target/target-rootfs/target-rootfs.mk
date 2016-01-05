@@ -82,6 +82,11 @@ endif
 
 #extras
 
+ifdef CONFIG_DEBUG_ARP
+BDEPENDS_${P} += $(target_gdb)
+opkg_my_list += gdb
+endif
+
 ifdef CONFIG_WLAN_SUPPORT
 BDEPENDS_${P} += $(target_wireless_tools) $(target_firmware_wlan) $(target_compat_wireless)
 opkg_my_list += \
