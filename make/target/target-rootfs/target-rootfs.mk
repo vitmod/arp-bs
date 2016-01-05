@@ -59,7 +59,6 @@ opkg_my_list += \
 	kernel-dvb-modules-stv090x \
 	kernel-module-multicom \
 	kernel-module-player2 \
-	kernel-module-ptinp \
 	kernel-module-simu-button \
 	kernel-module-smartcard \
 	kernel-module-stgfb
