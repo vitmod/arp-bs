@@ -5,13 +5,13 @@ package[[ target_libsoup
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 2.50.0
+PV_${P} = 2.53.2
 PR_${P} = 1
 
 call[[ base ]]
 
 rule[[
-  extract:http://download.gnome.org/sources/${PN}/2.40/${PN}-${PV}.tar.xz
+  extract:https://download.gnome.org/sources/${PN}/2.53/${PN}-${PV}.tar.xz
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
