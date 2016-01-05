@@ -25,6 +25,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--prefix=/usr \
 			--disable-more-warnings \
+			--enable-vala=no \
 			--without-gnome \
 		&& \
 		$(run_make) all
