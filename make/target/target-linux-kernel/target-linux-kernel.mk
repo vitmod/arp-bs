@@ -52,7 +52,9 @@ ${P}_patches = \
 	linux-sh4-ext23_as_ext4_stm24_$(KERNEL_LABEL).patch \
 	bpa2_procfs_stm24_$(KERNEL_LABEL).patch \
 	linux-ftdi_sio.c_stm24_$(KERNEL_LABEL).patch \
+	linux-sh4-mmap_stm24.patch \
 	linux-sh4-lzma-fix_stm24_$(KERNEL_LABEL).patch \
+	patch_swap_notify_core_support.diff \
 	perf-warning-fix.diff
 
 ifeq ($(CONFIG_KERNEL_0211),y)
@@ -72,14 +74,6 @@ ${P}_patches += \
 	linux-sh4-ratelimit-bug_stm24_$(KERNEL_LABEL).patch
 endif
 
-ifeq ($(CONFIG_KERNEL_0211)$(CONFIG_KERNEL_0215)$(CONFIG_KERNEL_0217),y)
-${P}_patches += \
-	linux-sh4-mmap_stm24.patch \
-	linux-sh4-directfb_stm24_$(KERNEL_LABEL).patch
-endif
-
-${P}_patches += patch_swap_notify_core_support.diff
-
 
 # TARGET specific patches
 #############################################################################
@@ -89,9 +83,7 @@ ifdef CONFIG_HL101
   ${P}_patches += linux-usbwait123_stm24.patch
   ${P}_patches += linux-sh4-stmmac_stm24_$(KERNEL_LABEL).patch
   ${P}_patches += linux-sh4-i2c-st40-pio_stm24_$(KERNEL_LABEL).patch
-ifeq ($(CONFIG_KERNEL_0211)$(CONFIG_KERNEL_0215)$(CONFIG_KERNEL_0217),y)
   ${P}_patches += linux-sh4-hl101_i2c_st40_stm24_$(KERNEL_LABEL).patch
-endif
 endif #CONFIG_HL101
 
 ifdef CONFIG_SPARK
@@ -104,6 +96,7 @@ ifdef CONFIG_SPARK
   ${P}_patches += dvb-as102.patch
   ${P}_patches += linux-sh4-lirc_stm_stm24_$(KERNEL_LABEL).patch
   ${P}_patches += linux-sh4-fix-crash-usb-reboot_stm24_0211.diff
+  ${P}_patches += linux-sh4-directfb_stm24_$(KERNEL_LABEL).patch
 endif #CONFIG_SPARK
 
 ifdef CONFIG_SPARK7162
@@ -113,6 +106,7 @@ ifdef CONFIG_SPARK7162
   ${P}_patches += linux-sh4-lmb_stm24_$(KERNEL_LABEL).patch
   ${P}_patches += linux-sh4-spark7162_setup_stm24_$(KERNEL_LABEL).patch
   ${P}_patches += linux-sh4-fix-crash-usb-reboot_stm24_0211.diff
+  ${P}_patches += linux-sh4-directfb_stm24_$(KERNEL_LABEL).patch
 endif #CONFIG_SPARK7162
 
 #############################################################################
