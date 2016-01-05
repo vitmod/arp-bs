@@ -5,7 +5,7 @@ package[[ target_glib2
 
 BDEPENDS_${P} = $(target_glibc) $(target_zlib) $(target_libffi) $(target_libusb)
 
-PV_${P} = 2.34.3
+PV_${P} = 2.45.8
 PR_${P} = 1
 
 DIR_${P} = $(WORK_${P})/glib-${PV}
@@ -13,8 +13,8 @@ DIR_${P} = $(WORK_${P})/glib-${PV}
 call[[ base ]]
 
 rule[[
-  extract:http://ftp.gnome.org/pub/GNOME/sources/glib/2.34/glib-${PV}.tar.xz
-  patch:file://glib-${PV}.patch
+  extract:http://ftp.gnome.org/pub/GNOME/sources/glib/2.45/glib-${PV}.tar.xz
+#  patch:file://glib-${PV}.patch
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
