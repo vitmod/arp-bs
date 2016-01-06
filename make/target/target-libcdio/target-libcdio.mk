@@ -5,7 +5,7 @@ package[[ target_libcdio
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 0.82
+PV_${P} = 0.83
 PR_${P} = 1
 
 call[[ base ]]
