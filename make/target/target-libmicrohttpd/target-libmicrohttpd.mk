@@ -5,7 +5,7 @@ package[[ target_libmicrohttpd
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 0.9.43
+PV_${P} = 0.9.48
 PR_${P} = 1
 
 call[[ base ]]
