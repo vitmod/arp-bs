@@ -4,7 +4,7 @@
 ifeq ($(strip $(CONFIG_BUILD_XBMC)),y)
 package[[ target_xbmc
 
-BDEPENDS_${P} = $(target_boost) $(target_libass) $(target_libmpeg2) $(target_python) $(target_python_twisted) $(target_libmodplug) $(target_taglib) $(target_libstgles) $(target_libnfs) $(target_libmicrohttpd) $(target_tinyxml) $(target_gstreamer) $(target_libjpeg) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage)
+BDEPENDS_${P} = $(target_boost) $(target_libass) $(target_libmpeg2) $(target_python) $(target_python_twisted) $(target_libmodplug) $(target_taglib) $(target_libnfs) $(target_libmicrohttpd) $(target_expat) $(target_libxmlccwrap) $(target_tinyxml) $(target_libsamplerate) $(target_flac) $(target_jasper) $(target_gst_plugins_dvbmediasink) $(target_libjpeg_turbo) $(target_lzo) $(target_fontconfig) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libsigc) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libstgles) $(target_yajl) $(target_pcre) $(target_libcdio)
 
 PV_${P} = git
 PR_${P} = 1
@@ -38,6 +38,7 @@ CONFIG_FLAGS_${P} = \
 			--disable-libbluray \
 			--disable-texturepacker \
 			--disable-libcec \
+			--disable-sdl \
 			--enable-gstreamer \
 			--disable-paplayer \
 			--enable-gstplayer \
@@ -49,6 +50,76 @@ CONFIG_FLAGS_${P} = \
 			USE_TEXTUREPACKER_NATIVE_ROOT=-I$(targetprefix)/usr \
 			PYTHON_CPPFLAGS=-I$(targetprefix)/usr/include/python$(PYTHON_VERSION) \
 			PY_PATH=$(targetprefix)/usr \
+
+GST_BASE_RDEPS = \
+	gst_plugins_base_alsa \
+	gst_plugins_base_app \
+	gst_plugins_base_audioconvert \
+	gst_plugins_base_audioresample \
+	gst_plugins_base_decodebin \
+	gst_plugins_base_decodebin2 \
+	gst_plugins_base_ogg \
+	gst_plugins_base_playbin \
+	gst_plugins_base_subparse \
+	gst_plugins_base_typefindfunctions \
+	gst_plugins_base_vorbis
+
+GST_GOOD_RDEPS = \
+	gst_plugins_good_apetag \
+	gst_plugins_good_audioparsers \
+	gst_plugins_good_autodetect \
+	gst_plugins_good_avi \
+	gst_plugins_good_flac \
+	gst_plugins_good_flv \
+	gst_plugins_good_icydemux \
+	gst_plugins_good_id3demux \
+	gst_plugins_good_isomp4 \
+	gst_plugins_good_matroska \
+	gst_plugins_good_rtp \
+	gst_plugins_good_rtpmanager \
+	gst_plugins_good_rtsp \
+	gst_plugins_good_souphttpsrc \
+	gst_plugins_good_udp \
+	gst_plugins_good_wavparse
+
+GST_BAD_RDEPS = \
+	gst_plugins_bad_cdxaparse \
+	gst_plugins_bad_mms \
+	gst_plugins_bad_mpegdemux \
+	gst_plugins_bad_rtmp \
+	gst_plugins_bad_vcdsrc \
+	gst_plugins_bad_fragmented \
+	gst_plugins_bad_faad
+
+GST_UGLY_RDEPS = \
+	gst_plugins_ugly_asf \
+	gst_plugins_ugly_cdio \
+	gst_plugins_ugly_dvdsub \
+	gst_plugins_ugly_mad \
+	gst_plugins_ugly_mpegaudioparse \
+	gst_plugins_ugly_mpegstream
+
+PYTHON_RDEPS = \
+	libpython2.7 \
+	python-threading \
+	python-core \
+	python-twisted-core \
+	python-fcntl \
+	python-netclient \
+	python-netserver \
+	python-math \
+	python-codecs \
+	python-pickle \
+	python-twisted-web \
+	python-zlib \
+	python-crypt \
+	python-lang \
+	python-subprocess \
+	python-zopeinterface \
+	python-xml \
+	python-compression \
+	python-shell \
+	python-re
 
 ifdef CONFIG_SPARK
 CPPFLAGS_${P} += -I$(driverdir)/frontcontroller/aotom
@@ -62,15 +133,10 @@ call[[ base ]]
 
 rule[[
 
-ifdef CONFIG_XBMC0
+ifdef CONFIG_XBMC
   git://github.com/xbmc/xbmc.git:r=12.2-Frodo
   patch:file://xbmc-nightly.0.diff
   patch:file://xbmc-texture.patch
-endif
-
-ifdef CONFIG_XBMC1
-  git://github.com/xbmc/xbmc.git:r=460e79416c5cb13010456794f36f89d49d25da75
-  patch:file://xbmc-nightly.1.diff
 endif
 
 ]]rule
@@ -107,45 +173,13 @@ call[[ ipk ]]
 
 # Packaging
 ##########################################################################################
+
 PACKAGES_${P} = xbmc_core xbmc_addons xbmc_language
 DESCRIPTION_${P} = xbmc
-#BDEPENDS_${P} = libstgles \
-			libmad \
-			libsamplerate \
-			libogg \
-			libvorbis \
-			libmodplug \
-			curl \
-			libflac \
-			bzip2 \
-			tiff \
-			lzo \
-			libz \
-			fontconfig \
-			libfribidi \
-			freetype \
-			jasper \
-			sqlite \
-			libpng \
-			libpcre \
-			libcdio \
-			yajl \
-			libmicrohttpd \
-			tinyxml \
-			python \
-			gstreamer \
-			gst_plugins_dvbmediasink \
-			expat \
-			sdparm \
-			lirc \
-			libnfs \
-			driver-ptinp \
-			taglib \
-			directfb \
-			tvheadend
-PKGR_xbmc =r1
-SRC_URI_xbmc = git://github.com/xbmc/xbmc.git
-DESCRIPTION_xbmc_core = "xbmc core"
+SRC_URI_${P} = git://github.com/xbmc/xbmc.git
+
+RDEPENDS_xbmc_core = libstgles libmad0 libsamplerate0 libogg0 libvorbis libmodplug curl libjpeg-turbo libflac8 libbz2 libtiff5 liblzo2 libz1 libfontconfig1 libfribidi0 libfreetype6 jasper libsqlite3 libpng16 libpcre libcdio12 \
+yajl libmicrohttpd tinyxml $(PYTHON_RDEPS) $(GST_BASE_RDEPS) $(GST_GOOD_RDEPS) $(GST_BAD_RDEPS) $(GST_UGLY_RDEPS) gst_plugins_dvbmediasink gst_plugins_fluendo_mpegdemux gst_plugin_subsink libexpat1 lirc libnfs taglib directfb
 
 FILES_xbmc_core = /usr/bin/xbmc \
 		/usr/lib/xbmc/* \
@@ -156,7 +190,7 @@ FILES_xbmc_core = /usr/bin/xbmc \
 		/usr/share/xbmc/userdata/* \
 		/usr/share/xbmc/FEH.py
 
-DESCRIPTION_xbmc_addons = "xbmc addons"
+DESCRIPTION_xbmc_addons = xbmc addons
 FILES_xbmc_addons = \
 		/usr/share/xbmc/addons/library.xbmc.gui/* \
 		/usr/share/xbmc/addons/library.xbmc.pvr/* \
@@ -171,7 +205,7 @@ FILES_xbmc_addons = \
 		/usr/share/xbmc/addons/webinterface.default/* \
 		/usr/share/xbmc/addons/skin.confluence/*
 
-DESCRIPTION_xbmc_language = "xbmc language files"
+DESCRIPTION_xbmc_language = xbmc language files
 FILES_xbmc_language = \
 		/usr/share/xbmc/language/Russian/* \
 		/usr/share/xbmc/language/English/* \
