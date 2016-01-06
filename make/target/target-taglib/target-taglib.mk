@@ -5,7 +5,7 @@ package[[ target_taglib
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 1.9.1
+PV_${P} = 1.10
 PR_${P} = 1
 
 call[[ base ]]
