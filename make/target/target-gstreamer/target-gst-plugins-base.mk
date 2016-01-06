@@ -3,7 +3,7 @@
 #
 package[[ target_gst_plugins_base
 
-BDEPENDS_${P} = $(target_freetype) $(target_glib2) $(target_orc) $(target_gstreamer) $(target_libalsa) $(target_libogg) $(target_libvorbis) $(target_libtheora) $(target_liboil) $(target_tremor) $(target_cdparanoia)
+BDEPENDS_${P} = $(target_freetype) $(target_glib2) $(target_orc) $(target_gstreamer) $(target_libalsa) $(target_libogg) $(target_libvorbis) $(target_libtheora) $(target_liboil) $(target_libvorbisidec) $(target_cdparanoia)
 
 ifeq ($(strip $(CONFIG_GSTREAMER_GIT)),y)
 
