@@ -290,6 +290,17 @@ menu "GUI Configuration"
 		bool
 		prompt "XBMC"
 
+		if BUILD_XBMC
+			choice
+			prompt "XBMC source:"
+			default XBMC
+
+			config XBMC
+			bool XBMC
+			depends on BUILD_XBMC
+			endchoice
+		endif
+
 	config BUILD_VDR
 		tristate "VDR"
 
