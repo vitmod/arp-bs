@@ -3,7 +3,7 @@
 #
 package[[ target_gst_plugins_bad
 
-BDEPENDS_${P} = $(target_gstreamer) $(target_libmodplug) $(target_gst_plugins_base) $(target_openssl) $(target_libpng) $(target_tremor) $(target_rtmpdump) $(target_libass) $(target_libmms) $(target_faad2)
+BDEPENDS_${P} = $(target_gstreamer) $(target_libsndfile) $(target_libmodplug) $(target_gst_plugins_base) $(target_openssl) $(target_libpng) $(target_libvorbisidec) $(target_rtmpdump) $(target_libass) $(target_libmms) $(target_faad2)
 
 
 ifeq ($(strip $(CONFIG_GSTREAMER_GIT)),y)
