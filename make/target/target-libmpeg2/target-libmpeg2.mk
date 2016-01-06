@@ -25,6 +25,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
+			--disable-sdl \
 		&& \
 		$(run_make) all
 	touch $@
