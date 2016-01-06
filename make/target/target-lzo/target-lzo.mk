@@ -5,7 +5,7 @@ package[[ target_lzo
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 2.08
+PV_${P} = 2.09
 PR_${P} = 1
 
 call[[ base ]]
@@ -36,8 +36,8 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 
 call[[ ipk ]]
 
+NAME_${P} = liblzo2
 DESCRIPTION_${P} = Lossless data compression library
-NAME_{P} = liblzo2-2
 RDEPENDS_${P} = libc6
 FILES_${P} = /usr/lib/liblzo2.so.*
 
