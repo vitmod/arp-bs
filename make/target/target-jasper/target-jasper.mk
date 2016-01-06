@@ -35,7 +35,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 
 call[[ ipk ]]
 
-NAME_${P} = libpcre
+NAME_${P} = jasper
 DESCRIPTION_${P} = JasPer is a collection of software (i.e., a library and application programs) for the coding and manipulation of images.\
 This software can handle image data in a variety of formats.
 RDEPENDS_${P} = libc6
