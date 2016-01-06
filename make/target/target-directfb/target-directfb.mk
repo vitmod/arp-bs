@@ -3,7 +3,7 @@
 #
 package[[ target_directfb
 
-BDEPENDS_${P} = $(target_glibc) $(target_freetype) $(host_fluxcomp) $(target_driver)
+BDEPENDS_${P} = $(target_glibc) $(target_freetype) $(target_driver) $(target_tiff) $(target_libjpeg_turbo) $(host_fluxcomp)
 
 PV_${P} = 1.6.3
 PR_${P} = 1
@@ -79,7 +79,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 call[[ ipk ]]
 
 DESCRIPTION_${P} = directfb
-RDEPENDS_${P} = libc6 libpng libjpeg tiff jasper
+RDEPENDS_${P} = libc6 libpng16 libjpeg-turbo libtiff5 jasper
 
 define postinst_${P}
 #!/bin/sh
