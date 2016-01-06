@@ -11,7 +11,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  extract:http://downloads.sourceforge.net/project/modplug-xmms/${PN}/${PV}/${PN}-${PV}.tar.gz
+  extract:http://sourceforge.net/projects/modplug-xmms/files/${PN}/${PV}/${PN}-${PV}.tar.gz
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
