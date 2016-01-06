@@ -231,7 +231,7 @@ endif
 #xbmc
 ifdef CONFIG_BUILD_XBMC
 BDEPENDS_${P} += $(target_xbmc) $(target_libid3tag) $(target_libvorbisidec) $(target_libcap) $(target_libmad) $(target_tvheadend)
-opkg_my_list += libblkid1 tvheadend
+opkg_my_list += xbmc-core libblkid1 tvheadend
 endif
 
 #########################################################################################
