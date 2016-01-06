@@ -71,6 +71,28 @@ GST_UGLY_RDEPS = \
 	gst_plugins_ugly_mpegaudioparse \
 	gst_plugins_ugly_mpegstream
 
+PYTHON_RDEPS = \
+	libpython2.7 \
+	python-threading \
+	python-core \
+	python-twisted-core \
+	python-fcntl \
+	python-netclient \
+	python-netserver \
+	python-math \
+	python-codecs \
+	python-pickle \
+	python-twisted-web \
+	python-zlib \
+	python-crypt \
+	python-lang \
+	python-subprocess \
+	python-zopeinterface \
+	python-xml \
+	python-compression \
+	python-shell \
+	python-re
+
 # media framework
 ifdef CONFIG_GSTREAMER
 BDEPENDS_${P} += $(target_gst_plugins_dvbmediasink)
@@ -191,7 +213,8 @@ PACKAGES_${P} = \
 	enigma2_plugin_systemplugins_wirelesslan
 
 PACKAGE_ARCH_enigma2 = $(box_arch)
-RDEPENDS_enigma2 += libgcc1 libpython2.7 python-threading libtuxtxt0 libbz2 libgif4 libfreetype6 python-core python-twisted-core libdvbsi++1 python-re font-ae-almateen font-andale font-lcd font-md-khmurabi font-tuxtxt font-nmsbd libpng16 font-liberationsans-b font-liberationsans-bl font-liberationsans-i font-liberationsans-r libstdc++6 libglib python-fcntl python-netclient python-netserver python-math python-codecs libcrypto1 libfribidi0 python-zopeinterface python-xml libtuxtxt32bpp0 python-pickle libxmlccwrap python-shell ethtool libdreamdvd0 python-twisted-web python-zlib python-crypt python-lang python-subprocess enigma2_meta python-compression e2fsprogs-e2fsck e2fsprogs-tune2fs libjpeg-turbo
+RDEPENDS_enigma2 += $(PYTHON_RDEPS) libgcc1 libtuxtxt0 libbz2 libgif4 libfreetype6 libdvbsi++1 font-ae-almateen font-andale font-lcd font-md-khmurabi font-tuxtxt font-nmsbd libpng16 font-liberationsans-b font-liberationsans-bl font-liberationsans-i font-liberationsans-r libstdc++6 libglib libcrypto1 libfribidi0 libtuxtxt32bpp0 libxmlccwrap ethtool libdreamdvd0 enigma2_meta e2fsprogs-e2fsck e2fsprogs-tune2fs libjpeg-turbo
+
 FILES_enigma2 = \
 	/usr/bin \
 	/usr/lib/libopen.s* \
