@@ -5,7 +5,7 @@ package[[ target_pcre
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 8.36
+PV_${P} = 8.38
 PR_${P} = 1
 
 call[[ base ]]
