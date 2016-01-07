@@ -31,10 +31,7 @@ CONFIG_FLAGS_${P} = \
 call[[ base ]]
 
 rule[[
-  git://github.com/Duckbox-Developers/neutrino-mp-plugins.git;b=master
-  patch:file://giflib.patch
-  patch:file://font.patch
-  patch:file://hl101.patch
+  git://github.com/OpenAR-P/neutrino-hd-plugins.git;b=master
 ]]rule
 
 call[[ git ]]
