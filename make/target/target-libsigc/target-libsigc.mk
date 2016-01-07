@@ -6,9 +6,9 @@ package[[ target_libsigc
 BDEPENDS_${P} = $(target_gcc_lib)
 
 ifdef CONFIG_SIGC2
-PV_${P} = 2.6.2
+PV_${P} = 2.4.1
 PR_${P} = 1
-DV_${P} = 2.6
+DV_${P} = 2.4
 else
 PV_${P} = 1.2.7
 PR_${P} = 1
