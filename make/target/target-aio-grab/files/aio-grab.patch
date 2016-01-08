@@ -1,6 +1,8 @@
---- a/main.c.orig	2015-12-13 11:08:22.101489624 +0200
-+++ b/main.c	2015-12-13 11:52:15.854549701 +0200
-@@ -37,10 +37,48 @@
+diff --git a/main.c b/main.c
+index bb74bf4..85cc1fe 100644
+--- a/main.c
++++ b/main.c
+@@ -37,10 +37,48 @@ Feel free to use the code for your own projects. See LICENSE file for details.
  #include <sys/mman.h>
  #include <linux/types.h>
  #include <linux/fb.h>
@@ -49,7 +51,7 @@
  #define CLAMP(x)    ((x < 0) ? 0 : ((x > 255) ? 255 : x))
  #define SWAP(x,y)	{ x ^= y; y ^= x; x ^= y; }
  
-@@ -83,7 +121,7 @@
+@@ -83,7 +121,7 @@ void fast_resize(const unsigned char *source, unsigned char *dest, int xsource,
  void (*resize)(const unsigned char *source, unsigned char *dest, int xsource, int ysource, int xdest, int ydest, int colors);
  void combine(unsigned char *output, const unsigned char *video, const unsigned char *osd, int vleft, int vtop, int vwidth, int vheight, int xres, int yres);
  
@@ -58,7 +60,7 @@
  
  static int chr_luma_stride = 0x40;
  static int chr_luma_register_offset = 0;
-@@ -112,6 +150,7 @@
+@@ -112,6 +150,7 @@ int main(int argc, char **argv)
  
  	const char* filename = "/tmp/screenshot.bmp";
  
@@ -66,7 +68,7 @@
  	// detect STB
  	char buf[256];
  	FILE *fp = fopen("/proc/fb","r");
-@@ -339,6 +378,7 @@
+@@ -329,6 +368,7 @@ int main(int argc, char **argv)
  		default:
  			break;
  	}
@@ -74,7 +76,7 @@
  
  	// process command line
  	while ((c = getopt (argc, argv, "dhj:lbnopqr:sv")) != -1)
-@@ -421,14 +461,17 @@
+@@ -411,14 +451,17 @@ int main(int argc, char **argv)
  
  	int mallocsize=1920*1080;
  
@@ -93,7 +95,7 @@
  
  	output = (unsigned char *)malloc(mallocsize*4);
  
-@@ -444,6 +487,7 @@
+@@ -434,6 +477,7 @@ int main(int argc, char **argv)
  		getvideo(video,&xres_v,&yres_v);
  	}
  
@@ -101,7 +103,7 @@
  	// get aspect ratio
  	if (stb_type == VULCAN || stb_type == PALLAS)
  	{
-@@ -458,6 +502,10 @@
+@@ -448,6 +492,10 @@ int main(int argc, char **argv)
  	else
  	{
  		fp = fopen("/proc/stb/vmpeg/0/aspect", "r");
@@ -112,7 +114,7 @@
  		if (fp)
  		{
  			while (fgets(buf,sizeof(buf), fp))
-@@ -494,7 +542,10 @@
+@@ -484,7 +532,10 @@ int main(int argc, char **argv)
  		}
  		if (dst_width == 720) dst_width = 0;
  		if (dst_height == 576) dst_height = 0;
@@ -123,7 +125,7 @@
  
  	// resizing
   	if (video_only)
-@@ -776,7 +827,16 @@
+@@ -766,7 +817,16 @@ void getvideo(unsigned char *video, int *xres, int *yres)
  	int stride = 0;
  	FILE *fp;
  	char buf[256];
@@ -141,7 +143,7 @@
  	if (stb_type == BRCM7366ARM)
  	{
  		int fd_video = open("/dev/dvb/adapter0/video0", O_RDONLY);
-@@ -792,13 +852,226 @@
+@@ -782,13 +842,226 @@ void getvideo(unsigned char *video, int *xres, int *yres)
  		*yres = 1080;
  		return;
  	}
@@ -369,7 +371,7 @@
  	if (stb_type > XILLEON)
  	{
  		// grab bcm pic from decoder memory
-@@ -1162,6 +1435,7 @@
+@@ -1152,6 +1425,7 @@ void getvideo(unsigned char *video, int *xres, int *yres)
  
  		free(memory_tmp);
  	}
@@ -377,7 +379,7 @@
  
  	close(mem_fd);
  
-@@ -1187,22 +1461,26 @@
+@@ -1177,22 +1451,26 @@ void getvideo(unsigned char *video, int *xres, int *yres)
  			int GV=yuv2rgbtable_gv[V];
  			int BV=yuv2rgbtable_bv[V];
  
@@ -404,7 +406,7 @@
  			video[out1+rgbstride]=CLAMP((Y + RU)>>16);
  			video[out1+1+rgbstride]=CLAMP((Y - GV - GU)>>16);
  			video[out1+2+rgbstride]=CLAMP((Y + BV)>>16);
-@@ -1212,12 +1490,14 @@
+@@ -1202,12 +1480,14 @@ void getvideo(unsigned char *video, int *xres, int *yres)
  
  			Y=yuv2rgbtable_y[luma[pos]];
  
@@ -419,7 +421,7 @@
  			video[out1+rgbstride]=CLAMP((Y + RU)>>16);
  			video[out1+1+rgbstride]=CLAMP((Y - GV - GU)>>16);
  			video[out1+2+rgbstride]=CLAMP((Y + BV)>>16);
-@@ -1340,6 +1620,7 @@
+@@ -1330,6 +1610,7 @@ void getosd(unsigned char *osd, int *xres, int *yres)
  			return;
  		}
  
@@ -427,7 +429,7 @@
  		if (stb_type == VULCAN) // DM500/5620 stores the colors as a 16bit word with yuv values, so we have to convert :(
  		{
  			unsigned short yuv;
-@@ -1380,6 +1661,7 @@
+@@ -1370,6 +1651,7 @@ void getosd(unsigned char *osd, int *xres, int *yres)
  			fprintf(stderr, "unsupported framebuffermode\n");
  			return;
  		}
