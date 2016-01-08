@@ -31,7 +31,7 @@ CONFIG_FLAGS_${P} = \
 call[[ base ]]
 
 rule[[
-  git://github.com/OpenAR-P/neutrino-hd-plugins.git;b=master
+  git://github.com/OpenAR-P/neutrino-mp-plugins.git;b=master
 ]]rule
 
 call[[ git ]]
