@@ -72,13 +72,11 @@ ${P}_patches += \
 	linux-sh4-ratelimit-bug_stm24_$(KERNEL_LABEL).patch
 endif
 
-ifeq ($(CONFIG_KERNEL_0211)$(CONFIG_KERNEL_0215)$(CONFIG_KERNEL_0217),y)
+
 ${P}_patches += \
 	linux-sh4-mmap_stm24.patch \
-	linux-sh4-directfb_stm24_$(KERNEL_LABEL).patch
-endif
-
-${P}_patches += patch_swap_notify_core_support.diff
+	linux-sh4-directfb_stm24_$(KERNEL_LABEL).patch \
+	patch_swap_notify_core_support.diff
 
 
 # TARGET specific patches
@@ -89,9 +87,7 @@ ifdef CONFIG_HL101
   ${P}_patches += linux-usbwait123_stm24.patch
   ${P}_patches += linux-sh4-stmmac_stm24_$(KERNEL_LABEL).patch
   ${P}_patches += linux-sh4-i2c-st40-pio_stm24_$(KERNEL_LABEL).patch
-ifeq ($(CONFIG_KERNEL_0211)$(CONFIG_KERNEL_0215)$(CONFIG_KERNEL_0217),y)
   ${P}_patches += linux-sh4-hl101_i2c_st40_stm24_$(KERNEL_LABEL).patch
-endif
 endif #CONFIG_HL101
 
 ifdef CONFIG_SPARK
