@@ -5,17 +5,35 @@ package[[ target_openssl
 
 BDEPENDS_${P} = $(target_gcc_lib)
 
-PR_${P} = 2
-
-PV_${P} = 1.0.1k-32
-${P}_SPEC = stm-$(${P}).spec
-${P}_SPEC_PATCH =
-${P}_PATCHES =
-${P}_SRCRPM = $(archivedir)/$(STLINUX)-$(${P})-$(PV_${P}).src.rpm
+PV_${P} = 1.0.2e
+PR_${P} = 1
 
 call[[ base ]]
-call[[ base_rpm ]]
-call[[ rpm ]]
+
+rule[[
+  extract:ftp://ftp.openssl.org/source/${PN}-${PV}.tar.gz
+  patch:file://${PN}-1.0.2.patch
+]]rule
+
+$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
+	$(PREPARE_${P})
+	touch $@
+
+$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
+	cd $(DIR_${P}) && \
+		$(BUILDENV) \
+		./Configure -DL_ENDIAN shared no-hw linux-generic32 \
+			--prefix=/usr \
+			--openssldir=/etc/ssl \
+		&& \
+		$(run_make)
+	touch $@
+
+$(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
+	$(PKDIR_clean)
+	cd $(DIR_${P}) && $(run_make) install INSTALL_PREFIX=$(PKDIR)
+	touch $@
+
 call[[ ipk ]]
 
 PACKAGES_${P} =  libcrypto1 libssl1
