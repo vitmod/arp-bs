@@ -27,7 +27,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	$(BUILDENV) \
-	$(run_make) all
+	$(run_make) all DESTDIR=$(targetprefix)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile

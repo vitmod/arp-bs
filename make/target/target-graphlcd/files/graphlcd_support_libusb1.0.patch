@@ -1,9 +1,6 @@
---- graphlcd-base/glcddrivers/ax206dpf.c	2013-06-30 19:53:11.000000000 
-+++ graphlcd-base/glcddrivers/ax206dpf.c	2013-07-13 10:53:05.000000000 
-@@ -40,13 +40,13 @@
- #include <stdio.h>
- #include <syslog.h>
- #include <cstring>
+--- a/glcddrivers/ax206dpf.c
++++ b/glcddrivers/ax206dpf.c
+@@ -43,7 +43,7 @@
  #include <algorithm>
  #include <pthread.h>
  #include <time.h>
@@ -12,13 +9,7 @@
  
  #include "common.h"
  #include "config.h"
- 
- #include "ax206dpf.h"
- 
-@@ -174,14 +174,14 @@
-     return 0;
- }
- 
+@@ -177,8 +177,8 @@ int cDriverAX206DPF::Init(void)
  bool cDriverAX206DPF::RescanUSB()
  {
      bool ret = false;
@@ -29,13 +20,7 @@
      {
          unsigned int a = 0, b = 0;
          for (unsigned int i = 0; i < numdisplays; i++)
-         {
-             if (dh[i]->attached) a |= 0x01 << i;
-             DeInitSingleDisplay(i);
-@@ -189,12 +189,14 @@
-         for (unsigned int i = 0; i < numdisplays; i++)
-         {
-             InitSingleDisplay(i);
+@@ -192,6 +192,8 @@ bool cDriverAX206DPF::RescanUSB()
              if (dh[i]->attached) b |= 0x01 << i;
          }
          ret = a != b;
@@ -44,13 +29,7 @@
      }
      return ret;
  }
- 
- int cDriverAX206DPF::InitSingleDisplay(unsigned int di)
- {
-@@ -212,18 +214,15 @@
-     {
-         dh[di]->dpfh = NULL;
-         dh[di]->attached = false;
+@@ -215,12 +217,9 @@ int cDriverAX206DPF::InitSingleDisplay(unsigned int di)
          return 0;
      }
      dh[di]->attached = true;
@@ -66,13 +45,7 @@
      
      // See, if we have to rotate the display
      dh[di]->isPortrait = dh[di]->dpfh->width < dh[di]->dpfh->height;
-     dh[di]->rotate90 = dh[di]->isPortrait != portrait;
-     dh[di]->flip = (!dh[di]->isPortrait && dh[di]->rotate90);    // adjust to make rotate por/land = physical por/land
-     if (flips.size() >= di + 1 && flips[di] == 'y')
-@@ -671,13 +670,13 @@
- 
- int dpf_open(const char *dev, DPFHANDLE *h)
- {
+@@ -674,7 +673,7 @@ int dpf_open(const char *dev, DPFHANDLE *h)
  	int error = 0;
  	DPFContext *dpf;
  	int i;
@@ -81,13 +54,7 @@
  
  	//int fd;
  
- 	if (!dev) {
- 		fprintf(stderr, "Please specify a string like 'usb0' or a sg device\n");
- 		return DEVERR_OPEN;
-@@ -719,14 +718,14 @@
- {
- 	//switch (h->mode) {
- 	//	case MODE_SG:
+@@ -722,8 +721,8 @@ void dpf_close(DPFContext *h)
  	//		close(h->dev.fd);
  	//		break;
  	//	case MODE_USB:
@@ -98,13 +65,7 @@
  	//		break;
  	//}
  	free(h);
- }
- 
- const char *dev_errstr(int err)
-@@ -838,59 +837,68 @@
- int handle_error(const char *txt)
- {
- 	fprintf(stderr, "Error: %s\n", txt);
+@@ -841,53 +840,62 @@ int handle_error(const char *txt)
  	return -1;
  }
  
@@ -159,14 +120,13 @@
 -			if (check_known_device(d)) {
 -				if (enumeration == index) return d;
 -				else enumeration++;
--			}
 +	for (int i = 0; i < cnt; i++) {
 +		struct libusb_device *d = list[i];
 +		if (check_known_device(d)) {
 +			if (enumeration == index) {
 +				found = d;
 +				break;
-+			}
+ 			}
 +			else enumeration++;
 +		}
  
@@ -181,9 +141,8 @@
 -			d = d->next;
 -		}
 -		b = b->next;
--	}
+ 	}
 -	return NULL;
-+	}
 +	
 +	if (cnt > 0)
 +		libusb_free_device_list(list, 0);
@@ -192,13 +151,7 @@
  }
  
  unsigned char g_buf[] = {
- 	0x55, 0x53, 0x42, 0x43, // dCBWSignature
- 	0xde, 0xad, 0xbe, 0xef, // dCBWTag
- 	0x00, 0x80, 0x00, 0x00, // dCBWLength
-@@ -902,50 +910,51 @@
- 	0xcd, 0x00, 0x00, 0x00,
- 	0x00, 0x06, 0x11, 0xf8,
- 	0x70, 0x00, 0x40, 0x00,
+@@ -905,12 +913,13 @@ unsigned char g_buf[] = {
  	0x00, 0x00, 0x00, 0x00,
  };
  
@@ -213,9 +166,7 @@
  
  	g_buf[14] = cmdlen;
  	memcpy(&g_buf[15], cmd, cmdlen);
- 
- 	g_buf[8] = block_len;
- 	g_buf[9] = block_len >> 8;
+@@ -920,21 +929,21 @@ int emulate_scsi(usb_dev_handle *dev, unsigned char *cmd, int cmdlen, char out,
  	g_buf[10] = block_len >> 16;
  	g_buf[11] = block_len >> 24;
  
@@ -243,7 +194,7 @@
  			perror("bulk data read");
  		}
  	}
- 	// get ACK:
+@@ -942,8 +951,8 @@ int emulate_scsi(usb_dev_handle *dev, unsigned char *cmd, int cmdlen, char out,
  	len = sizeof(ansbuf);
  	int retry = 0;
  	do {
@@ -254,12 +205,7 @@
  			perror("bulk ACK read");
  			ret = DEVERR_TIMEOUT;
  		}
- 		retry++;
- 	} while (ret == DEVERR_TIMEOUT && retry < 5);
-@@ -953,33 +962,37 @@
- 		return handle_error("Got invalid reply\n");
- 	}
- 	// pass back return code set by peer:
+@@ -956,14 +965,18 @@ int emulate_scsi(usb_dev_handle *dev, unsigned char *cmd, int cmdlen, char out,
  	return ansbuf[12];
  }
  
@@ -284,7 +230,7 @@
  
  	d = find_dev(index);
  	if (!d) {
- 		handle_error("No matching USB device found!");
+@@ -971,12 +984,12 @@ usb_dev_handle *dpf_usb_open(int index)
  		return NULL;
  	}
  
@@ -299,16 +245,9 @@
  	return usb_dev;
  }
  
- // -------------------------------------------------------------------
- // END SELECTIVE COPY & PASTE "rawusb.c"
- // -------------------------------------------------------------------
-
---- graphlcd-base/glcddrivers/ax206dpf.h	2013-06-30 19:53:11.000000000 
-+++ graphlcd-base/glcddrivers/ax206dpf.h	2013-07-13 09:52:47.000000000 
-@@ -128,13 +128,13 @@
-  */
- 
- // -------------------------------------------------------------------
+--- a/glcddrivers/ax206dpf.h
++++ b/glcddrivers/ax206dpf.h
+@@ -131,7 +131,7 @@ public:
  // START SELECTIVE COPY & PASTE "usbuser.h"
  // -------------------------------------------------------------------
  
@@ -317,13 +256,7 @@
  
  namespace LIBDPF
  {
- 
- /* USB user commands
-  *
-@@ -190,13 +190,13 @@
- 
- typedef
- struct dpf_context {
+@@ -193,7 +193,7 @@ struct dpf_context {
  	unsigned char mode;
  	unsigned char flags;
  	union {
@@ -332,13 +265,7 @@
  		int fd;
  	} dev;
  	unsigned int width;
- 	unsigned int height;
- 	int bpp;
- 	int proto;
-@@ -248,19 +248,19 @@
-  * \param value       Pointer to value
-  */
- int dpf_setproperty(DPFHANDLE h, int token, const DPFValue *value);
+@@ -251,13 +251,13 @@ int dpf_setproperty(DPFHANDLE h, int token, const DPFValue *value);
  
  /* USB raw */
  
@@ -354,12 +281,10 @@
  int sgdev_open(const char *portname, int *fd);
  
  #ifdef __cplusplus
- }
- #endif
- 
---- graphlcd-base/glcddrivers/Makefile	2013-06-30 19:53:11.000000000 
-+++ graphlcd-base/glcddrivers/Makefile	2013-07-13 09:45:32.000000000 
-@@ -26,18 +26,18 @@
+
+--- a/glcddrivers/Makefile
++++ b/glcddrivers/Makefile
+@@ -26,18 +26,18 @@ DEFINES += -DHAVE_LIBHID
  endif
  
  
@@ -382,4 +307,4 @@
 +        LIBS += $(shell pkg-config --libs libusb-1.0)
          DEFINES += -DHAVE_DRIVER_picoLCD_256x64
      endif
- endif
+ endif  
