@@ -104,6 +104,20 @@ CONFIG_FLAGS_${P} += --enable-libeplayer3
 RDEPENDS_enigma2 += libeplayer3
 endif
 
+# box type
+ifdef CONFIG_SPARK
+CONFIG_FLAGS_${P} += --enable-spark
+keymap_${P} = keymap_spark.xml
+endif
+ifdef CONFIG_SPARK7162
+CONFIG_FLAGS_${P} += --enable-spark7162
+keymap_${P} = keymap_spark.xml
+endif
+ifdef CONFIG_HL101
+CONFIG_FLAGS_${P} += --enable-hl101
+keymap_${P} = keymap_hl101.xml
+endif
+
 ifdef CONFIG_EXTERNAL_LCD
 BDEPENDS_${P} += $(target_graphlcd)
 CONFIG_FLAGS_${P} += --with-graphlcd
@@ -138,6 +152,10 @@ ifdef CONFIG_ENIGMA2_TAAPAT
    git://bitbucket.org/Taapat/enigma2-pli-arp-taapat.git;b=master;protocol=https
    patch:file://enigma2-taapat.patch
 endif
+
+  install:-d:$(PKDIR)/usr/share/enigma2/
+  install_file:$(PKDIR)/usr/share/enigma2/keymap.xml:file://$(keymap_${P})
+  install_file:$(PKDIR)/usr/share/enigma2/keymap_amiko.xml:file://keymap_amiko.xml
 
 ]]rule
 
