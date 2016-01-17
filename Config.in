@@ -205,10 +205,6 @@ menu "GUI Configuration"
 		  bool "public branch staging"
 		  depends on BUILD_ENIGMA2
 
-		  config ENIGMA2_SRC_LAST
-		  bool "non-public branch last"
-		  depends on BUILD_ENIGMA2
-
 		  config ENIGMA2_TAAPAT
 		  bool "enigma2 taapat on bitbucket"
 		  depends on BUILD_ENIGMA2

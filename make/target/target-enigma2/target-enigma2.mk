@@ -139,9 +139,6 @@ endif
 ifdef CONFIG_ENIGMA2_SRC_STAGING
   git://github.com/OpenAR-P/enigma2-pli-arp.git;b=staging
 endif
-ifdef CONFIG_ENIGMA2_SRC_LAST
-  git://github.com/OpenAR-P/enigma2-pli-arp.git;b=last
-endif
 ifdef CONFIG_ENIGMA2_TAAPAT
    git://bitbucket.org/Taapat/enigma2-pli-arp-taapat.git;b=master;protocol=https
    patch:file://enigma2-taapat.patch
@@ -150,6 +147,7 @@ endif
   install_file:$(PKDIR)/usr/share/enigma2/keymap.xml:file://keymap.xml
   install_file:$(PKDIR)/usr/share/enigma2/keytranslation.xml:file://keytranslation.xml
   install_file:$(PKDIR)/usr/share/enigma2/skin_display_perl.xml:file://skin_display_perl.xml
+
 ]]rule
 
 call[[ git ]]
