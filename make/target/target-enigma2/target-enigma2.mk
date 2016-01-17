@@ -7,7 +7,7 @@ package[[ target_enigma2
 BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif)
 
 PV_${P} = git
-PR_${P} = 19
+PR_${P} = 20
 PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -107,15 +107,12 @@ endif
 # box type
 ifdef CONFIG_SPARK
 CONFIG_FLAGS_${P} += --enable-spark
-keymap_${P} = keymap_spark.xml
 endif
 ifdef CONFIG_SPARK7162
 CONFIG_FLAGS_${P} += --enable-spark7162
-keymap_${P} = keymap_spark.xml
 endif
 ifdef CONFIG_HL101
 CONFIG_FLAGS_${P} += --enable-hl101
-keymap_${P} = keymap_hl101.xml
 endif
 
 ifdef CONFIG_EXTERNAL_LCD
@@ -141,9 +138,6 @@ ifdef CONFIG_ENIGMA2_SRC_MASTER
 endif
 ifdef CONFIG_ENIGMA2_SRC_STAGING
   git://github.com/OpenAR-P/enigma2-pli-arp.git;b=staging
-  install:-d:$(PKDIR)/usr/share/enigma2/
-  install_file:$(PKDIR)/usr/share/enigma2/keytranslation.xml:file://keytranslation.xml
-  install_file:$(PKDIR)/usr/share/enigma2/skin_display_perl.xml:file://skin_display_perl.xml
 endif
 ifdef CONFIG_ENIGMA2_SRC_LAST
   git://github.com/OpenAR-P/enigma2-pli-arp.git;b=last
@@ -152,10 +146,10 @@ ifdef CONFIG_ENIGMA2_TAAPAT
    git://bitbucket.org/Taapat/enigma2-pli-arp-taapat.git;b=master;protocol=https
    patch:file://enigma2-taapat.patch
 endif
-
   install:-d:$(PKDIR)/usr/share/enigma2/
-  install_file:$(PKDIR)/usr/share/enigma2/keymap.xml:file://$(keymap_${P})
-  
+  install_file:$(PKDIR)/usr/share/enigma2/keymap.xml:file://keymap.xml
+  install_file:$(PKDIR)/usr/share/enigma2/keytranslation.xml:file://keytranslation.xml
+  install_file:$(PKDIR)/usr/share/enigma2/skin_display_perl.xml:file://skin_display_perl.xml
 ]]rule
 
 call[[ git ]]
