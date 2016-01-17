@@ -111,7 +111,7 @@ CONFIG_FLAGS_${P} += --with-graphlcd --with-lcddev=/dev/fb1
 RDEPENDS_enigma2 += libgraphlcd
 endif
 ifdef CONFIG_SIGC2
-CONFIG_FLAGS_${P} += --enable-sigc2 CXXFLAGS="-std=c++11"
+CONFIG_FLAGS_${P} += --enable-sigc2
 RDEPENDS_enigma2 += libsigc-2.4
 else
 RDEPENDS_enigma2 += libsigc-1.2
