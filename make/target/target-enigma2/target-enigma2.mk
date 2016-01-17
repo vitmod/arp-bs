@@ -7,7 +7,7 @@ package[[ target_enigma2
 BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif)
 
 PV_${P} = git
-PR_${P} = 17
+PR_${P} = 16
 PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -15,7 +15,6 @@ DESCRIPTION_${P} = Framebuffer-based digital media application
 CONFIG_FLAGS_${P} = \
 	--with-libsdl=no \
 	--with-boxtype=none \
-	--with-fbdev=/dev/fb0 \
 	--datadir=/usr/share \
 	--libdir=/usr/lib \
 	--bindir=/usr/bin \
@@ -107,7 +106,7 @@ endif
 
 ifdef CONFIG_EXTERNAL_LCD
 BDEPENDS_${P} += $(target_graphlcd)
-CONFIG_FLAGS_${P} += --with-graphlcd --with-lcddev=/dev/fb1
+CONFIG_FLAGS_${P} += --with-graphlcd
 RDEPENDS_enigma2 += libgraphlcd
 endif
 ifdef CONFIG_SIGC2
