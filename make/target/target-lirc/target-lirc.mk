@@ -5,7 +5,7 @@ package[[ target_lirc
 
 BDEPENDS_${P} = $(target_glibc) $(target_linux_kernel_headers)
 PV_${P} = 0.9.0
-PR_${P} = 6
+PR_${P} = 7
 
 call[[ base ]]
 
@@ -61,7 +61,7 @@ ifdef CONFIG_HL101
 	$(INSTALL_FILE) ${DIR}/lircd_hl101.conf.03_00_02 $(PKDIR)/etc/lircd.conf.03_00_02
 	$(INSTALL_FILE) ${DIR}/lircd_hl101.conf.03_00_07 $(PKDIR)/etc/lircd.conf.03_00_07
 endif
-ifeq ($(CONFIG_SPARK)$(CONFIG_SPARK7162),y)
+ifdef CONFIG_SPARK
 	$(INSTALL_FILE) ${DIR}/lircd_spark.conf.09_00_0B $(PKDIR)/etc/lircd.conf.09_00_0B
 	$(INSTALL_FILE) ${DIR}/lircd_spark.conf.09_00_07 $(PKDIR)/etc/lircd.conf.09_00_07
 	$(INSTALL_FILE) ${DIR}/lircd_spark.conf.09_00_08 $(PKDIR)/etc/lircd.conf.09_00_08
@@ -84,8 +84,13 @@ FILES_lirc = \
 
 FILES_lirc_dev = /usr/bin/ir*
 
+ifdef CONFIG_SPARK7162
+define conffiles_lirc
+/etc/lircd.conf
+endef
+endif
 
-ifeq ($(CONFIG_SPARK)$(CONFIG_SPARK7162),y)
+ifdef CONFIG_SPARK
 define conffiles_lirc
 /etc/lircd.conf
 /etc/lircd.conf.09_00_0B
@@ -93,7 +98,9 @@ define conffiles_lirc
 /etc/lircd.conf.09_00_08
 /etc/lircd.conf.09_00_1D
 endef
-else
+endif
+
+ifdef CONFIG_HL101
 define conffiles_lirc
 /etc/lircd.conf
 /etc/lircd.conf.03_00_01
