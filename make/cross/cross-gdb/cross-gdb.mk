@@ -28,7 +28,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--with-separate-debug-dir=$(targetprefix) \
 			--disable-gdbtk \
 			--disable-werror \
-			--without-python \
+			--with-python=/usr/bin/python \
 			--enable-linux-kernel-aware \
 			--enable-shtdi \
 		&& \
