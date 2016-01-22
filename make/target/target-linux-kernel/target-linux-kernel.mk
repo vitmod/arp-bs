@@ -53,6 +53,7 @@ ${P}_patches = \
 	bpa2_procfs_stm24_$(KERNEL_LABEL).patch \
 	linux-ftdi_sio.c_stm24_$(KERNEL_LABEL).patch \
 	linux-sh4-lzma-fix_stm24_$(KERNEL_LABEL).patch \
+	stm-gpio-fix-build-CONFIG_BUG.patch \
 	perf-warning-fix.diff
 
 ifeq ($(CONFIG_KERNEL_0211),y)
