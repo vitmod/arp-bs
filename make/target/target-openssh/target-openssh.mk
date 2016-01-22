@@ -53,13 +53,15 @@ FILES_${P} = /usr/bin/* /usr/sbin/* /etc/ssh/* /sbin/* /var/* /etc/init.d/*
 define postinst_${P}
 #!/bin/sh
 update-rc.d -r $$OPKG_OFFLINE_ROOT/ sshd start 44 S . stop 30 0 6 .
-$$OPKG_OFFLINE_ROOT/ addgroup -g 74 -S  sshd
-$$OPKG_OFFLINE_ROOT/ adduser -S -H sshd sshd
+addgroup -g 74 -S  sshd
+adduser -S -H sshd sshd
 endef
 
 define prerm_${P}
 #!/bin/sh
 update-rc.d -f -r $$OPKG_OFFLINE_ROOT/ sshd remove
+deluser sshd
+delgroup sshd
 endef
 
 call[[ ipkbox ]]
