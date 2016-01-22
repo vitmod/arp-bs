@@ -110,11 +110,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	$(run_make) -C $(DIR_${P}) install DESTDIR=$(PKDIR) \
-
+	$(run_make) -C $(DIR_${P}) install DESTDIR=$(PKDIR)
+ifndef CONFIG_DEBUG_ARP
 	$(target)-strip $(PKDIR)/usr/bin/neutrino
 	$(target)-strip $(PKDIR)/usr/bin/pzapit
 	$(target)-strip $(PKDIR)/usr/bin/sectionsdcontrol
+endif
 	$(INSTALL_DIR) $(PKDIR)/etc/network
 	$(INSTALL_BIN) $(DIR_${P})/pre-wlan0.sh $(PKDIR)/etc/network/pre-wlan0.sh
 	$(INSTALL_BIN) $(DIR_${P})/post-wlan0.sh $(PKDIR)/etc/network/post-wlan0.sh
