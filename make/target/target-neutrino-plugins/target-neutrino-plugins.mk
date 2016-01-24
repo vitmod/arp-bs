@@ -6,7 +6,7 @@ package[[ target_neutrino_plugins
 
 BDEPENDS_${P} =  $(target_lua) $(target_neutrino)
 PV_${P} = git
-PR_${P} = 1
+PR_${P} = 2
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
 
@@ -32,6 +32,11 @@ call[[ base ]]
 
 rule[[
   git://github.com/OpenAR-P/neutrino-mp-plugins.git;b=master
+  nothing:file://cam
+  nothing:file://camstartstop
+  nothing:file://flex_cammanager.conf
+  nothing:file://flex_tuxcom.conf
+  nothing:file://flex_tuxwetter.conf
 ]]rule
 
 call[[ git ]]
@@ -57,6 +62,13 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
 	$(run_make) -C $(DIR_${P}) install DESTDIR=$(PKDIR)
+	$(INSTALL_DIR) $(PKDIR)/etc/init.d
+	$(INSTALL_DIR) $(PKDIR)/var/tuxbox/config/flex
+	$(INSTALL_BIN) $(DIR_${P})/cam $(PKDIR)/etc/init.d/cam
+	$(INSTALL_BIN) $(DIR_${P})/camstartstop $(PKDIR)/var/tuxbox/plugins/camstartstop
+	$(INSTALL_FILE) $(DIR_${P})/flex_cammanager.conf $(PKDIR)/var/tuxbox/config/flex/flex_cammanager.conf
+	$(INSTALL_FILE) $(DIR_${P})/flex_tuxcom.conf $(PKDIR)/var/tuxbox/config/flex/flex_tuxcom.conf
+	$(INSTALL_FILE) $(DIR_${P})/flex_tuxwetter.conf $(PKDIR)/var/tuxbox/config/flex/flex_tuxwetter.conf
 
 	touch $@
 
@@ -66,6 +78,7 @@ call[[ ipk ]]
 ##########################################################################################
 DESCRIPTION_${P} = Neutrino plugins and games
 PACKAGES_${P} = \
+	neutrino_plugins_cammanager \
 	neutrino_plugins_tuxcom \
 	neutrino_plugins_tuxwetter \
 	neutrino_plugins_msgbox \
@@ -86,8 +99,10 @@ PACKAGES_${P} = \
 	neutrino_plugins_vierg \
 	neutrino_plugins_yahtzee
 
-FILES_neutrino_plugins_tuxcom = /var/tuxbox/plugins/tuxcom.cfg /var/tuxbox/plugins/tuxcom.so
-FILES_neutrino_plugins_tuxwetter = /var/tuxbox/plugins/tuxwetter.so /var/tuxbox/plugins/tuxwetter.cfg /var/tuxbox/config/tuxwetter
+FILES_neutrino_plugins_cammanager = /etc/init.d/cam /var/tuxbox/plugins/camstartstop /var/tuxbox/config/flex/flex_cammanager.conf
+RDEPENDS_neutrino_plugins_cammanager = neutrino_plugins_shellexec neutrino_plugins_msgbox
+FILES_neutrino_plugins_tuxcom = /var/tuxbox/plugins/tuxcom.cfg /var/tuxbox/plugins/tuxcom.so /var/tuxbox/config/flex/flex_tuxcom.conf
+FILES_neutrino_plugins_tuxwetter = /var/tuxbox/plugins/tuxwetter.so /var/tuxbox/plugins/tuxwetter.cfg /var/tuxbox/config/tuxwetter /var/tuxbox/config/flex/flex_tuxwetter.conf
 FILES_neutrino_plugins_msgbox = /bin/msgbox
 FILES_neutrino_plugins_getrc = /bin/getrc
 FILES_neutrino_plugins_shellexec = /bin/shellexec /var/tuxbox/config/shellexec.conf /var/tuxbox/plugins/shellexec.cfg /var/tuxbox/plugins/shellexec.so
