@@ -7,7 +7,7 @@ package[[ target_neutrino
 BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libopenthreads) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc) $(target_lua) $(target_luaexpat) $(target_libstb_hal) $(target_aio_grab) $(target_tuxbox_configs)
 
 PV_${P} = git
-PR_${P} = 6
+PR_${P} = 7
 PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -74,18 +74,15 @@ rule[[
 
 ifdef CONFIG_NEUTRINO_SRC_MASTER
   git://github.com/OpenAR-P/neutrino-mp-cst-next.git;b=master
-  nothing:file://neutrino.sh
-  nothing:file://post-wlan0.sh
-  nothing:file://pre-wlan0.sh
 endif
 
 ifdef CONFIG_NEUTRINO_SRC_MAX
   git://github.com/Duckbox-Developers/neutrino-mp-cst-next.git;b=master
   patch:file://include.patch
+endif
   nothing:file://neutrino.sh
   nothing:file://post-wlan0.sh
   nothing:file://pre-wlan0.sh
-endif
 
 ]]rule
 
