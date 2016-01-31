@@ -54,7 +54,7 @@ function[[ base_tdt_tools
 
 PV_${P} ?= git
 SRC_URI_${P} ?= https://github.com/OpenAR-P/tdt-arp
-NAME_${P} ?= ${PN}
+PR_tdt_tools = 3
 
 call[[ base ]]
 
