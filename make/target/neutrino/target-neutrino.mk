@@ -4,10 +4,10 @@
 ifeq ($(strip $(CONFIG_BUILD_NEUTRINO)),y)
 package[[ target_neutrino
 
-BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libopenthreads) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc) $(target_lua) $(target_luaexpat) $(target_libstb_hal) $(target_aio_grab) $(target_tuxbox_configs)
+BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libopenthreads) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc) $(target_flac) $(target_lua) $(target_luaexpat) $(target_libstb_hal) $(target_aio_grab) $(target_tuxbox_configs)
 
 PV_${P} = git
-PR_${P} = 7
+PR_${P} = 8
 PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -25,7 +25,10 @@ CONFIG_FLAGS_${P} += \
 		--enable-giflib \
 		--with-tremor \
 		--enable-ffmpegdec \
+		--enable-flac \
 		--enable-lua \
+		--enable-pip \
+		--enable-extupdate \
 		--with-libdir=/usr/lib \
 		--with-datadir=/usr/share/tuxbox \
 		--with-fontdir=/usr/share/fonts \
