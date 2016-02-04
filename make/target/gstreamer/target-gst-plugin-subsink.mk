@@ -13,7 +13,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  git://git.code.sf.net/p/openpli/gstsubsink.git;r=0cb20d6024
+  git://github.com/OpenPLi/gst-plugin-subsink.git;r=0cb20d6024
 ]]rule
 
 call[[ git ]]
@@ -26,7 +26,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  git://openpli.git.sourceforge.net/gitroot/openpli/gstsubsink:r=8182abe751364f6eb1ed45377b0625102aeb68d5
+  git://github.com/OpenPLi/gst-plugin-subsink.git
 ]]rule
 
 call[[ git ]]
