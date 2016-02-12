@@ -1,10 +1,10 @@
 #!/bin/sh
 case $1 in
 oscamstart)
-rm /var/run/.mgos
-rm /var/run/.mgcamd
-rm /var/run/.wicardd
-touch /var/run/.oscam
+rm /var/tuxbox/config/.mgos
+rm /var/tuxbox/config/.mgcamd
+rm /var/tuxbox/config/.wicardd
+touch /var/tuxbox/config/.oscam
 sleep 2
 /etc/init.d/cam restart
 	;;
@@ -12,14 +12,14 @@ sleep 2
 oscamstop)
 /etc/init.d/cam stop
 sleep 2
-rm /var/run/.oscam 
+rm /var/tuxbox/config/.oscam 
 	;;
 
 mgcamdstart)
-rm /var/run/.mgos
-rm /var/run/.oscam
-rm /var/run/.wicardd
-touch /var/run/.mgcamd
+rm /var/tuxbox/config/.mgos
+rm /var/tuxbox/config/.oscam
+rm /var/tuxbox/config/.wicardd
+touch /var/tuxbox/config/.mgcamd
 sleep 2
 /etc/init.d/cam restart 
 	;;
@@ -27,14 +27,14 @@ sleep 2
 mgcamdstop)
 /etc/init.d/cam stop
 sleep 2
-rm /var/run/.mgcamd 
+rm /var/tuxbox/config/.mgcamd 
 	;;
 
 mgosstart)
-rm /var/run/.mgcamd
-rm /var/run/.oscam
-rm /var/run/.wicardd
-touch /var/run/.mgos
+rm /var/tuxbox/config/.mgcamd
+rm /var/tuxbox/config/.oscam
+rm /var/tuxbox/config/.wicardd
+touch /var/tuxbox/config/.mgos
 sleep 2
 /etc/init.d/cam restart
 	;;
@@ -42,14 +42,14 @@ sleep 2
 mgosstop)
 /etc/init.d/cam stop
 sleep 2
-rm /var/run/.mgos
+rm /var/tuxbox/config/.mgos
 	;;
 
 wicarddstart)
-rm /var/run/.mgos
-rm /var/run/.oscam
-rm /var/run/.mgcamd
-touch /var/run/.wicardd
+rm /var/tuxbox/config/.mgos
+rm /var/tuxbox/config/.oscam
+rm /var/tuxbox/config/.mgcamd
+touch /var/tuxbox/config/.wicardd
 sleep 2
 /etc/init.d/cam restart
 	;;
@@ -57,7 +57,7 @@ sleep 2
 wicarddstop)
 /etc/init.d/cam stop
 sleep 2
-rm /var/run/.wicardd
+rm /var/tuxbox/config/.wicardd
 	;;
   
 keyupdate)
