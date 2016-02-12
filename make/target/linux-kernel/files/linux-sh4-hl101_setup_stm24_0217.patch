@@ -1,5 +1,5 @@
---- linux-sh4-2.6.32.61_stm24_0215_orig/arch/sh/boards/mach-mb442/setup.c
-+++ linux-sh4/arch/sh/boards/mach-mb442/setup.c
+--- a/arch/sh/boards/mach-mb442/setup.c
++++ b/arch/sh/boards/mach-mb442/setup.c
 @@ -22,14 +22,30 @@
  #include <linux/stm/platform.h>
  #include <linux/stm/stx7100.h>
@@ -27,7 +27,7 @@
 + {
 +         .name = "LMI_SYS",
 +         .start = 0,
-+         .size = 0x01300000,
++         .size = 0x01400000,
 +         .flags = 0,
 +         .aka = LMI_SYS_partalias
 + }
@@ -140,8 +140,8 @@
  			ARRAY_SIZE(mb442_devices));
  }
 
-*** linux-sh4-2.6.32.61_stm24_0215_orig/drivers/net/phy/phy_device.c
---- linux-sh4/drivers/net/phy/phy_device.c
+*** a/drivers/net/phy/phy_device.c
+--- b/drivers/net/phy/phy_device.c
 ***************
 *** 1104,1110 ****
   		return retval;
@@ -159,8 +159,8 @@
   
   	return 0;
   }
-*** linux-sh4-2.6.32.61_stm24_0215_orig/drivers/net/stmmac/stmmac_mdio.c
---- linux-sh4/drivers/net/stmmac/stmmac_mdio.c
+*** a/drivers/net/stmmac/stmmac_mdio.c
+--- b/drivers/net/stmmac/stmmac_mdio.c
 ***************
 *** 194,202 ****
   			 * and no PHY number was provided to the MAC,
@@ -188,8 +188,8 @@
   
   			act = (priv->plat->bus_id == mdio_bus_data->bus_id) &&
   				(priv->plat->phy_addr == addr);
---- linux-sh4-2.6.32.61_stm24_0215_orig/include/linux/stm/stx7100.h
-+++ linux-sh4/include/linux/stm/stx7100_orig.h
+--- a/include/linux/stm/stx7100.h
++++ b/include/linux/stm/stx7100_orig.h
 @@ -34,15 +34,11 @@
  };
  void stx7100_configure_asc(int asc, struct stx7100_asc_config *config);
@@ -208,8 +208,8 @@
  
  
  struct stx7100_lirc_config {
---- linux-sh4-2.6.32.61_stm24_0215_orig/drivers/stm/gpio.c.orig
-+++ linux-sh4/drivers/stm/gpio.c
+--- a/drivers/stm/gpio.c.orig
++++ b/drivers/stm/gpio.c
 @@ -27,13 +27,17 @@
  #include <linux/stm/platform.h>
  #include <linux/stm/pad.h>
