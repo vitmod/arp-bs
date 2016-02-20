@@ -15,6 +15,7 @@ DESCRIPTION_${P} = Framebuffer-based digital media application
 CONFIG_FLAGS_${P} = \
 	--with-libsdl=no \
 	--with-boxtype=none \
+	--enable-arp-build \
 	--datadir=/usr/share \
 	--libdir=/usr/lib \
 	--bindir=/usr/bin \
