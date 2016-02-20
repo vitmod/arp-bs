@@ -5,7 +5,7 @@ package[[ target_usb_modeswitch_data
 
 BDEPENDS_${P} = $(target_filesystem)
 
-PV_${P} = 20150627
+PV_${P} = 20160112
 PR_${P} = 1
 
 call[[ base ]]
