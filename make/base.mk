@@ -369,6 +369,7 @@ define _ipkbox_write_control
 	echo 'Depends: $(call _ipk_control_list,$(RDEPENDS_$1))' >> $2
 	echo 'Replaces: $(call _ipk_control_list,$(RREPLACES_$1))' >> $2
 	echo 'Conflicts: $(call _ipk_control_list,$(RCONFLICTS_$1))' >> $2
+	echo 'Provides: $(call _ipk_control_list,$(RPROVIDES_$1))' >> $2
 
 	$(call _ipk_write_control_common,$1,$2)
 

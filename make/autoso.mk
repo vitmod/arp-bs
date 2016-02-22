@@ -9,7 +9,7 @@ $(TARGET_${P}).write_provides: $(TARGET_${P}).do_split
 		for s in `find /lib /usr/lib -maxdepth 1 -type l -name '*.so.*'`; \
 		do \
 			sn=`echo $$s |sed -e 's,.*lib/,,' -e 's,\.so\.,,'; \
-			echo "PROVIDES_$$p += $$sn" >> $@; \
+			echo "RPROVIDES_$$p += $$sn" >> $@; \
 		done \
 	done \
 	true
