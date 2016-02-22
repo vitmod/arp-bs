@@ -1,0 +1,57 @@
+--- a/tuxtxt.c.orig	2016-01-30 13:33:00.490535631 +0100
++++ b/tuxtxt.c	2016-01-30 13:41:33.070533175 +0100
+@@ -204,11 +204,22 @@
+ 	tuxtxt_cache.vtxtpid = pid;
+ 
+ 	/* open Framebuffer */
++#if defined(__sh__)
++	if ((renderinfo.fb=open("/dev/fb/0", O_RDWR)) == -1)
++	{
++		if ((renderinfo.fb=open("/dev/fb0", O_RDWR)) == -1)
++		{
++			perror("TuxTxt <open /dev/fb/0 || /dev/fb0>");
++			return 0;
++		}
++	}
++#else
+	if ((renderinfo.fb=open(FB_DEV, O_RDWR)) == -1)
+ 	{
+		printf("TuxTxt <open %s>: %m", FB_DEV);
+ 		return 0;
+ 	}
++#endif
+ 	rc[0] = rc[1] =-1;
+ 	while(rc_num < 2)
+ 	{
+@@ -225,13 +236,21 @@
+ 		}
+ 		if (ioctl(rc[rc_num], EVIOCGNAME(128), tmp) < 0)
+ 			perror("EVIOCGNAME failed");
++#if defined(__sh__)
++		if (!strstr(tmp, "TDT RC event driver"))
++#else
+		if (!strstr(tmp, "remote control") && !strstr(tmp, "key"))
++#endif
+ 		{
+ 			close(rc[rc_num]);
+ 			rc[rc_num] = -1;
+ 		}
+ 		else
++#if defined(__sh__)
++			break;
++#else
+ 			++rc_num;
++#endif
+ 		++cnt;
+ 	}
+ 
+@@ -2943,6 +2962,9 @@
+ 				case KEY_MENU:		RCCode = RC_DBOX;	break;
+ 				case KEY_TEXT:
+ 				case KEY_EXIT:		RCCode = RC_HOME;	break;
++#if defined(__sh__)
++				case KEY_HOME:		RCCode = RC_HOME;	break;
++#endif
+ 				case KEY_POWER:		RCCode = RC_STANDBY;	break;
+ 				default:			RCCode = -1;		break;
+				}

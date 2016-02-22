@@ -1,0 +1,2 @@
+DEPENDOFF=&OsCam		~T250 ~GAktiviren,/var/tuxbox/plugins/camstartstop oscamstart,/var/tuxbox/config/.oscam,OSCam wird aktiv.
+DEPENDON=&OsCam			~T250 ~RAnhalten,/var/tuxbox/plugins/camstartstop oscamstop,/var/tuxbox/config/.oscam,OSCam wird angehalten.

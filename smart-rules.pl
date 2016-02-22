@@ -181,11 +181,11 @@ sub process_block ($)
 
   process_depends($_);
   $out = process_prepare($_);
-  output("PREPARE_$P += $out \n") if $out;
+  output("PREPARE_$P += $out\n") if $out;
   $out = process_sources($_);
-  output("SRC_URI_$P += $out \n") if $out;
+  output("SRC_URI_$P += $out\n") if $out;
   $out = process_install($_);
-  output("INSTALL_$P += $out \n") if $out;
+  output("INSTALL_$P += $out\n") if $out;
   $out = process_download($_);
   output("$out \n") if $out;
 
@@ -447,7 +447,7 @@ sub process_prepare ($)
       $rev = $opts{"r"} if $opts{"r"};
 
       # -- set GIT_DIR variable
-      $outpost .= "GIT_DIR_$P = $f \n";
+      $outpost .= "GIT_DIR_$P = $f\n";
 
       # -- pull changes from remote --
       my $upd = "";
@@ -625,7 +625,7 @@ sub process_sources ($)
     return if ( $p eq "none" );
     my $rev = "";
     $rev = ":r$opts{'r'}" if $opts{"r"};
-    $output .= "$url$rev ";
+    $output .= "$url$rev";
 
   return "$output"
 }

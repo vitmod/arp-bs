@@ -1,0 +1,2 @@
+DEPENDOFF=&Camd3		~T250 ~GAktiviren,var/tuxbox/plugins/camstartstop camd3start,/var/tuxbox/config/.camd3,Camd3 wird aktiv.
+DEPENDON=&Camd3			~T250 ~RAnhalten,var/tuxbox/plugins/camstartstop camd3stop,/var/tuxbox/config/.camd3,Camd3 wird angehalten.

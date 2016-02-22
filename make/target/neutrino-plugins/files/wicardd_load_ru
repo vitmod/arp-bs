@@ -1,0 +1,2 @@
+DEPENDOFF=&_WiCardd		~T250 ~GЗапустить,/var/tuxbox/plugins/camstartstop wicarddstart,/var/tuxbox/config/.wicardd,WiCardd будет активен.
+DEPENDON=&_WiCardd		~T250 ~RОстановить,/var/tuxbox/plugins/camstartstop wicarddstop,/var/tuxbox/config/.wicardd,WiCardd будет остановлен.

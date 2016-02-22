@@ -434,7 +434,7 @@ $(TARGET_${P}).set_inherit_vars: $(TARGET_${P}).do_package
 			) \
 		) \
 		$(if $(NAME_$(pkg)),, \
-			$(eval NAME_$(pkg) := $(subst _,-,$(pkg)) ) \
+			$(eval NAME_$(pkg) := $(subst _,-,$(pkg))) \
 		) \
 		$(foreach var, $(INHERIT_DEFINES), \
 			$(if $(call undefined,$(var)_$(pkg)), \
@@ -463,6 +463,7 @@ $(TARGET_${P}).do_ipkbox: $(TARGET_${P}).do_split
 	for pkg in `ls $(SPLITDIR_${P})`; do \
 		echo "building package $${pkg} ..."; \
 		pkgn=`cat $(SPLITDIR_${P})/$${pkg}/CONTROL/control |sed -n '/^Package:/ s/Package: //p'`; \
+		rm -f $(ipkbox)/$${pkgn}_*.ipk; \
 		echo ${P} > $(ipkorigin)/$${pkgn}.origin; \
 		ipkg-build -o root -g root $(SPLITDIR_${P})/$${pkg} $(ipkbox); \
 	done
