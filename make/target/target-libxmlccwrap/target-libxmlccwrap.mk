@@ -26,12 +26,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--prefix=/usr \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
@@ -40,11 +40,9 @@ DESCRIPTION_${P} = libxmlccwrap is a small C++ wrapper around libxml2 and libxsl
 RDEPENDS_${P} += libgcc1 libxml2 libz1 libstdc++6 libc6 libxslt
 define postinst_${P}
 #!/bin/sh
-if [ x"$$D" = "x" ]; then
-	if [ -x /sbin/ldconfig ]; then /sbin/ldconfig ; fi
-fi
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
-FILES_${P} = /usr/lib/*.so*
+FILES_${P} = /usr/lib/*.so
 
 call[[ ipkbox ]]
 

@@ -5,7 +5,7 @@ package[[ target_pppd
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 2.4.6
+PV_${P} = 2.4.7
 PR_${P} = 1
 
 DIR_${P} = ${WORK}/ppp-${PV}
@@ -13,7 +13,7 @@ DIR_${P} = ${WORK}/ppp-${PV}
 call[[ base ]]
 
 rule[[
-  extract:ftp://ftp.samba.org/pub/ppp/ppp-${PV}.tar.gz
+  extract:https://download.samba.org/pub/ppp/ppp-${PV}.tar.gz
   patch:file://${PN}.patch
 ]]rule
 
@@ -32,12 +32,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--with-kernel=$(buildprefix)/$(KERNEL_DIR) \
 			--disable-kernel-module \
 		&& \
-		$(MAKE)
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)/usr
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)/usr
 	touch $@
 
 call[[ ipk ]]

@@ -5,7 +5,7 @@ package[[ target_libffi
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 3.0.13
+PV_${P} = 3.2.1
 PR_${P} = 1
 
 DESCRIPTION_${P} = A portable foreign function interface library \
@@ -23,7 +23,7 @@ call[[ base ]]
 
 rule[[
   extract:ftp://sourceware.org/pub/${PN}/${PN}-${PV}.tar.gz
-  patch:file://libffi-3.0.11.patch
+  patch:file://${PN}.patch
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
@@ -41,19 +41,19 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--disable-static \
 			--enable-builddir=libffi \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
 
 NAME_${P} = libffi6
 RDEPENDS_${P} = libc6
-FILES_${P} = /usr/lib/libffi.so*
+FILES_${P} = /usr/lib/libffi.so.*
 
 call[[ ipkbox ]]
 

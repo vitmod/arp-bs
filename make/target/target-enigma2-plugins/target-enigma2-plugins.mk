@@ -1,9 +1,10 @@
 #
 # AR-P buildsystem smart Makefile
 #
+ifeq ($(strip $(CONFIG_BUILD_ENIGMA2)),y)
 package[[ target_enigma2_plugins
 
-BDEPENDS_${P} = $(target_enigma2) $(target_python_gdata)
+BDEPENDS_${P} = $(target_enigma2) $(target_python_gdata) $(target_aio_grab)
 
 PV_${P} = git
 PR_${P} = 1
@@ -12,7 +13,6 @@ call[[ base ]]
 
 rule[[
   git://github.com/OpenAR-P/enigma2-plugins-sh4.git
-  patch:file://mytube-remove-dreambox-validation.patch
 ]]rule
 
 call[[ git ]]
@@ -32,7 +32,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix=/usr \
 			$(CONFIG_FLAGS_${P}) \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 
@@ -85,7 +85,7 @@ $(TARGET_${P}).do_split: $(TARGET_${P}).write_vars
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install-metaDATA DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install-metaDATA DESTDIR=$(PKDIR)
 	touch $@
 
 PACKAGES_${P} = enigma2_plugins_meta $(PACKAGES_DYNAMIC_${P})
@@ -119,3 +119,4 @@ $(TARGET_${P}).do_split_post: $(TARGET_${P}).do_split
 $(TARGET_${P}).do_ipkbox: $(TARGET_${P}).do_split_post
 
 ]]package
+endif

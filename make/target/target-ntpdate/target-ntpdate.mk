@@ -3,7 +3,7 @@
 #
 package[[ target_ntpdate
 
-PV_${P} = 4.2.6p5
+PV_${P} = 4.2.8
 PR_${P} = 1
 DIR_${P} = ${WORK}/ntp-${PV}
 
@@ -31,12 +31,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--target=$(target) \
 		&& \
-		$(MAKE)
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 		install -d $(PKDIR)/etc/default/
 		install -m644 $(SDIR_${P})/ntpdate $(PKDIR)/etc/default
 		install -d $(PKDIR)/usr/bin/

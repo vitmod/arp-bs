@@ -1,0 +1,24 @@
+--- a/configure	2013-10-21 21:24:58.000000000 +0300
++++ b/configure	2015-09-24 19:41:45.089355027 +0300
+@@ -5197,21 +5197,7 @@
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_func_malloc_0_nonnull" >&5
+ $as_echo "$ac_cv_func_malloc_0_nonnull" >&6; }
+ if test $ac_cv_func_malloc_0_nonnull = yes; then :
+-
+ $as_echo "#define HAVE_MALLOC 1" >>confdefs.h
+-
+-else
+-  $as_echo "#define HAVE_MALLOC 0" >>confdefs.h
+-
+-   case " $LIBOBJS " in
+-  *" malloc.$ac_objext "* ) ;;
+-  *) LIBOBJS="$LIBOBJS malloc.$ac_objext"
+- ;;
+-esac
+-
+-
+-$as_echo "#define malloc rpl_malloc" >>confdefs.h
+-
+ fi
+ 
+ 

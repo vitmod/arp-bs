@@ -5,14 +5,14 @@ package[[ target_flac
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 1.3.0
+PV_${P} = 1.3.1
 PR_${P} = 1
 
 call[[ base ]]
 
 rule[[
   extract:http://downloads.xiph.org/releases/${PN}/${PN}-${PV}.tar.xz
-  patch:file://${PN}-${PV}.patch
+  patch:file://${PN}.patch
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
@@ -37,12 +37,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--without-libiconv-prefix \
 			--without-id3lib \
 		&& \
-		make
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
@@ -50,11 +50,11 @@ call[[ ipk ]]
 PACKAGES_${P} = libflac8 libflacpp6
 DESCRIPTION_${P} = FLAC stands for Free Lossless Audio Codec, an audio format similar to MP3, but lossless.
 
-FILES_libflac8 = /usr/lib/libFLAC.so*
+FILES_libflac8 = /usr/lib/libFLAC.so.*
 
 NAME_libflacpp6 = libflac++6
 RDEPENDS_libflacpp6 = libgcc1 libogg0 libflac8 libstdc
-FILES_libflacpp6 = /usr/lib/libFLAC++.so*
+FILES_libflacpp6 = /usr/lib/libFLAC++.so.*
 
 call[[ ipkbox ]]
 

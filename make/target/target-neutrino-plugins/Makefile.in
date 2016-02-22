@@ -1,0 +1,5 @@
+ifeq ($(strip $(CONFIG_BUILD_NEUTRINO)),y)
+package[[ target_neutrino_plugins
+call[[ header ]]
+]]package
+endif

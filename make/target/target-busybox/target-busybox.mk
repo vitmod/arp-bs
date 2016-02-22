@@ -5,23 +5,26 @@ package[[ target_busybox
 
 BDEPENDS_${P} = $(target_glibc) $(target_zlib) $(target_libffi)
 
-PV_${P} = 1.22.1
-PR_${P} = 1
+PV_${P} = 1.24.1
+PR_${P} = 3
 
 DESCRIPTION_${P} = Tiny versions of many common UNIX utilities in a single small executable.
 
 call[[ base ]]
 
 rule[[
-  extract:http://www.${PN}.net/downloads/${PN}-${PV}.tar.bz2
-  nothing:file://${PN}-${PV}.config
+  extract:http://busybox.net/downloads/${PN}-${PV}.tar.bz2
+  patch:https://busybox.net/downloads/fixes-${PV}/busybox-1.24.1-unzip.patch
+  patch:https://busybox.net/downloads/fixes-${PV}/busybox-1.24.1-unzip-regression.patch
+  patch:https://busybox.net/downloads/fixes-${PV}/busybox-1.24.1-truncate-open-mode.patch
+  nothing:file://${PN}.config
   nothing:file://busybox-cron
+  nothing:file://syslog.busybox
   nothing:file://autologin
-  pmove:${DIR}/${PN}-${PV}.config:${DIR}/.config
-  patch:file://${PN}-${PV}-ash.patch
-  patch:file://${PN}-${PV}-date.patch
-  patch:file://${PN}-${PV}-iplink.patch
+  pmove:${DIR}/${PN}.config:${DIR}/.config
 ]]rule
+
+#call[[ git ]]
 
 MAKE_FLAGS_${P} = \
 	CROSS_COMPILE=$(target)- \
@@ -34,13 +37,13 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
-		make $(MAKE_FLAGS_${P}) all
+		$(run_make) $(MAKE_FLAGS_${P}) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
 	cd $(DIR_${P}) && \
-		make $(MAKE_FLAGS_${P}) install CONFIG_PREFIX=$(PKDIR)
+		$(run_make) $(MAKE_FLAGS_${P}) install CONFIG_PREFIX=$(PKDIR)
 
 #	install -m644 -D /dev/null $(PKDIR)/etc/shells
 #	export HHL_CROSS_TARGET_DIR=$(PKDIR) && $(hostprefix)/bin/target-shellconfig --add /bin/ash 5
@@ -48,6 +51,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	install -d $(PKDIR)/etc/init.d/
 	install -m755 $(DIR_${P})/busybox-cron $(PKDIR)/etc/init.d
 	install -d $(PKDIR)/etc/cron/crontabs/
+	install -m755 $(DIR_${P})/syslog.busybox $(PKDIR)/etc/init.d
 # FIXME:
 	install -d $(PKDIR)/bin
 	install -m755 $(DIR_${P})/autologin $(PKDIR)/bin/autologin
@@ -56,55 +60,59 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 
 call[[ TARGET_base_do_config ]]
 
-PACKAGES_${P} = busybox_cron busybox
+PACKAGES_${P} = busybox_cron busybox_syslog busybox
 
 FILES_busybox = /
 
 FILES_busybox_cron = \
 	/etc/cron/crontabs \
 	/etc/init.d/busybox-cron
+
+FILES_busybox_syslog = \
+	/etc/init.d/syslog.busybox
+
 define postinst_busybox_cron
 #!/bin/sh
-if type update-rc.d >/dev/null 2>/dev/null; then
-	if [ -n "$$D" ]; then
-		OPT="-r $$D"
-	else
-		OPT="-s"
-	fi
-	update-rc.d $$OPT $$OPKG_OFFLINE_ROOT/ busybox-cron start 03 S . stop 99 0 6 .
-fi
+update-rc.d -r $$OPKG_OFFLINE_ROOT/ busybox-cron start 03 S . stop 99 0 6 .
+
 endef
 define postrm_busybox_cron
 #!/bin/sh
-if type update-rc.d >/dev/null 2>/dev/null; then
-	if [ -n "$$D" ]; then
-		OPT="-r $$D"
-	else
-		OPT=""
-	fi
-	update-rc.d $$OPT $$OPKG_OFFLINE_ROOT/ busybox-cron remove
-fi
+update-rc.d -r $$OPKG_OFFLINE_ROOT/ busybox-cron remove
 endef
 
 define preinst_busybox_cron
 #!/bin/sh
-if [ -z "$$D" -a -f "/etc/init.d/busybox-cron" ]; then
+if [ -z "$$OPKG_OFFLINE_ROOT" -a -f "/etc/init.d/busybox-cron" ]; then
 	/etc/init.d/busybox-cron stop
 fi
-if type update-rc.d >/dev/null 2>/dev/null; then
-	if [ -n "$$D" ]; then
-		OPT="-f -r $$D"
-	else
-		OPT="-f"
-	fi
-	update-rc.d $$OPT $$OPKG_OFFLINE_ROOT/ busybox-cron remove
-fi
+update-rc.d -r $$OPKG_OFFLINE_ROOT/ busybox-cron remove
 endef
 define prerm_busybox_cron
 #!/bin/sh
-if [ -z "$$D" ]; then
-	/etc/init.d/busybox-cron stop
+$$OPKG_OFFLINE_ROOT/etc/init.d/busybox-cron stop
+endef
+
+define postinst_busybox_syslog
+#!/bin/sh
+update-rc.d -r $$OPKG_OFFLINE_ROOT/ syslog.busybox start 36 S .
+
+endef
+define postrm_busybox_syslog
+#!/bin/sh
+update-rc.d -r $$OPKG_OFFLINE_ROOT/ syslog.busybox remove
+endef
+
+define preinst_busybox_syslog
+#!/bin/sh
+if [ -z "$$OPKG_OFFLINE_ROOT" -a -f "/etc/init.d/syslog.busybox" ]; then
+	/etc/init.d/syslog.busybox stop
 fi
+update-rc.d -r $$OPKG_OFFLINE_ROOT/ syslog.busybox remove
+endef
+define prerm_busybox_syslog
+#!/bin/sh
+$$OPKG_OFFLINE_ROOT/etc/init.d/syslog.busybox stop
 endef
 
 call[[ ipkbox ]]

@@ -5,7 +5,7 @@ package[[ target_freetype
 
 BDEPENDS_${P} = $(target_glibc) $(target_libpng) $(target_zlib)
 
-PV_${P} = 2.4.9
+PV_${P} = 2.6.2
 PR_${P} = 2
 
 DESCRIPTION_${P} = Freetype font rendering library \
@@ -33,12 +33,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--prefix=/usr \
 		&& \
-		$(MAKE)
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 
 	$(call rewrite_config, $(PKDIR)/usr/bin/freetype-config)
 	touch $@
@@ -47,7 +47,7 @@ call[[ ipk ]]
 
 NAME_${P} = libfreetype6
 RDEPENDS_${P} = libc6
-FILES_${P} = /usr/lib/*.so*
+FILES_${P} = /usr/lib/*.so.*
 
 call[[ ipkbox ]]
 

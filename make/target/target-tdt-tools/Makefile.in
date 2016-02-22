@@ -17,6 +17,10 @@ package[[ target_libeplayer3
 call[[ header ]]
 ]]package
 
+package[[ target_eplayer4
+call[[ header ]]
+]]package
+
 package[[ target_libmme_host
 call[[ header ]]
 ]]package
@@ -37,7 +41,10 @@ package[[ target_ustslave
 call[[ header ]]
 ]]package
 
-PR_tdt_tools = 2
+package[[ target_libstgles
+call[[ header ]]
+]]package
+
 # end tdt tools packages
 
 function[[ base_tdt_tools
@@ -71,11 +78,12 @@ CONFIG_FLAGS_${P} += \
 	--with-driver=$(driverdir) \
 	--with-dvbincludes=$(driverdir)/include \
 	--with-target=cdk
+	
 
-ifdef CONFIG_MULTICOM_324
+ifdef CONFIG_MULTICOM324
 CONFIG_FLAGS_${P} += --enable-multicom324
 endif
-ifdef CONFIG_MULTICOM_406
+ifdef CONFIG_MULTICOM406
 CONFIG_FLAGS_${P} += --enable-multicom406
 endif
 
@@ -91,15 +99,15 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
-			--prefix= \
+			--prefix=/ \
 			$(CONFIG_FLAGS_${P}) \
 		&& \
-		make $(MAKE_FLAGS_${P})
+		$(run_make) $(MAKE_FLAGS_${P})
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && make $(MAKE_FLAGS_${P}) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) $(MAKE_FLAGS_${P}) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]

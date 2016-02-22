@@ -39,12 +39,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix=/usr \
 			$(CONFIG_FLAGS_${P}) \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 
 	$(call rewrite_config, $(PKDIR)/usr/bin/xslt-config)
 	sed -e "/^XSLT_LIBDIR/ s,/usr/lib,$(targetprefix)/usr/lib,g" -i $(PKDIR)/usr/lib/xsltConf.sh
@@ -56,8 +56,8 @@ call[[ ipk ]]
 
 DESCRIPTION_${P} = XML stylesheet transformation library
 FILES_${P} = \
-	/usr/lib/libxslt* \
-	/usr/lib/libexslt* \
+	/usr/lib/libxslt.so.* \
+	/usr/lib/libexslt.so.* \
 	$(PYTHON_DIR)/site-packages/libxslt.py
 
 call[[ ipkbox ]]

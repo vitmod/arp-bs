@@ -1,0 +1,8 @@
+#!/bin/sh
+
+STARTUP=`grep -c 'neutrino' /etc/.gui`
+	if [ "$STARTUP" -eq "1" ]; then
+		/usr/bin/neutrino.sh
+	else
+		/usr/bin/enigma2.sh
+	fi

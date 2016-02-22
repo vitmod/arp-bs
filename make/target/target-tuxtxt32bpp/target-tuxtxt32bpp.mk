@@ -11,7 +11,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  git://git.code.sf.net/p/openpli/tuxtxt.git:sub=tuxtxt
+  git://github.com/OpenPLi/tuxtxt.git:sub=tuxtxt
   patch:file://${PN}-1.0-fix_dbox_headers.diff
   install:-m644:-D:$(PKDIR)/etc/tuxtxt/tuxtxt2.conf:file://tuxtxt2.conf
 ]]rule
@@ -38,12 +38,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--with-datadir=/usr/share/tuxtxt \
 			--with-fontdir=/usr/share/fonts \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	cd $(DIR_${P}) && $(INSTALL_${P})
 
 	rm -rf $(PKDIR)/usr/share/fonts/
@@ -55,7 +55,7 @@ NAME_${P} = libtuxtxt32bpp0
 DESCRIPTION_${P} = tuxbox tuxtxt for 32bit framebuffer
 RDEPENDS_${P} = libtuxtxt0 libfreetype6 libz1
 FILES_${P} = \
-	/usr/lib/libtuxtxt32bpp* \
+	/usr/lib/*.so.* \
 	/usr/lib/enigma2/python/Plugins/Extensions/Tuxtxt/* \
 	/etc/tuxtxt/tuxtxt2.conf
 

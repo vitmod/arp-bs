@@ -26,19 +26,23 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--prefix=/usr \
 		&& \
-		make
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
 
 DESCRIPTION_${P} = The libvorbis reference implementation provides both a standard encoder and decoder
 RDEPENDS_${P} = libogg0 libc6
-FILES_${P} = /usr/lib/libvorbis*
+define postinst_${P}
+#!/bin/sh
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
+endef
+FILES_${P} = /usr/lib/*.so.*
 
 call[[ ipkbox ]]
 

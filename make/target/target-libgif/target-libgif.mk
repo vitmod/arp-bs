@@ -5,7 +5,7 @@ package[[ target_libgif
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 5.1.0
+PV_${P} = 5.1.1
 PR_${P} = 1
 
 PN_${P} = giflib
@@ -29,19 +29,19 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix=/usr \
 			--without-x \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
 
 NAME_${P} = libgif4
 DESCRIPTION_${P} =  shared library for GIF images
-FILES_${P} = /usr/lib/*.so*
+FILES_${P} = /usr/lib/*.so.*
 
 call[[ ipkbox ]]
 

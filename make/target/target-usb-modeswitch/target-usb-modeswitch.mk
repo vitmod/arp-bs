@@ -5,7 +5,7 @@ package[[ target_usb_modeswitch
 
 BDEPENDS_${P} = $(target_libusb) $(target_libusb_compat) $(target_usb_modeswitch_data)
 
-PV_${P} = 2.2.0
+PV_${P} = 2.2.5
 PR_${P} = 1
 
 call[[ base ]]
@@ -22,15 +22,13 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		$(BUILDENV) \
-		$(MAKE) $(MAKE_ARGS)
+		$(run_make) $(MAKE_ARGS)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
-
-call[[ ipk ]]
 
 DESCRIPTION_${P} = usb-modeswitch
 RDEPENDS_${P} = libusb-0.1 libusb-1.0 usb_modeswitch_data

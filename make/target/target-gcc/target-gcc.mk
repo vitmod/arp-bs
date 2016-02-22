@@ -8,11 +8,14 @@ BREMOVES_${P} = $(target_cross_gcc_lib)
 
 PR_${P} = 1
 
-ifdef GCC48
-PV_${P} := 4.8.2-135
+ifdef CONFIG_GCC48
+ ST_PV_${P} = 4.8.4
+ ST_PR_${P} = 149
 else
-PV_${P} := 4.7.3-129
+ ST_PV_${P} = 4.7.3
+ ST_PR_${P} = 129
 endif
+PV_${P} := ${ST_PV}-${ST_PR}
 
 ${P}_SPEC = stm-$(${P}).spec
 ${P}_SPEC_PATCH = $(${P}_SPEC).$(PV_${P}).diff

@@ -12,6 +12,7 @@ call[[ base ]]
 
 rule[[
   extract:http://mirror.linux.org.au/linux/libs/security/linux-privs/${PN}2/${PN}-${PV}.tar.bz2
+  patch:file://fix-CAP_LAST_CAP.patch
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
@@ -27,12 +28,12 @@ MAKE_FLAGS_${P} = \
 	BUILD_CC=gcc
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
-	cd $(DIR_${P}) && $(MAKE) ${MAKE_FLAGS}
+	cd $(DIR_${P}) && $(run_make) ${MAKE_FLAGS}
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) ${MAKE_FLAGS} install
+	cd $(DIR_${P}) && $(run_make) ${MAKE_FLAGS} install
 	touch $@
 
 call[[ ipk ]]
@@ -41,7 +42,11 @@ DESCRIPTION_${P} = Library for getting/setting POSIX.1e capabilities
 PACKAGES_${P} = libcap2 libcap_bin
 
 RDEPENDS_libcap2 = libc6
-FILES_libcap2 = /lib/*.so*
+define postinst_libcap2
+#!/bin/sh
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
+endef
+FILES_libcap2 = /lib/*.so.*
 
 RDEPENDS_libcap_bin = libc6 libcap2
 FILES_libcap_bin = /sbin/*

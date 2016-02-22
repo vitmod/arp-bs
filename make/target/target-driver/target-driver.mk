@@ -30,6 +30,20 @@ rule[[
 
 call[[ git ]]
 
+ifeq (,$(wildcard $(driverdir)/pti_np))
+ifeq (,$(wildcard $(archivedir)/ptinp))
+# build pti source
+BUILD_PTI_NP := NO
+else
+# bin_copy
+BUILD_PTI_NP := BINCOPY
+endif 		#(,$(wildcard $(archivedir)/ptinp))
+else #(,$(wildcard $(driverdir})/pti_np))
+# build pti_np source
+BUILD_PTI_NP := SRCBUILD
+endif 		#(,$(wildcard $(driverdir})/pti_np))
+$(info PTI---> $(BUILD_PTI_NP))
+
 MAKE_FLAGS_${P} = \
 	ARCH=sh \
 	CROSS_COMPILE=$(target)- \
@@ -42,7 +56,6 @@ MAKE_FLAGS_${P} = \
 	$(if $(CONFIG_HL101),HL101=y) \
 	$(if $(CONFIG_SPARK),SPARK=y) \
 	$(if $(CONFIG_SPARK7162),SPARK7162=y) \
-	$(if $(CONFIG_PLAYER179),PLAYER179=y) \
 	$(if $(CONFIG_PLAYER191),PLAYER191=y)
 
 
@@ -56,46 +69,37 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 # TODO:
 	rm -f ${DIR}/include/multicom
 	rm -f ${DIR}/multicom
-ifdef CONFIG_MULTICOM_324
+ifdef CONFIG_MULTICOM324
 	echo "export CONFIG_MULTICOM324=y" >> ${DIR}/.config
-	ln -s ../multicom-3.2.4/include ${DIR}/include/multicom
-	ln -s multicom-3.2.4 ${DIR}/multicom
+	ln -sf ../multicom-3.2.4/include ${DIR}/include/multicom
+	ln -sf multicom-3.2.4 ${DIR}/multicom
 endif
-ifdef CONFIG_MULTICOM_406
-	ln -s ../multicom-4.0.6/include ${DIR}/include/multicom
-	ln -s multicom-4.0.6 ${DIR}/multicom
+ifdef CONFIG_MULTICOM406
+	ln -sf ../multicom-4.0.6/include ${DIR}/include/multicom
+	ln -sf multicom-4.0.6 ${DIR}/multicom
 	echo "export CONFIG_MULTICOM406=y" >> ${DIR}/.config
 endif
 	touch $@
 
-
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
-	cd $(DIR_${P}) && make $(MAKE_FLAGS_${P})
+	cd $(DIR_${P}) && $(run_make) $(MAKE_FLAGS_${P})
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && make $(MAKE_FLAGS_${P}) install
+	cd $(DIR_${P}) && $(run_make) $(MAKE_FLAGS_${P}) install
 
-# copy free pti ko if we have built pti_np
-ifdef CONFIG_PTINP_SRC
-	install -d $(PKDIR)/lib/modules/$(KERNEL_VERSION)/extra/pti
-ifeq ($(CONFIG_HL101)$(CONFIG_SPARK),y)
-	cp -dp $(archivedir)/ptinp/ptif_$(KERNEL_RELEASE).ko $(PKDIR)/lib/modules/$(KERNEL_VERSION)/extra/pti/pti.ko
-endif
-ifdef CONFIG_SPARK7162
-	cp -dp $(archivedir)/ptinp/ptif_$(KERNEL_RELEASE)s2.ko $(PKDIR)/lib/modules/$(KERNEL_VERSION)/extra/pti/pti.ko
-endif
-# copy pti_np ko if we have built free pti
-else #CONFIG_PTINP_SRC
+ifeq ($(BUILD_PTI_NP), BINCOPY)
+# copy binary  from $(archivedir)/ptinp
 	install -d $(PKDIR)/lib/modules/$(KERNEL_VERSION)/extra/pti_np
 ifeq ($(CONFIG_HL101)$(CONFIG_SPARK),y)
-	cp -dp $(archivedir)/ptinp/pti_$(KERNEL_RELEASE).ko $(PKDIR)/lib/modules/$(KERNEL_VERSION)/extra/pti_np/pti.ko
-endif
+	cp -dp $(archivedir)/ptinp/pti_$(KERNEL_RELEASE).ko $(PKDIR)/lib/modules/$(KERNEL_VERSION)/extra/pti_np/pti.ko	
+endif #($(CONFIG_HL101)$(CONFIG_SPARK),y)
 ifdef CONFIG_SPARK7162
 	cp -dp $(archivedir)/ptinp/pti_$(KERNEL_RELEASE)s2.ko $(PKDIR)/lib/modules/$(KERNEL_VERSION)/extra/pti_np/pti.ko
-endif
-endif #CONFIG_PTINP_SRC
+
+endif #CONFIG_SPARK7162
+endif #($(BUILD_PTI_NP),bin_copy)
 
 #	install -d $(PKDIR)/lib/modules/$(KERNEL_VERSION)/extra/encrypt
 #	cp -dp $(buildprefix)/root/release/encrypt_$(TARGET)_stm24_$(KERNEL_LABEL).ko
@@ -121,20 +125,32 @@ PACKAGES_${P} = \
 	kernel_module_e2_proc \
 	kernel_module_encrypt \
 	kernel_module_frontcontroller \
-	kernel_module_frontends \
+	kernel_dvb_modules_stv090x \
 	kernel_module_multicom \
 	kernel_module_player2 \
-	kernel_module_pti \
-	kernel_module_ptinp \
 	kernel_module_simu_button \
 	kernel_module_smartcard \
 	kernel_module_stgfb \
+	kernel_module_mt7601u \
 	kernel_module_rt2870sta \
 	kernel_module_rt3070sta \
 	kernel_module_rt5370sta \
 	kernel_module_rtl8192cu \
 	kernel_module_rtl871x \
 	kernel_module_rtl8188eu
+
+ifeq ($(BUILD_PTI_NP), NO)
+PACKAGES_${P} += \
+	kernel_module_pti
+else
+PACKAGES_${P} += \
+	kernel_module_ptinp
+endif
+
+ifdef CONFIG_HL101
+PACKAGES_${P} += \
+	kernel_module_cic
+endif
 
 DESCRIPTION_kernel_module_avs = For av receiver without av switch. the e2_core in stmdvb need some functions \
 from avs module but fake_avs is not a real fake because it sets pio pins.
@@ -145,6 +161,11 @@ FILES_kernel_module_bpamem = /lib/modules/$(KERNEL_VERSION)/extra/bpamem
 
 DESCRIPTION_kernel_module_cec = HdmiCEC  driver for multimedia devices control
 FILES_kernel_module_cec = /lib/modules/$(KERNEL_VERSION)/extra/cec
+
+ifdef CONFIG_HL101
+DESCRIPTION_kernel_module_cic = driver for control  devices
+FILES_kernel_module_cic = /lib/modules/$(KERNEL_VERSION)/extra/cic
+endif
 
 DESCRIPTION_kernel_module_compcache = The zram module creates RAM based block devices named /dev/zram<id>
 FILES_kernel_module_compcache = /lib/modules/$(KERNEL_VERSION)/extra/compcache
@@ -162,8 +183,8 @@ DESCRIPTION_kernel_module_frontcontroller = frontcontroller driver for control  
 #RDEPENDS_kernel_module_frontcontroller = fp_control
 FILES_kernel_module_frontcontroller = /lib/modules/$(KERNEL_VERSION)/extra/frontcontroller
 
-DESCRIPTION_kernel_module_frontends = frontends driver for control  devices
-FILES_kernel_module_frontends = /lib/modules/$(KERNEL_VERSION)/extra/frontends
+DESCRIPTION_kernel_dvb_modules_stv090x = frontends driver for control  devices
+FILES_kernel_dvb_modules_stv090x = /lib/modules/$(KERNEL_VERSION)/extra/frontends
 
 DESCRIPTION_kernel_module_multicom = stm-multicom driver for control  devices
 RDEPENDS_kernel_module_multicom = libmme-host libmmeimage
@@ -173,13 +194,21 @@ DESCRIPTION_kernel_module_player2 = frontends driver for control  devices
 RDEPENDS_kernel_module_player2 = libmmeimage
 FILES_kernel_module_player2 = /lib/modules/$(KERNEL_VERSION)/extra/player2
 
-DESCRIPTION_kernel_module_pti = open source st-pti kernel module
-RCONFLICTS_kernel_module_pti = kernel_module_ptinp
-FILES_kernel_module_pti = /lib/modules/$(KERNEL_VERSION)/extra/pti
-
+ifneq (,$(wildcard $(DIR_${P})/pti_np))
 DESCRIPTION_kernel_module_ptinp = pti non public
 RCONFLICTS_kernel_module_ptinp = kernel_module_pti
 FILES_kernel_module_ptinp = lib/modules/$(KERNEL_VERSION)/extra/pti_np
+else
+ifeq (,$(wildcard $(archivedir)/ptinp))
+DESCRIPTION_kernel_module_pti = open source st-pti kernel module
+RCONFLICTS_kernel_module_pti = kernel_module_ptinp
+FILES_kernel_module_pti = /lib/modules/$(KERNEL_VERSION)/extra/pti
+else
+DESCRIPTION_kernel_module_ptinp = pti non public
+RCONFLICTS_kernel_module_ptinp = kernel_module_pti
+FILES_kernel_module_ptinp = lib/modules/$(KERNEL_VERSION)/extra/pti_np
+endif
+endif
 
 DESCRIPTION_kernel_module_simu_button = simu-button driver for control  devices
 FILES_kernel_module_simu_button = /lib/modules/$(KERNEL_VERSION)/extra/simu_button
@@ -190,6 +219,10 @@ FILES_kernel_module_smartcard = /lib/modules/$(KERNEL_VERSION)/extra/smartcard
 DESCRIPTION_kernel_module_stgfb = stgfb driver for control  devices
 #RDEPENDS_kernel_module_stgfb = stfbcontrol
 FILES_kernel_module_stgfb = /lib/modules/$(KERNEL_VERSION)/extra/stgfb
+
+DESCRIPTION_kernel_module_mt7601u = mt7601u frontends driver for control wireless devices
+FILES_kernel_module_mt7601u = /lib/modules/$(KERNEL_VERSION)/extra/wireless/mt7601u
+RDEPENDS_kernel_module_mt7601u = firmware_mt7601u
 
 DESCRIPTION_kernel_module_rt2870sta = rt2870sta frontends driver for control wireless devices
 FILES_kernel_module_rt2870sta = /lib/modules/$(KERNEL_VERSION)/extra/wireless/rt2870sta
@@ -237,7 +270,6 @@ $(TARGET_${P}).do_package: $(DEPENDS_${P})
 	cp $(driverdir)/stgfb/stmfb/linux/drivers/video/stmfb.h $(PKDIR)/usr/include/linux
 	cp $(driverdir)/player2/linux/include/linux/dvb/stm_ioctls.h $(PKDIR)/usr/include/linux/dvb
 
-	cp $(driverdir)/include/player2/mme.h $(PKDIR)/usr/include/
 	cp $(driverdir)/include/player2/JPEG_VideoTransformerTypes.h $(PKDIR)/usr/include/
 	cp $(driverdir)/bpamem/bpamem.h $(PKDIR)/usr/include/
 	touch $@

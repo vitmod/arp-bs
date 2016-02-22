@@ -5,13 +5,13 @@ package[[ target_libpng
 
 BDEPENDS_${P} = $(target_glibc) $(target_zlib)
 
-PV_${P} = 1.6.10
+PV_${P} = 1.6.20
 PR_${P} = 1
 
 call[[ base ]]
 
 rule[[
-  extract:http://prdownloads.sourceforge.net/libpng/${PN}-${PV}.tar.gz
+  extract:http://sourceforge.net/projects/libpng/files/latest/${PN}-${PV}.tar.xz
   nothing:file://${PN}.diff
   patch:file://${PN}-workaround_for_stmfb_alpha_error.patch
 ]]rule
@@ -29,12 +29,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--enable-maintainer-mode \
 			--prefix=/usr \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	$(call rewrite_config, $(PKDIR)/usr/bin/libpng-config)
 	touch $@
 
@@ -43,7 +43,7 @@ call[[ ipk ]]
 PACKAGES_${P} = libpng16
 DESCRIPTION_libpng16 = libpng
 RDEPENDS_libpng16 = libz1 libc6
-FILES_libpng16 = /usr/lib/*.so*
+FILES_libpng16 = /usr/lib/*.so.*
 
 call[[ ipkbox ]]
 

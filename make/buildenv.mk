@@ -139,24 +139,17 @@ export CXXFLAGS = -g -O2
 
 # Kernel configuration
 
-ifdef CONFIG_KERNEL_0207
-KERNEL_VERSION := 2.6.32.28_stm24_0207
-endif
-
-ifdef CONFIG_KERNEL_0209
-KERNEL_VERSION := 2.6.32.46_stm24_0209
-endif
-
-ifdef CONFIG_KERNEL_0210
-KERNEL_VERSION := 2.6.32.57_stm24_0210
-endif
 
 ifdef CONFIG_KERNEL_0211
 KERNEL_VERSION := 2.6.32.59_stm24_0211
 endif
 
-ifdef CONFIG_KERNEL_0212
-KERNEL_VERSION := 2.6.32.61_stm24_0212
+ifdef CONFIG_KERNEL_0215
+KERNEL_VERSION := 2.6.32.61_stm24_0215
+endif
+
+ifdef CONFIG_KERNEL_0217
+KERNEL_VERSION := 2.6.32.61_stm24_0217
 endif
 
 KERNEL_VERSION_SPLITED := $(subst _, ,$(KERNEL_VERSION))
@@ -182,6 +175,7 @@ endif
 DEPMOD = $(hostprefix)/bin/depmod
 SOCKSIFY=
 WGET=$(SOCKSIFY) wget -P
+run_make:=make -j$(CONFIG_MAKE_JLEVEL)
 
 INSTALL := install
 INSTALL_DIR=$(INSTALL) -d
@@ -209,8 +203,8 @@ EXPORT_BUILDENV := \
 	export OBJCOPY=$(target)-objcopy && \
 	export OBJDUMP=$(target)-objdump && \
 	export LN_S="ln -s" && \
-	export CFLAGS="$(TARGET_CFLAGS)" && \
-	export CXXFLAGS="$(TARGET_CFLAGS)" && \
+	export CFLAGS="$(strip $(subst ", ,$(CONFIG_TARGET_CFLAGS)))" && \
+	export CXXFLAGS="$(strip $(subst ", ,$(CONFIG_TARGET_CXXFLAGS)))" && \
 	export LDFLAGS="$(TARGET_LDFLAGS) -Wl,-rpath-link,$(PKDIR)/usr/lib" && \
 	export PKG_CONFIG_SYSROOT_DIR="$(targetprefix)" && \
 	export PKG_CONFIG_PATH="$(targetprefix)/usr/lib/pkgconfig" && \

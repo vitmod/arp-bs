@@ -3,9 +3,9 @@
 #
 package[[ target_python_twisted
 
-BDEPENDS_${P} = $(target_python_zopeinterface) $(target_python_pyopenssl)
+BDEPENDS_${P} = $(target_python_zopeinterface) $(target_python_pyopenssl) $(target_python_serviceidentity)
 
-PV_${P} = 12.0.0
+PV_${P} = 14.0.0
 PR_${P} = 2
 
 DIR_${P} = $(WORK_${P})/Twisted-${PV}
@@ -13,7 +13,7 @@ DIR_${P} = $(WORK_${P})/Twisted-${PV}
 call[[ base ]]
 
 rule[[
-  extract:http://twistedmatrix.com/Releases/Twisted/12.0/Twisted-${PV}.tar.bz2
+  extract:http://twistedmatrix.com/Releases/Twisted/14.0/Twisted-${PV}.tar.bz2
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
@@ -72,7 +72,7 @@ FILES_python_twisted_conch = \
   $(PYTHON_DIR)/site-packages/twisted/conch/ui \
   $(PYTHON_DIR)/site-packages/twisted/plugins/twisted_conch.p*
 
-RDEPENDS_python_twisted_core = python_core python_zopeinterface libc6 python_numbers python_pyopenssl
+RDEPENDS_python_twisted_core = python_core python_compression python_misc python_netserver python_shell python_zlib python_zopeinterface libc6 python_numbers python_pyopenssl python_serviceidentity
 FILES_python_twisted_core = \
   /usr/bin/manhole \
   /usr/bin/pyhtmlizer \

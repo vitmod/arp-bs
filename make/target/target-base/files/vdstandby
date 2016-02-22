@@ -1,0 +1,33 @@
+#!/bin/sh
+if [ $# -eq 1 ]; then
+  if [ "$1" = "-a" ]; then
+    echo "enter standby..."
+	stfbcontrol hd
+	fp_control -l 0 1
+	echo on > /proc/stb/avs/0/standby
+	echo off > /dev/vfd 
+	sleep 2 
+	fp_control -s `date +"%H:%M:%S %d-%m-%Y"`
+	echo "done"
+  elif [ "$1" = "-d" ]; then
+	echo "end standby..."
+       #enable hdmi
+       stfbcontrol he
+       fp_control -l 0 0
+       echo off > /proc/stb/avs/0/standby
+  elif [ "$1" = "-en" ]; then
+	init 4
+	/etc/init.d/cam stop /dev/null
+	echo enigma2 > /etc/.gui
+	echo "go to enigma2..."
+	echo load enigma2 > /dev/vfd
+	init 3
+  elif [ "$1" = "-ne" ]; then
+	init 4
+	/etc/init.d/cam start > /dev/null
+	echo neutrino > /etc/.gui
+	echo "go to neutrino..."
+	echo load neutrino > /dev/vfd
+	init 3
+  fi
+fi

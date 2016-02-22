@@ -5,14 +5,14 @@ package[[ target_libxml2
 
 BDEPENDS_${P} = $(target_glibc) $(target_zlib)
 
-PV_${P} = 2.7.8
+PV_${P} = 2.9.1
 PR_${P} = 1
 
 call[[ base ]]
 
 rule[[
   extract:http://xmlsoft.org/sources/${PN}-${PV}.tar.gz
-  patch:file://${PN}-${PV}.diff
+  patch:file://${PN}.diff
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
@@ -32,12 +32,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--without-debug \
 			--without-mem-debug \
 		&& \
-		$(MAKE)
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 
 	$(call rewrite_config, $(PKDIR)/usr/bin/xml2-config)
 	sed -e "/^XML2_LIBDIR/ s,/usr/lib,$(targetprefix)/usr/lib,g" -i $(PKDIR)/usr/lib/xml2Conf.sh
@@ -57,11 +57,9 @@ DESCRIPTION_${P} = XML C Parser Library and Toolkit \
 RDEPENDS_${P} = libz1 libc6
 define postinst_${P}
 #!/bin/sh
-if [ x"$$D" = "x" ]; then
-	if [ -x /sbin/ldconfig ]; then /sbin/ldconfig ; fi
-fi
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
-FILES_${P} = /usr/bin/xmlcatalog /usr/bin/xmllint /usr/lib/libxml2.*
+FILES_${P} = /usr/bin/xmlcatalog /usr/bin/xmllint /usr/lib/libxml2.so.*
 
 call[[ ipkbox ]]
 

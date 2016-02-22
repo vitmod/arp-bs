@@ -1,0 +1,5 @@
+# add event  priority
+KERNEL=="event?", SUBSYSTEM=="input", ATTRS{name}=="remote control", NAME="input/event0",  MODE="0660"
+KERNEL=="event?", SUBSYSTEM=="input", ATTRS{name}=="fulan front panel buttons", NAME="input/event1",  MODE="0660"
+KERNEL=="event?", SUBSYSTEM=="input", ATTRS{name}=="Spider HL101 frontpanel buttons", NAME="input/event1",  MODE="0660"
+KERNEL=="event?", SUBSYSTEM=="input", ATTRS{name}=="TDT RC event driver", NAME="input/event2",  MODE="0660"

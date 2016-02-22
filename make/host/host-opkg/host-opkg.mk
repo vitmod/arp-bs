@@ -24,8 +24,8 @@ $(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
 		./configure \
 			--prefix=$(hostprefix) \
 		&& \
-		$(MAKE) && \
-		$(MAKE) install
+		$(run_make) && \
+		$(run_make) install
 	ln -sf opkg-cl $(hostprefix)/bin/opkg
 
 	echo '$(opkg_script)' > $(hostprefix)/bin/opkg-safe

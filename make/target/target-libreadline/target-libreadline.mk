@@ -5,7 +5,7 @@ package[[ target_libreadline
 
 BDEPENDS_${P} = $(target_glibc) $(target_ncurses)
 
-PV_${P} = 6.2
+PV_${P} = 6.3
 PR_${P} = 1
 
 DIR_${P} = ${WORK}/readline-${PV}
@@ -29,12 +29,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--prefix=/usr \
 		&& \
-		$(MAKE)
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	rm -f $(PKDIR)/usr/share/info/dir
 	touch $@
 
@@ -49,9 +49,7 @@ RDEPENDS_${P} += libncurses5 libc6
 FILES_${P} = /usr/lib/*.so*
 define postinst_${P}
 #!/bin/sh
-if [ x"$$D" = "x" ]; then
-	if [ -x /sbin/ldconfig ]; then /sbin/ldconfig ; fi
-fi
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 
 call[[ ipkbox ]]

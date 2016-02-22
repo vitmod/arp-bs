@@ -5,7 +5,7 @@ package[[ target_udev_rules
 
 BDEPENDS_${P} = $(target_filesystem)
 
-PV_${P} = 0.3
+PV_${P} = 0.4
 PR_${P} = 1
 
 call[[ base ]]
@@ -14,6 +14,7 @@ rule[[
   pdircreate:${PN}-${PV}
   install:-d:$(PKDIR)/etc/udev/rules.d
   install_file:$(PKDIR)/etc/udev/rules.d/:file://60-dvb-ca.rules
+  install_file:$(PKDIR)/etc/udev/rules.d/:file://65-event.rules
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})

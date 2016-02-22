@@ -6,7 +6,7 @@ package[[ target_base_files
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = 0.2
-PR_${P} = 2
+PR_${P} = 3
 PACKAGE_ARCH_${P} = $(box_arch)
 
 DESCRIPTION_${P} = Miscellaneous files for the base system.
@@ -16,8 +16,6 @@ call[[ base ]]
 # TODO:
 # /etc/nsswitch.conf
 # /etc/host.conf
-# +/var/lock
-# +/var/tmp
 # -/etc/profile.d/empty
 # +/etc/motd
 # +/var/run
@@ -28,9 +26,7 @@ call[[ base ]]
 # +/tmp
 # -/etc/skel/.bashrc
 # +/etc/hostname
-# +/var/log
 # -/etc/skel/.profile
-# +/etc/profile
 # -/etc/default/usbd
 # +/etc/filesystems
 # +/etc/mtab
@@ -44,34 +40,25 @@ rule[[
   install:-d:$(PKDIR)/proc
   install:-d:$(PKDIR)/sys
   install:-d:$(PKDIR)/tmp
-  install:-d:$(PKDIR)/var/tmp
   install:-d:$(PKDIR)/var/run
   install:-d:$(PKDIR)/var/log
+  install:-d:$(PKDIR)/var/lock
+  install:-d:$(PKDIR)/var/lib
   install:-d:$(PKDIR)/var/cache
+  install:-d:$(PKDIR)/var/lib/urandom
   install:-d:$(PKDIR)/etc
+  install:-d:$(PKDIR)/mnt
+  install:-d:$(PKDIR)/media/hdd
+  install:-d:$(PKDIR)/media/dvd
+  install:-d:$(PKDIR)/media/net
   install:-d:$(PKDIR)/root
+  install:-d:$(PKDIR)/bin
   install:-d:$(PKDIR)/dev
-  install:-d:$(PKDIR)/dev.static
   install_file:$(PKDIR)/etc/motd:file://motd
   install_file:$(PKDIR)/etc/fstab:file://fstab
-#  nothing:file://../root/etc/image-version
-#  nothing:file://../root/etc/network/interfaces
-#  nothing:file://../root/bin/autologin
-#  nothing:file://../root/bin/fw_*
-#  nothing:file://../root/bin/setspark.sh
-#  nothing:file://../root/bin/vdstandby
-#  nothing:file://../root/etc/vdstandby.cfg
-#  nothing:file://../root/sbin/flash_*
-#  nothing:file://../root/sbin/nand*
-#  nothing:file://../root/etc/inetd.conf
+  install_bin:$(PKDIR)/bin/vdstandby:file://vdstandby
+  install_file:$(PKDIR)/etc/vdstandby.cfg:file://vdstandby.cfg
   install_file:$(PKDIR)/etc/profile:file://profile
-#  nothing:file://../root/etc/resolv.conf
-#  nothing:file://../root/etc/tuxbox/satellites.xml
-#  nothing:file://../root/etc/tuxbox/cables.xml
-#  nothing:file://../root/etc/tuxbox/terrestrial.xml
-#  nothing:file://../root/etc/tuxbox/timezone.xml
-#  nothing:file://../root/etc/init.d/udhcpc
-#  nothing:file://../root/usr/share/udhcpc/default.script
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
@@ -87,7 +74,11 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	ln -sf /proc/mounts $(PKDIR)/etc/mtab
 	echo "$(TARGET)" > $(PKDIR)/etc/hostname
 	echo "576i50" > $(PKDIR)/etc/videomode
-
+ifdef CONFIG_BUILD_ENIGMA2
+	echo "enigma" > $(PKDIR)/etc/.gui
+else
+	echo "neutrino" > $(PKDIR)/etc/.gui
+endif
 	touch $@
 
 call[[ ipkbox ]]

@@ -19,7 +19,7 @@ endif
 function[[ target_linux_kernel_in
 
 PV_${P} = $(KERNEL_VERSION)
-PR_${P} = 8
+PR_${P} = 9
 
 DIR_${P} = $(WORK_target_linux_kernel)/linux-$(KERNEL_MAJOR)
 PACKAGE_ARCH_${P} = $(box_arch)
@@ -50,44 +50,34 @@ ${P}_patches = \
 	linux-sh4-strcpy_stm24_$(KERNEL_LABEL).patch \
 	linux-squashfs-lzma_stm24_$(KERNEL_LABEL).patch \
 	linux-sh4-ext23_as_ext4_stm24_$(KERNEL_LABEL).patch \
-	bpa2_procfs_stm24_$(KERNEL_LABEL).patch
-
-ifeq ($(CONFIG_KERNEL_0207),y)
-${P}_patches += \
-	xchg_fix_stm24_$(KERNEL_LABEL).patch) \
-	mm_cache_update_stm24_$(KERNEL_LABEL).patch) \
-	linux-sh4-ehci_stm24_$(KERNEL_LABEL).patch
-endif
-
-${P}_patches += \
+	bpa2_procfs_stm24_$(KERNEL_LABEL).patch \
 	linux-ftdi_sio.c_stm24_$(KERNEL_LABEL).patch \
-	linux-sh4-lzma-fix_stm24_$(KERNEL_LABEL).patch
+	linux-sh4-lzma-fix_stm24_$(KERNEL_LABEL).patch \
+	stm-gpio-fix-build-CONFIG_BUG.patch \
+	perf-warning-fix.diff
 
-ifeq ($(CONFIG_KERNEL_0209)$(CONFIG_KERNEL_0210)$(CONFIG_KERNEL_0211),y)
+ifeq ($(CONFIG_KERNEL_0211),y)
 ${P}_patches += linux-tune_stm24.patch
 endif
 
-ifeq ($(CONFIG_KERNEL_0212),y)
-${P}_patches += linux-tune_stm24_0212.patch
+ifdef CONFIG_GIT_KERNEL_ARP
+else
+ifeq ($(CONFIG_KERNEL_0215),y)
+${P}_patches += fix_localversion_stm24_$(KERNEL_LABEL).diff
+endif
 endif
 
-ifeq ($(CONFIG_KERNEL_0209)$(CONFIG_KERNEL_0210)$(CONFIG_KERNEL_0211)$(CONFIG_KERNEL_0212),y)
-${P}_patches += linux-sh4-mmap_stm24.patch
+ifeq ($(CONFIG_KERNEL_0215)$(CONFIG_KERNEL_0217),y)
+${P}_patches += \
+	linux-tune_stm24_$(KERNEL_LABEL).patch \
+	linux-sh4-ratelimit-bug_stm24_$(KERNEL_LABEL).patch
 endif
 
-ifeq ($(CONFIG_KERNEL_0209),y)
-${P}_patches += linux-sh4-dwmac_stm24_0209.patch
-endif
 
-ifeq ($(CONFIG_KERNEL_0207),y)
-${P}_patches += linux-sh4-sti7100_missing_clk_alias_stm24_$(KERNEL_LABEL).patch
-endif
-
-ifeq ($(CONFIG_KERNEL_0209)$(CONFIG_KERNEL_0211)$(CONFIG_KERNEL_0212),y)
-${P}_patches += linux-sh4-directfb_stm24_$(KERNEL_LABEL).patch
-endif
-
-${P}_patches += patch_swap_notify_core_support.diff
+${P}_patches += \
+	linux-sh4-mmap_stm24.patch \
+	linux-sh4-directfb_stm24_$(KERNEL_LABEL).patch \
+	patch_swap_notify_core_support.diff
 
 
 # TARGET specific patches
@@ -98,58 +88,67 @@ ifdef CONFIG_HL101
   ${P}_patches += linux-usbwait123_stm24.patch
   ${P}_patches += linux-sh4-stmmac_stm24_$(KERNEL_LABEL).patch
   ${P}_patches += linux-sh4-i2c-st40-pio_stm24_$(KERNEL_LABEL).patch
-ifeq ($(CONFIG_KERNEL_0207)$(CONFIG_KERNEL_0209)$(CONFIG_KERNEL_0210)$(CONFIG_KERNEL_0211),y)
-  ${P}_patches += linux-sh4-hl101_i2c_st40_stm24_$(KERNEL_LABEL).patch)
-endif
+  ${P}_patches += linux-sh4-hl101_i2c_st40_stm24_$(KERNEL_LABEL).patch
 endif #CONFIG_HL101
 
 ifdef CONFIG_SPARK
   ${P}_patches += linux-sh4-stmmac_stm24_$(KERNEL_LABEL).patch
   ${P}_patches += linux-sh4-lmb_stm24_$(KERNEL_LABEL).patch
   ${P}_patches += linux-sh4-spark_setup_stm24_$(KERNEL_LABEL).patch
+  ${P}_patches += linux-sh4-linux_yaffs2.patch
   ${P}_patches += bpa2-ignore-bigphysarea-kernel-parameter.patch
-ifeq ($(CONFIG_KERNEL_0207),y)
-  ${P}_patches += linux-sh4-i2c-stm-downgrade_stm24_$(KERNEL_LABEL).patch
-endif
-ifeq ($(CONFIG_KERNEL_0209),y)
-  ${P}_patches += linux-sh4-linux_yaffs2_stm24_0209.patch
-endif
-ifeq ($(CONFIG_KERNEL_0207)$(CONFIG_KERNEL_0209),y)
-  ${P}_patches += linux-sh4-lirc_stm.patch
-endif
-ifeq ($(CONFIG_KERNEL_0210)$(CONFIG_KERNEL_0211)$(CONFIG_KERNEL_0212),y)
+  ${P}_patches += af901x-NXP-TDA18218.patch
+  ${P}_patches += dvb-as102.patch
   ${P}_patches += linux-sh4-lirc_stm_stm24_$(KERNEL_LABEL).patch
-endif
-ifeq ($(CONFIG_KERNEL_0211),y)
   ${P}_patches += linux-sh4-fix-crash-usb-reboot_stm24_0211.diff
-endif
 endif #CONFIG_SPARK
 
 ifdef CONFIG_SPARK7162
   ${P}_patches += linux-sh4-stmmac_stm24_$(KERNEL_LABEL).patch
+  ${P}_patches += linux-sh4-linux_yaffs2.patch
   ${P}_patches += bpa2-ignore-bigphysarea-kernel-parameter.patch
   ${P}_patches += linux-sh4-lmb_stm24_$(KERNEL_LABEL).patch
   ${P}_patches += linux-sh4-spark7162_setup_stm24_$(KERNEL_LABEL).patch
-ifeq ($(CONFIG_KERNEL_0211),y)
   ${P}_patches += linux-sh4-fix-crash-usb-reboot_stm24_0211.diff
-endif
 endif #CONFIG_SPARK7162
 
 #############################################################################
 # end patches
+
+ifdef CONFIG_DEBUG_ARP
+DEBUG_STR=.debug
+else
+DEBUG_STR=
+endif
 
 CONFIG_${P} = linux-sh4-$(KERNEL_UPSTREAM)-$(KERNEL_LABEL)_$(TARGET).config$(DEBUG_STR)
 
 DEPENDS_${P} += $(addprefix ${SDIR}/,$(${P}_patches) ${CONFIG})
 
 rule[[
+ifdef CONFIG_GIT_KERNEL_ARP
+ifdef CONFIG_KERNEL_0211
+  git://git.stlinux.com/stm/linux-sh4-2.6.32.y.git;b=stmicro;r=3bce06ff873fb5098c8cd21f1d0e8d62c00a4903
+endif
+ifdef CONFIG_KERNEL_0215
+  git://git.stlinux.com/stm/linux-sh4-2.6.32.y.git;b=stmicro;r=5384bd391266210e72b2ca34590bd9f543cdb5a3
+endif
+ifdef CONFIG_KERNEL_0217
+  git://git.stlinux.com/stm/linux-sh4-2.6.32.y.git;b=stmicro;r=b43f8252e9f72e5b205c8d622db3ac97736351fc
+endif
+else
   dirextract:local://$(archivedir)/$(STLINUX)-host-kernel-source-sh4-$(KERNEL_VERSION)-$(KERNEL_RELEASE).src.rpm
   extract:localwork://${DIR}/linux-$(KERNEL_MAJOR).tar.bz2
 # don't forget to check on version update, but usually .src.rpm has these 2 patches
   patch:localwork://${DIR}/linux-$(KERNEL_UPSTREAM).patch.bz2
   patch:localwork://${DIR}/linux-$(KERNEL_UPSTREAM)_$(KERNEL_STM)_sh4_$(KERNEL_LABEL).patch.bz2
 # TODO: add patches
+endif
 ]]rule
+
+ifdef CONFIG_GIT_KERNEL_ARP
+call[[ git ]]
+endif
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 	$(PREPARE_${P})
@@ -163,15 +162,17 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 	touch $@
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
-	cd $(DIR_${P}) && $(MAKE) ${MAKE_FLAGS} uImage modules
-#	cd $(DIR_${P})/tools/perf && $(MAKE) ${MAKE_FLAGS} $(MAKE_ARGS) all
+	cd $(DIR_${P}) && $(run_make) ${MAKE_FLAGS} uImage modules
+ifdef CONFIG_DEBUG_ARP
+	cd $(DIR_${P})/tools/perf && $(run_make) ${MAKE_FLAGS} $(MAKE_ARGS) all
+endif
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
 	install -d $(PKDIR)/boot
 	cp $(DIR_${P})/arch/sh/boot/uImage $(PKDIR)/boot/
-	cd $(DIR_${P}) && $(MAKE) ${MAKE_FLAGS} INSTALL_MOD_PATH=$(PKDIR) modules_install
+	cd $(DIR_${P}) && $(run_make) ${MAKE_FLAGS} INSTALL_MOD_PATH=$(PKDIR) modules_install
 
 # provide this dir to build external modules (target_driver)
 #	rm -rf $(PKDIR)/lib/modules/$(KERNEL_VERSION)/build

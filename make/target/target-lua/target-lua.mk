@@ -3,7 +3,7 @@
 #
 package[[ target_lua
 
-BDEPENDS_${P} = $(target_glibc) $(target_ncurses)
+BDEPENDS_${P} = $(target_glibc) $(target_ncurses) $(target_curl)
 
 PV_${P} = 5.2.3
 PR_${P} = 1
@@ -34,12 +34,12 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		$(BUILDENV) \
-		$(MAKE) $(MAKE_ARGS) linux
+		$(run_make) $(MAKE_ARGS) BUILDMODE=dynamic PKG_VERSION=5.2.3 AR="$(target)-ar rcu" linux
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install INSTALL_TOP=$(PKDIR)/usr
+	cd $(DIR_${P}) && $(run_make) install INSTALL_TOP=$(PKDIR)/usr
 	touch $@
 
 call[[ ipk ]]

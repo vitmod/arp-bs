@@ -5,7 +5,7 @@ package[[ target_sqlite
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 3080403
+PV_${P} = 3080600
 PR_${P} = 1
 
 DIR_${P} = ${WORK}/${PN}-autoconf-${PV}
@@ -28,12 +28,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--prefix=/usr \
 		&& \
-		make
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
@@ -41,7 +41,11 @@ call[[ ipk ]]
 NAME_${P} = libsqlite3
 DESCRIPTION_${P} = Embeddable SQL database engine
 RDEPENDS_${P} = libc6
-FILES_sqlite = /usr/lib/*.so*
+define postinst_${P}
+#!/bin/sh
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
+endef
+FILES_sqlite = /usr/lib/*.so.*
 
 call[[ ipkbox ]]
 

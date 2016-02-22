@@ -3,7 +3,7 @@
 #
 package[[ target_python_pylimaging
 
-BDEPENDS_${P} = $(target_python_setuptools)
+BDEPENDS_${P} = $(target_python_setuptools) $(target_libjpeg_turbo)
 
 PV_${P} = 1.1.7
 PR_${P} = 1
@@ -36,7 +36,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 
 
 DESCRIPTION_${P} = Python Imaging Library
-RDEPENDS_${P} = libz1 libfreetype6 python_core libc6 python_lang libjpeg8 python_stringold
+RDEPENDS_${P} = libz1 libfreetype6 python_core libc6 python_lang libjpeg_turbo python_stringold
 FILES_${P} =   $(PYTHON_DIR)/site-packages /usr/bin/*
 
 call[[ ipkbox ]]

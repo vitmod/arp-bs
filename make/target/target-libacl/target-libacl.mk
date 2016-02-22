@@ -24,12 +24,10 @@ RDEPENDS_acl = libacl libc6
 FILES_acl = /usr/bin
 
 RDEPENDS_libacl = libc6
-FILES_libacl = /usr/lib
+FILES_libacl = /usr/lib/libacl.so.*
 define postinst_libacl
 #!/bin/sh
-if [ x"$$D" = "x" ]; then
-	if [ -x /sbin/ldconfig ]; then /sbin/ldconfig ; fi
-fi
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 
 call[[ ipkbox ]]

@@ -24,18 +24,18 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		mv Makefile-libbz2_so Makefile && \
-		$(MAKE) all CC=$(target)-gcc
+		$(run_make) all CC=$(target)-gcc
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install PREFIX=$(PKDIR)/usr
+	cd $(DIR_${P}) && $(run_make) install PREFIX=$(PKDIR)/usr
 	touch $@
 
 call[[ ipk ]]
 
 DESCRIPTION_${P} =  high-quality data compressor
-FILES_${P} = /usr/bin/* /usr/lib/*
+FILES_${P} = /usr/bin/* /usr/lib/*.so.*
 
 call[[ ipkbox ]]
 

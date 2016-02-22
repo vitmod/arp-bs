@@ -1,0 +1,310 @@
+--- a/glcddrivers/ax206dpf.c
++++ b/glcddrivers/ax206dpf.c
+@@ -43,7 +43,7 @@
+ #include <algorithm>
+ #include <pthread.h>
+ #include <time.h>
+-#include <usb.h>
++#include <libusb.h>
+ 
+ #include "common.h"
+ #include "config.h"
+@@ -177,8 +177,8 @@ int cDriverAX206DPF::Init(void)
+ bool cDriverAX206DPF::RescanUSB()
+ {
+     bool ret = false;
+-    usb_find_busses();
+-    if (usb_find_devices() > 0)
++    libusb_device **list;
++    if (libusb_get_device_list(NULL, &list) > 0)
+     {
+         unsigned int a = 0, b = 0;
+         for (unsigned int i = 0; i < numdisplays; i++)
+@@ -192,6 +192,8 @@ bool cDriverAX206DPF::RescanUSB()
+             if (dh[i]->attached) b |= 0x01 << i;
+         }
+         ret = a != b;
++        
++        libusb_free_device_list(list, 1);
+     }
+     return ret;
+ }
+@@ -215,12 +217,9 @@ int cDriverAX206DPF::InitSingleDisplay(unsigned int di)
+         return 0;
+     }
+     dh[di]->attached = true;
+-    struct usb_device *dev = usb_device(dh[di]->dpfh->dev.udev);
+-    char *s1 = dev->bus->dirname;
+-    char *s2 = dev->filename;
+-    if (strlen(s1) > 3) s1 = (char *) "???";
+-    if (strlen(s2) > 3) s2 = (char *) "???";
+-    sprintf(dh[di]->address, "%s:%s", s1, s2);
++    struct libusb_device *dev = libusb_get_device(dh[di]->dpfh->dev.udev);
++
++    sprintf(dh[di]->address, "%03u:%03u", libusb_get_bus_number(dev), libusb_get_device_address(dev));
+     
+     // See, if we have to rotate the display
+     dh[di]->isPortrait = dh[di]->dpfh->width < dh[di]->dpfh->height;
+@@ -674,7 +673,7 @@ int dpf_open(const char *dev, DPFHANDLE *h)
+ 	int error = 0;
+ 	DPFContext *dpf;
+ 	int i;
+-	usb_dev_handle *u;
++	libusb_device_handle *u;
+ 
+ 	//int fd;
+ 
+@@ -722,8 +721,8 @@ void dpf_close(DPFContext *h)
+ 	//		close(h->dev.fd);
+ 	//		break;
+ 	//	case MODE_USB:
+-			usb_release_interface(h->dev.udev, 0);
+-			usb_close(h->dev.udev);
++			libusb_release_interface(h->dev.udev, 0);
++			libusb_close(h->dev.udev);
+ 	//		break;
+ 	//}
+ 	free(h);
+@@ -841,53 +840,62 @@ int handle_error(const char *txt)
+ 	return -1;
+ }
+ 
+-void usb_flush(usb_dev_handle *dev)
++void usb_flush(libusb_device_handle *dev)
+ {
+-	char buf[20];
+-	usb_bulk_read(dev, ENDPT_IN, buf, 3, 1000);
++	unsigned char buf[20];
++	int transferred;
++	libusb_bulk_transfer(dev, ENDPT_IN, buf, 3, &transferred, 1000);
+ }
+ 
+-int check_known_device(struct usb_device *d)
++int check_known_device(struct libusb_device *d)
+ {
+ 	struct known_device *dev = g_known_devices;
++	libusb_device_descriptor desc;
++	int r = libusb_get_device_descriptor(d, &desc);
++	if (r < 0)
++		return 0;
+ 
+ 	while (dev->desc) {
+-		if ((d->descriptor.idVendor == dev->vid) &&
+-			(d->descriptor.idProduct == dev->pid)) { 
++		if ((desc.idVendor == dev->vid) &&
++			(desc.idProduct == dev->pid)) { 
+ 				//fprintf(stderr, "Found %s at %s:%s\n", dev->desc, d->bus->dirname, d->filename);
+ 				return 1;
+ 		}
+ 		dev++;
+ 	}
++	
+ 	return 0;
+ }
+ 
+-static struct usb_device *find_dev(int index)
++static struct libusb_device *find_dev(int index)
+ {
+-	struct usb_bus *b;
+-	struct usb_device *d;
++	struct libusb_device **list;
++	struct libusb_device *found = NULL;
+ 	int enumeration = 0;
+ 
+-	b = usb_get_busses();
++	ssize_t cnt = libusb_get_device_list(NULL, &list);
+ 
+-	while (b) {
+-		d = b->devices;
+-		while (d) {
+-			if (check_known_device(d)) {
+-				if (enumeration == index) return d;
+-				else enumeration++;
++	for (int i = 0; i < cnt; i++) {
++		struct libusb_device *d = list[i];
++		if (check_known_device(d)) {
++			if (enumeration == index) {
++				found = d;
++				break;
+ 			}
++			else enumeration++;
++		}
+ 
+ #ifdef HAVE_DEBUG
+-			printf("%04x %04x\n",
+-				   d->descriptor.idVendor,
+-				   d->descriptor.idProduct);
++		printf("%04x %04x\n",
++			   d->descriptor.idVendor,
++			   d->descriptor.idProduct);
+ #endif
+-			d = d->next;
+-		}
+-		b = b->next;
+ 	}
+-	return NULL;
++	
++	if (cnt > 0)
++		libusb_free_device_list(list, 0);
++	
++	return found;
+ }
+ 
+ unsigned char g_buf[] = {
+@@ -905,12 +913,13 @@ unsigned char g_buf[] = {
+ 	0x00, 0x00, 0x00, 0x00,
+ };
+ 
+-int emulate_scsi(usb_dev_handle *dev, unsigned char *cmd, int cmdlen, char out,
++int emulate_scsi(libusb_device_handle *dev, unsigned char *cmd, int cmdlen, char out,
+ 	unsigned char *data, unsigned long block_len)
+ {
+ 	int len;
+ 	int ret;
+ 	static unsigned char ansbuf[13]; // Do not change size.
++	int transferred, received;
+ 
+ 	g_buf[14] = cmdlen;
+ 	memcpy(&g_buf[15], cmd, cmdlen);
+@@ -920,21 +929,21 @@ int emulate_scsi(usb_dev_handle *dev, unsigned char *cmd, int cmdlen, char out,
+ 	g_buf[10] = block_len >> 16;
+ 	g_buf[11] = block_len >> 24;
+ 
+-	ret = usb_bulk_write(dev, ENDPT_OUT, (char*)g_buf, sizeof(g_buf), 1000);
++	ret = libusb_bulk_transfer(dev, ENDPT_OUT, g_buf, sizeof(g_buf), &transferred, 1000);
+ 	if (ret < 0) return ret;
+ 
+ 	if (out == DIR_OUT) {
+ 		if (data) {
+-			ret = usb_bulk_write(dev, ENDPT_OUT, (char* )data,
+-					block_len, 3000);
+-			if (ret != (int) block_len) {
++			ret = libusb_bulk_transfer(dev, ENDPT_OUT, data,
++					block_len, &transferred, 3000);
++			if (transferred != (int) block_len) {
+ 				perror("bulk write");
+ 				return ret;
+ 			}
+ 		}
+ 	} else if (data) {
+-		ret = usb_bulk_read(dev, ENDPT_IN, (char *) data, block_len, 4000);
+-		if (ret != (int) block_len) {
++		ret = libusb_bulk_transfer(dev, ENDPT_IN, data, block_len, &received, 4000);
++		if (received != (int) block_len) {
+ 			perror("bulk data read");
+ 		}
+ 	}
+@@ -942,8 +951,8 @@ int emulate_scsi(usb_dev_handle *dev, unsigned char *cmd, int cmdlen, char out,
+ 	len = sizeof(ansbuf);
+ 	int retry = 0;
+ 	do {
+-		ret = usb_bulk_read(dev, ENDPT_IN, (char *) ansbuf, len, 5000);
+-		if (ret != len) {
++		ret = libusb_bulk_transfer(dev, ENDPT_IN, ansbuf, len, &received, 5000);
++		if (received != len) {
+ 			perror("bulk ACK read");
+ 			ret = DEVERR_TIMEOUT;
+ 		}
+@@ -956,14 +965,18 @@ int emulate_scsi(usb_dev_handle *dev, unsigned char *cmd, int cmdlen, char out,
+ 	return ansbuf[12];
+ }
+ 
+-usb_dev_handle *dpf_usb_open(int index)
++libusb_device_handle *dpf_usb_open(int index)
+ {
+-	struct usb_device *d;
+-	usb_dev_handle *usb_dev;
++	int r;
++	struct libusb_device *d;
++	struct libusb_device_handle *usb_dev;
+ 
+-	usb_init();
+-	usb_find_busses();
+-	usb_find_devices();
++	r = libusb_init(NULL);
++	if (r < 0) {
++		handle_error("Could not initialise libusb!");
++		return NULL;
++	}
++	libusb_set_debug(NULL, 3);
+ 
+ 	d = find_dev(index);
+ 	if (!d) {
+@@ -971,12 +984,12 @@ usb_dev_handle *dpf_usb_open(int index)
+ 		return NULL;
+ 	}
+ 
+-	usb_dev = usb_open(d);
++	libusb_open(d, &usb_dev);
+ 	if (usb_dev == NULL) {
+ 		handle_error("Failed to open usb device!");
+ 		return NULL;
+ 	}
+-	usb_claim_interface(usb_dev, 0);
++	libusb_claim_interface(usb_dev, 0);
+ 	return usb_dev;
+ }
+ 
+--- a/glcddrivers/ax206dpf.h
++++ b/glcddrivers/ax206dpf.h
+@@ -131,7 +131,7 @@ public:
+ // START SELECTIVE COPY & PASTE "usbuser.h"
+ // -------------------------------------------------------------------
+ 
+-#include <usb.h>
++#include <libusb.h>
+ 
+ namespace LIBDPF
+ {
+@@ -193,7 +193,7 @@ struct dpf_context {
+ 	unsigned char mode;
+ 	unsigned char flags;
+ 	union {
+-		usb_dev_handle *udev;
++		libusb_device_handle *udev;
+ 		int fd;
+ 	} dev;
+ 	unsigned int width;
+@@ -251,13 +251,13 @@ int dpf_setproperty(DPFHANDLE h, int token, const DPFValue *value);
+ 
+ /* USB raw */
+ 
+-int emulate_scsi(usb_dev_handle *d, unsigned char *cmd, int cmdlen, char out,
++int emulate_scsi(libusb_device_handle *d, unsigned char *cmd, int cmdlen, char out,
+ 	unsigned char *data, unsigned long block_len);
+ 
+ const char *dev_errstr(int err);
+ 
+ // Private stuff:
+-usb_dev_handle *dpf_usb_open(int index);
++libusb_device_handle *dpf_usb_open(int index);
+ int sgdev_open(const char *portname, int *fd);
+ 
+ #ifdef __cplusplus
+
+--- a/glcddrivers/Makefile
++++ b/glcddrivers/Makefile
+@@ -26,18 +26,18 @@ DEFINES += -DHAVE_LIBHID
+ endif
+ 
+ 
+-ifeq ($(shell pkg-config --exists libusb && echo 1), 1)
++ifeq ($(shell pkg-config --exists libusb-1.0 && echo 1), 1)
+     DEFINES += -DHAVE_LIBUSB
+     ifdef HAVE_DRIVER_AX206DPF
+         OBJS += ax206dpf.o
+-        INCLUDES += $(shell pkg-config --cflags libusb)
+-        LIBS += $(shell pkg-config --libs libusb)
++        INCLUDES += $(shell pkg-config --cflags libusb-1.0)
++        LIBS += $(shell pkg-config --libs libusb-1.0)
+         DEFINES += -DHAVE_DRIVER_AX206DPF
+     endif
+     ifdef HAVE_DRIVER_picoLCD_256x64
+         OBJS += picoLCD_256x64.o
+-        INCLUDES += $(shell pkg-config --cflags libusb)
+-        LIBS += $(shell pkg-config --libs libusb)
++        INCLUDES += $(shell pkg-config --cflags libusb-1.0)
++        LIBS += $(shell pkg-config --libs libusb-1.0)
+         DEFINES += -DHAVE_DRIVER_picoLCD_256x64
+     endif
+ endif  

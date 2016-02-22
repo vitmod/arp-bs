@@ -3,7 +3,7 @@
 #
 package[[ target_libdreamdvd
 
-BDEPENDS_${P} = $(target_glibc) $(target_libdvdread) $(target_libdvdnav)
+BDEPENDS_${P} = $(target_glibc) $(target_libdvdread) $(target_libdvdnav) $(target_libdvdcss)
 
 PV_${P} = git
 PR_${P} = 1
@@ -30,20 +30,24 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--prefix=/usr \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
 
 NAME_${P} = libdreamdvd0
 DESCRIPTION_${P} = libdvdnav wrapper for enigma2 based stbs.
-RDEPENDS_${P} = libdvdread4 libdvdnav4 libc6
-FILES_${P} = /usr/lib/*
+RDEPENDS_${P} = libdvdcss2 libdvdread4 libdvdnav4 libc6
+FILES_${P} = /usr/lib/libdreamdvd.so.*
+define postinst_${P}
+#!/bin/sh
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
+endef
 
 call[[ ipkbox ]]
 

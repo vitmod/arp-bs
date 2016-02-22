@@ -19,7 +19,7 @@ ifeq ($(CONFIG_SPARK)$(CONFIG_SPARK7162),y)
 	OpenAR-P_$(KERNEL_RELEASE)_$(TARGET)_$(if $(CONFIG_EPLAYER3),epl3,gst)_py$(PYTHON_VERSION)\
 	_git`git rev-list --count HEAD`_`date +%d-%m-%y`
 endif
-	touch $@
+
 	@echo
 	@echo '==> FINISH'
 	@echo '==> image is in $(prefix)/flash/out'

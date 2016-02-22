@@ -6,7 +6,7 @@ package[[ target_fonts
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = 0.1
-PR_${P} = 3
+PR_${P} = 5
 PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = fonts

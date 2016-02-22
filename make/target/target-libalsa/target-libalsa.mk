@@ -5,7 +5,7 @@ package[[ target_libalsa
 
 BDEPENDS_${P} =
 
-PV_${P} = 1.0.26
+PV_${P} = 1.0.29
 PR_${P} = 1
 
 DIR_${P} = ${WORK}/alsa-lib-${PV}
@@ -39,25 +39,24 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--enable-static=no \
 			--disable-python \
 		&& \
-		make all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
 
+NAME_${P} =libasound2
 DESCRIPTION_${P} = "ALSA library"
 RDEPENDS_${P} = libc6
 define postinst_${P}
 #!/bin/sh
-if [ x"$$D" = "x" ]; then
-	if [ -x /sbin/ldconfig ]; then /sbin/ldconfig ; fi
-fi
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
-FILES_${P} = /usr/lib/libasound* /usr/share/alsa
+FILES_${P} = /usr/lib/*.so.* /usr/share/alsa
 
 call[[ ipkbox ]]
 

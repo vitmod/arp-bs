@@ -6,13 +6,13 @@ package[[ target_libtuxtxt
 BDEPENDS_${P} = $(target_freetype) $(target_zlib) $(target_driver_headers)
 
 PV_${P} = git
-PR_${P} = 1
+PR_${P} = 2
 
 call[[ base ]]
 
 rule[[
-  nothing:git://git.code.sf.net/p/openpli/tuxtxt.git:sub=libtuxtxt
-  patch:file://libtuxtxt-1.0-fix_dbox_headers.diff
+  nothing:git://github.com/OpenPLi/tuxtxt.git:sub=libtuxtxt
+  patch:file://${PN}.diff
 ]]rule
 
 call[[ git ]]
@@ -37,12 +37,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--with-datadir=/usr/share/tuxtxt \
 			--with-fontdir=/usr/share/fonts \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]

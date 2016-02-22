@@ -5,14 +5,14 @@ package[[ target_samba
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 3.6.18
+PV_${P} = 3.6.24
 PR_${P} = 1
 
 call[[ base ]]
 
 rule[[
   extract:http://www.${PN}.org/${PN}/ftp/stable/${PN}-${PV}.tar.gz
-  patch:file://${PN}-${PV}.diff
+  patch:file://${PN}.diff
 ]]rule
 
 CONFIG_FLAGS_${P} = \
@@ -77,12 +77,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix=/usr \
 			$(CONFIG_FLAGS_${P}) \
 		&& \
-		$(MAKE) $(MAKE_OPTS)
+		$(run_make) $(MAKE_OPTS)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P})/source3 && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P})/source3 && $(run_make) install DESTDIR=$(PKDIR)
 
 	$(INSTALL) -d $(PKDIR)/etc/samba && \
 	$(INSTALL) -c -m644 $(DIR_${P})/examples/smb.conf.spark $(PKDIR)/etc/samba/smb.conf && \
@@ -122,7 +122,11 @@ endef
 
 DESCRIPTION_samba_lib = samba_lib
 RDEPENDS_samba = libc6
-FILES_samba_lib = /usr/lib/*.so /usr/lib/*.so.*
+FILES_samba_lib = /usr/lib/*.so.*
+define postinst_samba_lib
+#!/bin/sh
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
+endef
 
 call[[ ipkbox ]]
 

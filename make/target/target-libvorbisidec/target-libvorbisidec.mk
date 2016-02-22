@@ -5,7 +5,7 @@ package[[ target_libvorbisidec
 
 BDEPENDS_${P} = $(target_glibc) $(target_libogg)
 
-PV_${P} = 1.0.2+svn16259
+PV_${P} = 1.0.2+svn18153
 PR_${P} = 1
 
 call[[ base ]]
@@ -21,18 +21,19 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
+		ACLOCAL_FLAGS="-I . -I $(targetprefix)/usr/share/aclocal" \
 		$(BUILDENV) \
 		./autogen.sh \
 			--build=$(build) \
 			--host=$(target) \
 			--prefix=/usr \
 		&& \
-		make
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
@@ -40,7 +41,11 @@ call[[ ipk ]]
 NAME_${P} = libvorbisidec1
 DESCRIPTION_${P} = Fixed-point decoder - Development files tremor is a fixed point implementation of the vorbis codec.  This package contains static libraries for software development.
 RDEPENDS_${P} = libogg0 libc6
-FILES_${P} = /usr/lib/libvorbis*
+define postinst_${P}
+#!/bin/sh
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
+endef
+FILES_${P} = /usr/lib/*.so.*
 
 call[[ ipkbox ]]
 

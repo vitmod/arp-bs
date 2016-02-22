@@ -11,7 +11,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  svn://www.oscam.cc/svn/oscam-mirror/trunk/
+  svn://www.streamboard.tv/svn/oscam/trunk
 ]]rule
 
 call[[ svn ]]
@@ -23,7 +23,7 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		$(BUILDENV) \
-		$(MAKE) CROSS=$(crossprefix)/bin/$(target)-  CONF_DIR=/var/keys
+		$(run_make) CROSS=$(crossprefix)/bin/$(target)-  CONF_DIR=/var/keys
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile

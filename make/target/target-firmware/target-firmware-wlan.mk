@@ -6,7 +6,7 @@ package[[ target_firmware_wlan
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = git
-PR_${P} = 2
+PR_${P} = 3
 PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = linux-firmware
@@ -15,8 +15,7 @@ call[[ base ]]
 
 rule[[
   git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
-  nothing:file://Wireless/RT2870STA/RT2870STA.dat
-  nothing:file://Wireless/RT3070STA/RT3070STA.dat
+  nothing:file://Wireless/*
 ]]rule
 
 call[[ git ]]
@@ -33,9 +32,12 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	$(INSTALL_DIR) $(PKDIR)/lib/firmware/rtlwifi/ && \
 	$(INSTALL_DIR) $(PKDIR)/etc/Wireless/RT2870STA/ && \
 	$(INSTALL_DIR) $(PKDIR)/etc/Wireless/RT3070STA/ && \
-	$(INSTALL_FILE) RT2870STA.dat $(PKDIR)/etc/Wireless/RT2870STA/ && \
+	$(INSTALL_DIR) $(PKDIR)/etc/Wireless/MT7601U/ && \
+	$(INSTALL_FILE) RT2870STA/RT2870STA.dat $(PKDIR)/etc/Wireless/RT2870STA/ && \
+	$(INSTALL_FILE) MT7601U/RT2870STA.dat $(PKDIR)/etc/Wireless/MT7601U/ && \
 	$(INSTALL_FILE) rt2870.bin $(PKDIR)/lib/firmware/ && \
-	$(INSTALL_FILE) RT3070STA.dat $(PKDIR)/etc/Wireless/RT3070STA/ && \
+	$(INSTALL_FILE) mt7601u.bin $(PKDIR)/lib/firmware/ && \
+	$(INSTALL_FILE) RT3070STA/RT3070STA.dat $(PKDIR)/etc/Wireless/RT3070STA/ && \
 	ln -sf /lib/firmware/rt2870.bin $(PKDIR)/lib/firmware/rt3070.bin && \
 	ln -sf /lib/firmware/rt2870.bin $(PKDIR)/lib/firmware/rt5370.bin && \
 	$(INSTALL_FILE) rtlwifi/rtl8188eufw.bin $(PKDIR)/lib/firmware/rtlwifi && \
@@ -48,6 +50,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	touch $@
 
 PACKAGES_${P} = \
+	firmware_mt7601u \
 	firmware_rt2870 \
 	firmware_rt3070 \
 	firmware_rt5370 \
@@ -61,6 +64,10 @@ PACKAGES_${P} = \
 FILES_firmware_rt2870 = \
 	/lib/firmware/rt2870.bin \
 	/etc/Wireless/RT2870STA/RT2870STA.dat
+
+FILES_firmware_mt7601u = \
+	/lib/firmware/mt7601u.bin \
+	/etc/Wireless/MT7601U/RT2870STA.dat
 
 FILES_firmware_rt3070 = \
 	/lib/firmware/rt3070.bin \

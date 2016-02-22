@@ -667,6 +667,7 @@ sub process_download ($)
       my $tmpurl = $url;
       $tmpurl =~ s#git://#$opts{"protocol"}://#  if $opts{"protocol"} ;
       $tmpurl =~ s#ssh://#git\@# if $opts{"protocol"} and $opts{"protocol"} eq "ssh";
+      $tmpurl =~ s#https://#https://# if $opts{"protocol"} and $opts{"protocol"} eq "https";
       $output .= "\tgit clone $tmpurl  $f";
       $output .= " -b " . $opts{"b"} if $opts{"b"};
     }

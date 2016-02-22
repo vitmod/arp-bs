@@ -5,19 +5,20 @@ package[[ target_python
 
 BDEPENDS_${P} = $(target_glibc) $(cross_python) $(target_zlib) $(target_openssl) $(target_libffi) $(target_libbz2) $(target_libreadline) $(target_sqlite)
 
-PR_${P} = 2
+PR_${P} = 4
 
 #FIXME: add /usr/include/python2.7/pyconfig.h
 
 call[[ base ]]
 
 rule[[
-  extract:http://www.${PN}.org/ftp/${PN}/${PV}/Python-${PV}.tar.bz2
+  extract:http://www.${PN}.org/ftp/${PN}/${PV}/Python-${PV}.tgz
   pmove:Python-${PV}:${PN}-${PV}
-  patch:file://${PN}_${PV}.diff
-  patch:file://${PN}_${PV}-ctypes-libffi-fix-configure.diff
-  patch:file://${PN}_${PV}-pgettext.diff
-  patch:file://${PN}-fix-configure-Wformat.diff
+  patch:file://01-use-proper-tools-for-cross-build.patch
+  patch:file://revert_use_of_sysconfigdata.patch
+  patch:file://${PN}.diff
+  patch:file://${PN}-pgettext.diff
+  patch:file://disable-certificate-verification.patch
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
@@ -42,16 +43,9 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--with-pymalloc \
 			--with-signal-module \
 			--with-wctype-functions \
-			HOSTPYTHON=$(crossprefix)/bin/python \
-		&& \
-		$(MAKE) $(MAKE_ARGS) \
-			HOSTPYTHON=$(crossprefix)/bin/python \
-			HOSTPGEN=$(crossprefix)/bin/pgen \
-			CROSS_COMPILE=$(target) \
-			CROSS_COMPILE_TARGET=yes \
 			ac_sys_system=Linux \
 			ac_sys_release=2 \
-			ac_cv_file__dev_ptmx=yes \
+			ac_cv_file__dev_ptmx=no \
 			ac_cv_file__dev_ptc=no \
 			ac_cv_no_strict_aliasing_ok=yes \
 			ac_cv_pthread=yes \
@@ -61,6 +55,13 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			ac_cv_have_lchflags=no \
 			ac_cv_py_format_size_t=yes \
 			ac_cv_broken_sem_getvalue=no \
+			HOSTPYTHON=$(crossprefix)/bin/python \
+		&& \
+		$(MAKE) $(MAKE_ARGS) \
+			HOSTPYTHON=$(crossprefix)/bin/python \
+			HOSTPGEN=$(crossprefix)/bin/pgen \
+			CROSS_COMPILE=$(target) \
+			CROSS_COMPILE_TARGET=yes \
 			MACHDEP=linux2 \
 			HOSTARCH=$(target) \
 			BUILDARCH=$(build) \
@@ -75,7 +76,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
 	cd $(DIR_${P}) && \
-		$(MAKE) $(MAKE_ARGS) \
+		$(run_make) $(MAKE_ARGS) \
 			TARGET_OS=$(target) \
 			HOSTPYTHON=$(crossprefix)/bin/python \
 			CROSS_COMPILE=$(target) \
@@ -96,8 +97,8 @@ PACKAGES_${P} = \
 	python_2to3 \
 	python_lang \
 	python_re \
+	python_argparse \
 	python_audio \
-	python_bsddb \
 	python_codecs \
 	python_compile \
 	python_compiler \
@@ -115,7 +116,6 @@ PACKAGES_${P} = \
 	python_elementtree \
 	python_email \
 	python_fcntl \
-	python_gdbm \
 	python_hotshot \
 	python_html \
 	python_idle \
@@ -243,6 +243,11 @@ FILES_python_re = \
   $(PYTHON_DIR)/sre_constants.* \
   $(PYTHON_DIR)/sre_parse.*
 
+DESCRIPTION_python_argparse = Python Parser for command-line options, arguments and sub-commands
+RDEPENDS_python_argparse = python_core python_lang python_textutils python_re python_codecs
+FILES_python_argparse = \
+  $(PYTHON_DIR)/argparse.*
+
 DESCRIPTION_python_audio = Python Audio Handling
 RDEPENDS_python_audio = python_core libpython$(PYTHON_VERSION) libc6
 FILES_python_audio = \
@@ -255,11 +260,6 @@ FILES_python_audio = \
   $(PYTHON_DIR)/sunaudio.* \
   $(PYTHON_DIR)/toaiff.* \
   $(PYTHON_DIR)/wave.*
-
-DESCRIPTION_python_bsddb = Python Berkeley Database Bindings
-RDEPENDS_python_bsddb = python_core db libc6
-FILES_python_bsddb = \
-  $(PYTHON_DIR)/bsddb
 
 DESCRIPTION_python_codecs = Python Codecs, Encodings & i18n Support
 RDEPENDS_python_codecs = python_core python_lang libpython$(PYTHON_VERSION) libc6
@@ -387,11 +387,6 @@ RDEPENDS_python_fcntl = python_core libpython$(PYTHON_VERSION) libc6
 FILES_python_fcntl = \
   $(PYTHON_DIR)/lib-dynload/fcntl.so
 
-DESCRIPTION_python_gdbm = Python GNU Database Support
-RDEPENDS_python_gdbm = python_core libpython$(PYTHON_VERSION) libgdbm4 libc6
-FILES_python_gdbm = \
-  $(PYTHON_DIR)/lib-dynload/gdbm.so
-
 DESCRIPTION_python_hotshot = Python Hotshot Profile
 RDEPENDS_python_hotshot = python_core libpython$(PYTHON_VERSION) libc6
 FILES_python_hotshot = \
@@ -422,7 +417,7 @@ FILES_python_image = \
   $(PYTHON_DIR)/imghdr.*
 
 DESCRIPTION_python_io =  Python Low-Level I/O
-RDEPENDS_python_io = libpython$(PYTHON_VERSION) libcrypto1 python_math python_core libssl1 python_textutils libc6
+RDEPENDS_python_io = libpython$(PYTHON_VERSION) libcrypto1 python_core python_textutils libssl1 libc6
 FILES_python_io = \
   $(PYTHON_DIR)/lib-dynload/_io.so \
   $(PYTHON_DIR)/lib-dynload/_socket.so \
@@ -490,7 +485,6 @@ FILES_python_misc = \
   $(PYTHON_DIR)/__phello__.foo.* \
   $(PYTHON_DIR)/aifc.* \
   $(PYTHON_DIR)/antigravity.* \
-  $(PYTHON_DIR)/argparse.* \
   $(PYTHON_DIR)/ast.* \
   $(PYTHON_DIR)/asynchat.* \
   $(PYTHON_DIR)/asyncore.* \
@@ -539,12 +533,12 @@ FILES_python_mmap = \
 DESCRIPTION_python_modules = All Python modules
 RDEPENDS_python_modules = python_profile python_threading python_distutils python_curses \
 python_ctypes python_datetime python_core python_io python_compiler python_compression python_re \
-python_ xmlrpc python_email python_image python_compile python_resource python_json python_difflib \
-python_math python_hotshot python_unixadmin python_textutils python_tkinter python_gdbm python_elementtree \
+python_email python_image python_compile python_resource python_json python_difflib \
+python_math python_hotshot python_unixadmin python_textutils python_tkinter python_elementtree \
 python_fcntl python_netclient python_pprint python_netserver python_codecs python_mime python_syslog python_html \
 python_readline python_subprocess python_pydoc python_logging python_mailbox python_xml python_terminal \
 python_sqlite3 python_sqlite3_tests python_unittest python_stringold python_robotparser python_pickle \
-python_multiprocessing python_pkgutil python_2to3 python_debugger python_bsddb python_numbers python_mmap \
+python_multiprocessing python_pkgutil python_2to3 python_debugger python_numbers python_mmap \
 python_smtpd python_shell python_idle python_zlib python_db python_crypt python_tests python_lang python_audio
 FILES_python_modules =
 

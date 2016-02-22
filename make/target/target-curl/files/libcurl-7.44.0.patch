@@ -1,0 +1,32 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -3001,6 +3001,7 @@
+ 
+ AC_CHECK_SIZEOF(size_t)
+ AC_CHECK_SIZEOF(long)
++AC_CHECK_SIZEOF(long long)
+ AC_CHECK_SIZEOF(int)
+ AC_CHECK_SIZEOF(short)
+ CURL_CONFIGURE_LONG
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -141,7 +141,7 @@
+ bin_SCRIPTS = curl-config
+ 
+ SUBDIRS = lib src include
+-DIST_SUBDIRS = $(SUBDIRS) tests packages docs
++DIST_SUBDIRS = $(SUBDIRS) packages
+ 
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = libcurl.pc
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -598,7 +598,7 @@
+ 
+ bin_SCRIPTS = curl-config
+ SUBDIRS = lib src include
+-DIST_SUBDIRS = $(SUBDIRS) tests packages docs
++DIST_SUBDIRS = $(SUBDIRS) packages
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = libcurl.pc
+ LIB_VTLS_CFILES = vtls/openssl.c vtls/gtls.c vtls/vtls.c vtls/nss.c     \

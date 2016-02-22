@@ -25,12 +25,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--prefix=/usr \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
@@ -41,7 +41,7 @@ DESCRIPTION_${P} = The portable SDK for UPnP* Devices (libupnp) provides develop
  Play Device Architecture Specification.
 NAME_${P} = libupnp3
 RDEPENDS_${P} = libc6
-FILES_${P} = /usr/lib/*.so*
+FILES_${P} = /usr/lib/*.so.*
 define postinst_${P}
 #!/bin/sh
 if [ x"$$D" = "x" ]; then

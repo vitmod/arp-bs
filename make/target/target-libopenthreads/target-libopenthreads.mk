@@ -20,8 +20,7 @@ call[[ git ]]
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 	$(PREPARE_${P})
 	cd $(DIR_${P}) && \
-	git clone git://c00lstreamtech.de/cst-public-libraries-openthreads-src.git src; \
-	git clone git://c00lstreamtech.de/cst-public-libraries-openthreads-include.git include;
+		git submodule update --init --recursive
 	touch $@
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
@@ -35,12 +34,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			find . -name cmake_install.cmake -print0 | xargs -0 \
 			sed -i 's@SET(CMAKE_INSTALL_PREFIX "/usr/local")@SET(CMAKE_INSTALL_PREFIX "")@' \
 		&& \
-		make
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)/usr
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)/usr
 
 	touch $@
 

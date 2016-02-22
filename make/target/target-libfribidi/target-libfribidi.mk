@@ -5,7 +5,7 @@ package[[ target_libfribidi
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 0.19.5
+PV_${P} = 0.19.7
 PR_${P} = 1
 
 PN_${P} = fribidi
@@ -29,12 +29,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix=/usr \
 			--enable-memopt \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
@@ -43,7 +43,7 @@ PACKAGES_${P} = libfribidi0 libfribidi_bin
 DESCRIPTION_${P} = Fribidi library for bidirectional text
 
 RDEPENDS_libfribidi0 = libc6
-FILES_libfribidi0 = /usr/lib/*.so*
+FILES_libfribidi0 = /usr/lib/*.so.*
 
 RDEPENDS_libfribidi_bin = libfribidi0 libc6
 FILES_libfribidi_bin = /usr/bin/*

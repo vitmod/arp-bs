@@ -27,12 +27,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--target=$(target) \
 			--prefix=/usr \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
@@ -43,9 +43,7 @@ DESCRIPTION_${P} = libusb-0.1 compatible layer for libusb1, a drop-in replacemen
 RDEPENDS_${P} = libusb-1.0 libc6
 define postinst_${P}
 #!/bin/sh
-if [ x"$$D" = "x" ]; then
-	if [ -x /sbin/ldconfig ]; then /sbin/ldconfig ; fi
-fi
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 FILES_${P} = /usr/lib/libusb-0.1.so.*
 

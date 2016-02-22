@@ -36,12 +36,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--enable-speed \
 			--enable-sso \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
@@ -49,8 +49,8 @@ call[[ ipk ]]
 DESCRIPTION_${P} = Library for interacting with ID3 tags in MP3 files  Library for \
  interacting with ID3 tags in MP3 files.
 NAME_${P} = libmad0
-RDEPENDS_${P} = libz1 libc6
-FILES_${P} = /usr/lib/*.so*
+RDEPENDS_${P} = libc6
+FILES_${P} = /usr/lib/*.so.*
 
 call[[ ipkbox ]]
 

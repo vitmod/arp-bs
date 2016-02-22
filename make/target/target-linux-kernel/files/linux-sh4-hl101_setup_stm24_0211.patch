@@ -1,5 +1,5 @@
---- linux-sh4-2.6.32.59_stm24_0211_orig/arch/sh/boards/mach-mb442/setup.c        2013-03-12 10:36:42.000000000 +0100
-+++ linux-sh4/arch/sh/boards/mach-mb442/setup.c        2013-03-12 15:46:20.531999495 +0100
+--- linux-sh4-2.6.32.59_stm24_0211_orig/arch/sh/boards/mach-mb442/setup.c
++++ linux-sh4/arch/sh/boards/mach-mb442/setup.c
 @@ -22,14 +22,30 @@
  #include <linux/stm/platform.h>
  #include <linux/stm/stx7100.h>
@@ -27,7 +27,7 @@
 + {
 +         .name = "LMI_SYS",
 +         .start = 0,
-+         .size = 0x00F00000,
++         .size = 0x01300000,
 +         .flags = 0,
 +         .aka = LMI_SYS_partalias
 + }
@@ -140,42 +140,61 @@
  			ARRAY_SIZE(mb442_devices));
  }
 
----linux-sh4-2.6.32.59_stm24_0211_orig/drivers/net/phy/phy_device.c.orig	2014-01-06 20:23:25.844490137 +0100
-+++linux-sh4/drivers/net/phy/phy_device.c	2014-01-06 21:43:02.348503919 +0100
-@@ -1098,7 +1098,7 @@
- 		return retval;
- 	}
- 
--	pr_debug("%s: Registered new driver\n", new_driver->name);
-+	pr_info("%s: Registered new driver (0x%08x)\n", new_driver->name, new_driver->phy_id);
- 
- 	return 0;
- }
-
----linux-sh4-2.6.32.59_stm24_0211_orig/drivers/net/stmmac/stmmac_mdio.c.orig	2014-01-06 20:23:25.844490137 +0100
-+++linux-sh4/drivers/net/stmmac/stmmac_mdio.c        2014-01-06 21:49:12.920504988 +0100
-@@ -194,8 +194,13 @@
- 			 * and no PHY number was provided to the MAC,
- 			 * use the one probed here.
- 			 */
--			if ((priv->plat->bus_id == mdio_bus_data->bus_id) &&
--			    (priv->plat->phy_addr == -1))
-+			if ((priv->plat->bus_id == mdio_bus_data->bus_id) && ((priv->plat->phy_addr == -1) ||
-+					(phydev->phy_id == 0x0181b880) || // Davicom DM9161E
-+					(phydev->phy_id == 0x0181b8a0) || // Davicom DM9161A
-+					(phydev->phy_id == 0x00181b80) || // Davicom DM9131
-+					(phydev->phy_id == 0x1c040011) || // STe100p
-+					(phydev->phy_id == 0x00061c50) || // STe101p
-+					(phydev->phy_id == 0x001cc912))) // RTL821x
- 				priv->plat->phy_addr = addr;
- 
- 			act = (priv->plat->bus_id == mdio_bus_data->bus_id) &&
---- linux-sh4-2.6.32.59_stm24_0211_orig/include/linux/stm/stx7100.h	2014-01-06 20:22:20.000000000 +0100
-+++ linux-sh4/include/linux/stm/stx7100_orig.h	2014-01-06 23:08:09.100518654 +0100
-@@ -35,14 +35,11 @@
+*** linux-sh4-2.6.32.59_stm24_0211_orig/drivers/net/phy/phy_device.c
+--- linux-sh4/drivers/net/phy/phy_device.c
+***************
+*** 1104,1110 ****
+  		return retval;
+  	}
+  
+! 	pr_debug("%s: Registered new driver\n", new_driver->name);
+  
+  	return 0;
+  }
+--- 1104,1110 ----
+  		return retval;
+  	}
+  
+! 	pr_info("%s: Registered new driver (0x%08x)\n", new_driver->name, new_driver->phy_id);
+  
+  	return 0;
+  }
+*** linux-sh4-2.6.32.59_stm24_0211_orig/drivers/net/stmmac/stmmac_mdio.c
+--- linux-sh4/drivers/net/stmmac/stmmac_mdio.c
+***************
+*** 194,202 ****
+  			 * and no PHY number was provided to the MAC,
+  			 * use the one probed here.
+  			 */
+! 			if ((priv->plat->bus_id == mdio_bus_data->bus_id) &&
+! 			    (priv->plat->phy_addr == -1))
+! 				priv->plat->phy_addr = addr;
+  
+  			act = (priv->plat->bus_id == mdio_bus_data->bus_id) &&
+  				(priv->plat->phy_addr == addr);
+--- 194,208 ----
+  			 * and no PHY number was provided to the MAC,
+  			 * use the one probed here.
+  			 */
+! 
+! 			 if ((priv->plat->bus_id == mdio_bus_data->bus_id) && ((priv->plat->phy_addr == -1) ||
+! 			 (phydev->phy_id == 0x0181b880) || // Davicom DM9161E
+! 			 (phydev->phy_id == 0x0181b8a0) || // Davicom DM9161A
+! 			 (phydev->phy_id == 0x00181b80) || // Davicom DM9131
+! 			 (phydev->phy_id == 0x1c040011) || // STe100p
+! 			 (phydev->phy_id == 0x00061c50) || // STe101p
+! 			 (phydev->phy_id == 0x001cc912))) // RTL821x
+! 			 priv->plat->phy_addr = addr;
+  
+  			act = (priv->plat->bus_id == mdio_bus_data->bus_id) &&
+  				(priv->plat->phy_addr == addr);
+--- linux-sh4-2.6.32.59_stm24_0211_orig/include/linux/stm/stx7100.h
++++ linux-sh4/include/linux/stm/stx7100_orig.h
+@@ -34,15 +34,11 @@
+ };
  void stx7100_configure_asc(int asc, struct stx7100_asc_config *config);
  
- 
+-
 -struct stx7100_ssc_i2c_config {
 -	unsigned int fastmode:1;
 -};
@@ -188,9 +207,9 @@
  int stx7100_configure_ssc_spi(int ssc, struct stx7100_ssc_spi_config *config);
  
  
-
---- linux-sh4-2.6.32.59_stm24_0211_orig/drivers/stm/gpio.c.orig        2013-03-12 10:36:43.000000000 +0100
-+++ linux-sh4/drivers/stm/gpio.c        2013-03-12 19:59:20.000000000 +0100
+ struct stx7100_lirc_config {
+--- linux-sh4-2.6.32.59_stm24_0211_orig/drivers/stm/gpio.c.orig
++++ linux-sh4/drivers/stm/gpio.c
 @@ -27,13 +27,17 @@
  #include <linux/stm/platform.h>
  #include <linux/stm/pad.h>
@@ -608,24 +627,3 @@
  
  	ret = platform_driver_register(&stm_gpio_driver);
  	if (ret)
-
---- linux-sh4/include/linux/dvb/frontend.h.org        2012-12-26 21:01:29.588293732 +0100
-+++ linux-sh4/include/linux/dvb/frontend.h        2012-12-26 20:37:11.032257712 +0100
-@@ -304,6 +304,9 @@
- 
- #define DTV_ISDBS_TS_ID		42
- 
-+#define DTV_DVBT2_PLP_ID                43
-+#define DTV_DVBS2_MIS_ID                44
-+
- #define DTV_MAX_COMMAND				DTV_ISDBS_TS_ID
- 
- typedef enum fe_pilot {
-@@ -324,6 +327,7 @@
- 	SYS_DVBC_ANNEX_AC,
- 	SYS_DVBC_ANNEX_B,
- 	SYS_DVBT,
-+	SYS_DVBT2,
- 	SYS_DSS,
- 	SYS_DVBS,
- 	SYS_DVBS2,

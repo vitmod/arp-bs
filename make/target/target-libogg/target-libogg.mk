@@ -5,7 +5,7 @@ package[[ target_libogg
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 1.3.1
+PV_${P} = 1.3.2
 PR_${P} = 1
 
 call[[ base ]]
@@ -26,12 +26,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--prefix=/usr \
 		&& \
-		make
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
@@ -39,7 +39,7 @@ call[[ ipk ]]
 NAME_${P} = libogg0
 DESCRIPTION_${P} = libogg is the bitstream and framing library for the Ogg project. \
 It provides functions which are necessary to codec libraries like libvorbis.
-FILES_${P} = /usr/lib/*.so*
+FILES_${P} = /usr/lib/*.so.*
 
 call[[ ipkbox ]]
 

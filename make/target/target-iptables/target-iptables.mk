@@ -15,6 +15,9 @@ ${P}_SRCRPM = $(archivedir)/$(STLINUX)-$(${P})-$(PV_${P}).src.rpm
 
 call[[ base ]]
 call[[ base_rpm ]]
+
+DO_PACKAGE_${P} = chmod 755 $(PKDIR)/etc/init.d/iptables
+
 call[[ rpm ]]
 call[[ ipk ]]
 

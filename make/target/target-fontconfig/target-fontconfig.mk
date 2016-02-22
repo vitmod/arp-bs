@@ -5,7 +5,7 @@ package[[ target_fontconfig
 
 BDEPENDS_${P} = $(target_glibc) $(target_zlib) $(target_libxml2) $(target_freetype) $(target_expat)
 
-PV_${P} = 2.10.2
+PV_${P} = 2.11.1
 PR_${P} = 1
 
 DESCRIPTION_${P} = Generic font configuration library \
@@ -46,12 +46,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--disable-docs \
 			--without-add-fonts \
 		&& \
-		$(MAKE)
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
@@ -61,13 +61,11 @@ PACKAGES_${P} = libfontconfig1 fontconfig_utils
 RDEPENDS_libfontconfig1 = libexpat1 libfreetype6 libc6
 define postinst_libfontconfig1
 #!/bin/sh
-if [ x"$$D" = "x" ]; then
-	if [ -x /sbin/ldconfig ]; then /sbin/ldconfig ; fi
-fi
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 FILES_libfontconfig1 = \
 	/etc/fonts/* \
-	/usr/lib/* \
+	/usr/lib/*.so.* \
 	/usr/share/* \
 	/var/cache/*
 

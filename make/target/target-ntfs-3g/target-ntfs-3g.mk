@@ -5,7 +5,7 @@ package[[ target_ntfs_3g
 
 BDEPENDS_${P} = $(target_glibc) $(target_fuse)
 
-PV_${P} = 2014.2.15
+PV_${P} = 2015.3.14
 PR_${P} = 1
 PN_${P} = ntfs-3g_ntfsprogs
 
@@ -31,12 +31,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--enable-shared \
 			--exec-prefix=/usr \
 		&& \
-		$(MAKE)
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
@@ -70,9 +70,7 @@ FILES_ntfsprogs = \
 RDEPENDS_libntfs_3g85 = libc6
 define postinst_libntfs_3g85
 #!/bin/sh
-if [ x"$$D" = "x" ]; then
-	if [ -x /sbin/ldconfig ]; then /sbin/ldconfig ; fi
-fi
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 FILES_libntfs_3g85 = /usr/lib/libntfs-3g.so.*
 

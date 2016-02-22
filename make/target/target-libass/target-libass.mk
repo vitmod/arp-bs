@@ -5,7 +5,7 @@ package[[ target_libass
 
 BDEPENDS_${P} = $(target_glibc) $(target_freetype) $(target_libfribidi)
 
-PV_${P} = 0.10.2
+PV_${P} = 0.12.3
 PR_${P} = 1
 
 DESCRIPTION_${P} = libass
@@ -13,7 +13,7 @@ DESCRIPTION_${P} = libass
 call[[ base ]]
 
 rule[[
-  extract:http://${PN}.googlecode.com/files/${PN}-${PV}.tar.gz
+  extract:https://github.com/${PN}/${PN}/releases/download/${PV}/${PN}-${PV}.tar.gz
 ]]rule
 
 CONFIG_FLAGS_${P} = \
@@ -33,18 +33,22 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix=/usr \
 			$(CONFIG_FLAGS_${P}) \
 		&& \
-		$(MAKE)
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
 
 RDEPENDS_${P} += libfreetype6 libfribidi0
-FILES_${P} = /usr/lib/*.so*
+FILES_${P} = /usr/lib/*.so.*
+define postinst_${P}
+#!/bin/sh
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
+endef
 
 call[[ ipkbox ]]
 

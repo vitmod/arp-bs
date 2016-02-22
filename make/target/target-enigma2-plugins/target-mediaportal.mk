@@ -3,10 +3,10 @@
 #
 package[[ target_mediaportal
 
-BDEPENDS_${P} = $(target_python) $(target_enigma2)
+BDEPENDS_${P} = $(target_python) $(target_python_mechanize)
 
-PV_${P} = git
-PR_${P} = 2
+PV_${P} = 5.4.0
+PR_${P} = 3
 
 call[[ base ]]
 
@@ -17,7 +17,6 @@ rule[[
 call[[ git ]]
 
 CONFIG_FLAGS_${P} = \
-	--with-libsdl=no \
 	--datadir=/usr/share \
 	--libdir=/usr/lib \
 	--bindir=/usr/bin \
@@ -38,20 +37,23 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix=/usr \
 			$(CONFIG_FLAGS_${P}) \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
 
 NAME_${P} = enigma2-plugin-extensions-mediaportal
 DESCRIPTION_${P} = "Enigma2 MediaPortal"
-RDEPENDS_${P} = python_core python_json python_xml python_html python_misc python_twisted_core python_twisted_web python_compression python_robotparser python_mechanize librtmp1
-FILES_${P} = /usr/lib/enigma2/python/Plugins/Extensions/MediaPortal
+RDEPENDS_${P} = python_core python_json python_pyopenssl python_xml python_html python_misc python_twisted_core python_twisted_web python_compression python_robotparser python_mechanize librtmp1
+ifeq ($(strip $(CONFIG_GSTREAMER)),y)
+RDEPENDS_${P} += gst_plugins_good_flv gst_plugins_bad_fragmented gst_plugins_bad_rtmp
+endif
+FILES_${P} = /usr/lib/enigma2/python/Plugins/Extensions/MediaPortal /usr/lib/enigma2/python/Components/Converter
 
 call[[ ipkbox ]]
 

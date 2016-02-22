@@ -12,6 +12,8 @@ mainmenu "global config"
 	default y
 	bool "Activate ccache ?"
 
+###########################################################################################
+  menu "Global Configuration"
 	choice
 		prompt "Target:"
 		default SPARK
@@ -34,22 +36,23 @@ mainmenu "global config"
 		help
 			Select kernel version
 
-		config KERNEL_0207
-		bool "STM 24 2.6.32.28-0207"
-
-		config KERNEL_0209
-		bool "STM 24 2.6.32.46-0209"
-
-		config KERNEL_0210
-		bool "STM 24 2.6.32.57-0210"
-
 		config KERNEL_0211
 		bool "STM 24 2.6.32.59-0211"
-		
-		config KERNEL_0212
-		bool "STM 24 2.6.32.61-0212"
+
+		config KERNEL_0215
+		bool "STM 24 2.6.32.61-0215"
+
+		config KERNEL_0217
+		bool "STM 24 2.6.32.61-0217"
+		select GIT_KERNEL_ARP
+
 	endchoice
 
+
+		config GIT_KERNEL_ARP
+		bool  "Build kernel from Git STlinux"
+
+###########################################################################
 	choice
 		prompt "toolchain building:"
 		default GLIBC_SCRATCH
@@ -66,13 +69,21 @@ mainmenu "global config"
 
 	choice
 		prompt "Multicom:"
-		default MULTICOM_324
+		default MULTICOM324
 
-		config MULTICOM_324
+		config MULTICOM324
 		bool "Multicom 3.2.4"
 
-		config MULTICOM_406
+		config MULTICOM406
 		bool "Multicom 4.0.6 (testing)"
+	endchoice
+	
+	choice
+		prompt "Player:"
+		default PLAYER191
+
+		config PLAYER191
+		bool "Player 191"
 	endchoice
 
 	choice
@@ -90,37 +101,54 @@ mainmenu "global config"
 	config AVOID_RPM_SPEC
 		bool "don't use rpm spec if possible"
 		default n
-
+	
 	choice
-		prompt "Enigma2 source:"
-		default ENIGMA2_SRC_MASTER
+		prompt "Select GCC"
+		default GCC47
 
-		config ENIGMA2_SRC_MASTER
-		bool "non-public branch master"
+		config GCC47
+		bool "Build gcc 4.7.3"
+		depends on GCC_LIB_FROM_TARGET
 
-		config ENIGMA2_SRC_STAGING
-		bool "non-public branch staging"
+		config GCC48
+		bool "Build gcc 4.8.4"
+		depends on GCC_LIB_FROM_TARGET
+	  endchoice
 
-		config ENIGMA2_SRC_LAST
-		bool "non-public branch last"
+	config MAKE_JLEVEL
+		int "Number of jobs to run simultaneously"
+		default "1"
+		help
+		    Number of jobs to run simultanesouly
+	config TARGET_CFLAGS
+		string "Target Optimizations C Flags"
+		default "-O2"
 
-		config ENIGMA2_SRC_MAX
-		bool "public enigma2 max10  diff0"
+	config TARGET_CXXFLAGS
+		string "Target Optimizations C++ Flags"
+		default "-O2"
 
-	endchoice
+	comment	"Equipment:"
 
-	choice
-		prompt "Neutrino source:"
-		default NEUTRINO_SRC_MASTER
+		config WLAN_SUPPORT
+		bool "Wireless support"
 
-		config NEUTRINO_SRC_MASTER
-		bool "public branch master"
+		config 3G_SUPPORT
+		bool "Support 3G modem"
 
-		config NEUTRINO_SRC_MARTII
-		bool "public branch Martii"
+		config NTFS_3G_SUPPORT
+		bool "Support ntfs filesystem"
 
-	endchoice
+		config IPTABLES_SUPPORT
+		bool "Iptables support"
+		
+		config EXTERNAL_LCD
+		bool  "External USB GraphLCD "
 
+endmenu
+
+############################################################################
+menu "GUI Configuration"
 	choice
 		prompt "Media Framework:"
 		default EPLAYER3
@@ -131,3 +159,144 @@ mainmenu "global config"
 		config EPLAYER3
 		bool "eplayer3"
 	endchoice
+	
+	config GSTREAMER_GIT
+		bool "gstreamer git version"
+		depends on GSTREAMER
+
+	config FEED_SPARK
+		string "General URL for feed server"
+		depends on SPARK
+		default "src/gz spark-all http://gst.sat-universum.de" if GSTREAMER
+		default "src/gz spark-all http://eplay.sat-universum.de" if EPLAYER3
+
+	config FEED_SPARK7162
+		string "General URL for feed server"
+		depends on SPARK7162
+		default "src/gz spark-all http://gst7162.sat-universum.de" if GSTREAMER
+		default "src/gz spark-all http://eplay7162.sat-universum.de" if EPLAYER3
+
+	config FEED_HL101
+		string "General URL for feed server"
+		depends on HL101
+		default "src/gz hl101-all http://gsthl101.sat-universum.de" if GSTREAMER
+		default "src/gz hl101-all http://eplayhl101.sat-universum.de" if EPLAYER3
+
+	config NONFREE_FEED
+		string "URL for nonfree plugins"
+		default "src/gz non-free-feed http://nonfree.sat-universum.de"
+
+	prompt "Apps:"
+	default BUILD_ENIGMA2
+
+	config BUILD_ENIGMA2
+			bool
+			prompt "Enigma2"
+	if BUILD_ENIGMA2
+		choice
+		  prompt "Enigma2 source:"
+		  default ENIGMA2_SRC_MASTER
+
+		  config ENIGMA2_SRC_MASTER 
+		  bool "public branch master"
+		  depends on BUILD_ENIGMA2
+
+		  config ENIGMA2_SRC_STAGING
+		  bool "public branch staging"
+		  depends on BUILD_ENIGMA2
+
+		  config ENIGMA2_TAAPAT
+		  bool "enigma2 taapat on bitbucket"
+		  depends on BUILD_ENIGMA2
+
+		endchoice
+
+	config ENIGMA2_PLUGINS
+	bool "enigma2-plugins-extra"
+	default y
+	depends on BUILD_ENIGMA2
+
+		config ENIGMA2_EXTENSION_ALTSOFTCAM
+		bool "enigma2-plugin-extensions-alternativesoftcammanager"
+
+		config ENIGMA2_EXTENSION_WEBIF
+		bool "enigma2-plugin-extensions-webinterface"
+		depends on ENIGMA2_PLUGINS
+
+		config ENIGMA2_EXTENSION_OPENWEBIF
+		bool "enigma2-plugin-extensions-openwebif"
+
+
+		config ENIGMA2_EXTENSION_MEDIAPORTAL
+		bool "enigma2-plugin-extensions-mediaportal"
+
+		config PYTHON_LIVESTREAMER
+		bool  "Livestreamer"
+		
+		config OSCAM
+		bool  "enigma2-plugin-cams-oscam"
+
+	config ENIGMA2_SKINS
+	bool "enigma2-skins-extra"
+	default y
+	depends on BUILD_ENIGMA2
+
+		config ENIGMA2_SKIN_MEGAMOD
+		bool "enigma2-plugin-skin-megamod"
+		depends on ENIGMA2_SKINS
+
+		config ENIGMA2_SKIN_MAGIC
+		bool "enigma2-plugin-skin-magic"
+
+		config ENIGMA2_SKIN_PLIHD
+		bool "enigma2-plugin-skin-plihd"
+
+		config ENIGMA2_SKIN_METROPOLISHD
+		bool "enigma2-plugin-skin-metropolishd"
+
+	endif
+
+		config SIGC2
+		bool  "experemental  sigc++ 2.0 "
+
+	config BUILD_NEUTRINO
+		bool
+		prompt "Neutrino"
+
+		if BUILD_NEUTRINO
+		      choice
+			prompt "Neutrino source:"
+			default NEUTRINO_SRC_MASTER
+
+			config NEUTRINO_SRC_MASTER
+			bool "public branch master"
+			depends on BUILD_NEUTRINO
+			select SIGC2
+
+			config NEUTRINO_SRC_MAX
+			bool "public branch Max"
+			depends on BUILD_NEUTRINO
+			select SIGC2
+
+		      endchoice
+		endif
+
+	config BUILD_XBMC
+		bool
+		prompt "XBMC"
+
+		if BUILD_XBMC
+			choice
+			prompt "XBMC source:"
+			default XBMC
+
+			config XBMC
+			bool XBMC
+			depends on BUILD_XBMC
+			endchoice
+		endif
+
+	config BUILD_VDR
+		tristate "VDR"
+
+endmenu

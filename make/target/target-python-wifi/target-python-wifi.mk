@@ -5,13 +5,13 @@ package[[ target_python_wifi
 
 BDEPENDS_${P} = $(target_python_setuptools)
 
-PV_${P} = 0.5.0
+PV_${P} = 0.6.1
 PR_${P} = 1
 
 call[[ base ]]
 
 rule[[
-  extract:http://freefr.dl.sourceforge.net/project/pythonwifi.berlios/${PN}-${PV}.tar.bz2
+  extract:https://pypi.python.org/packages/source/p/python-wifi/${PN}-${PV}.tar.bz2
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})

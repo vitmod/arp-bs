@@ -5,7 +5,7 @@ package[[ target_fuse
 
 BDEPENDS_${P} = $(target_glibc) $(target_glib2)
 
-PV_${P} = 2.9.3
+PV_${P} = 2.9.4
 PR_${P} = 1
 
 call[[ base ]]
@@ -28,12 +28,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--target=$(target) \
 			--prefix=/usr \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR) && \
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR) && \
 	ln -sf sh4-linux-fusermount $(PKDIR)/usr/bin/fusermount && \
 	ln -sf sh4-linux-ulockmgr_server $(PKDIR)/usr/bin/ulockmgr_server && \
 	touch $@
@@ -51,18 +51,14 @@ DESCRIPTION_${P} = With FUSE it is possible to implement a fully functional file
 RDEPENDS_libfuse2 = libc6
 define postinst_libfuse2
 #!/bin/sh
-if [ x"$$D" = "x" ]; then
-	if [ -x /sbin/ldconfig ]; then /sbin/ldconfig ; fi
-fi
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 FILES_libfuse2 = /usr/lib/libfuse.so.*
 
 RDEPENDS_libulockmgr1 = libc6
 define postinst_libulockmgr1
 #!/bin/sh
-if [ x"$$D" = "x" ]; then
-	if [ -x /sbin/ldconfig ]; then /sbin/ldconfig ; fi
-fi
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 FILES_libulockmgr1 = /usr/lib/libulockmgr.so.*
 

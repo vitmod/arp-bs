@@ -11,11 +11,12 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  extract:http://www.python.org/ftp/python/${PV}/Python-${PV}.tar.bz2
+  extract:http://www.python.org/ftp/python/${PV}/Python-${PV}.tgz
   pmove:Python-${PV}:${PN}-${PV}
-  patch:file://python_${PV}.diff
-  patch:file://python_${PV}-ctypes-libffi-fix-configure.diff
-  patch:file://python_${PV}-pgettext.diff
+  patch:file://01-use-proper-tools-for-cross-build.patch
+  patch:file://revert_use_of_sysconfigdata.patch
+  patch:file://${PN}.diff
+  patch:file://${PN}-pgettext.diff
 ]]rule
 
 MAKE_FLAGS_${P} = \
@@ -38,7 +39,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 		OPT="$(HOST_CFLAGS)" \
 		./configure \
 			--without-cxx-main \
-			--without-threads \
+			--with-threads \
 		&& \
 		make python Parser/pgen && \
 		mv python ./hostpython && \
@@ -48,7 +49,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix=$(crossprefix) \
 			--sysconfdir=$(crossprefix)/etc \
 			--without-cxx-main \
-			--without-threads \
+			--with-threads \
 		&& \
 		make $(MAKE_FLAGS_${P}) all
 	touch $@

@@ -1,5 +1,5 @@
---- fuse-2.7.2/util/init_script	2007-05-02 16:34:04.000000000 +0200
-+++ fuse-2.7.2/util/init_script-new	2008-01-07 10:51:24.000000000 +0100
+--- fuse-2.9.4/util/init_script	2007-05-02 16:34:04.000000000 +0200
++++ fuse-2.9.4/util/init_script-new	2008-01-07 10:51:24.000000000 +0100
 @@ -1,19 +1,11 @@
  #! /bin/sh
 -### BEGIN INIT INFO
@@ -24,3 +24,33 @@
  MOUNTPOINT=/sys/fs/fuse/connections
  
  # Gracefully exit if the package has been removed.
+
+--- fuse-2.9.4/util/Makefile.am.orig	2015-11-15 03:04:02.479655076 +0100
++++ fuse-2.9.4/util/Makefile.am	2015-11-15 03:04:15.635655391 +0100
+@@ -22,11 +22,6 @@
+ 
+ install-exec-hook:
+ 	-chmod u+s $(DESTDIR)$(bindir)/fusermount
+-	@if test ! -e $(DESTDIR)/dev/fuse; then \
+-		$(MKDIR_P) $(DESTDIR)/dev; \
+-		echo "mknod $(DESTDIR)/dev/fuse -m 0666 c 10 229 || true"; \
+-		mknod $(DESTDIR)/dev/fuse -m 0666 c 10 229 || true; \
+-	fi
+ 
+ EXTRA_DIST = udev.rules init_script
+
+ --- fuse-2.9.4/util/Makefile.in.orig	2015-11-15 11:16:49.250317169 +0100
++++ fuse-2.9.4/util/Makefile.in	2015-11-15 11:17:13.262316723 +0100
+@@ -723,11 +723,6 @@
+ 
+ install-exec-hook:
+ 	-chmod u+s $(DESTDIR)$(bindir)/fusermount
+-	@if test ! -e $(DESTDIR)/dev/fuse; then \
+-		$(MKDIR_P) $(DESTDIR)/dev; \
+-		echo "mknod $(DESTDIR)/dev/fuse -m 0666 c 10 229 || true"; \
+-		mknod $(DESTDIR)/dev/fuse -m 0666 c 10 229 || true; \
+-	fi
+ 
+ install-exec-local:
+ 	$(MKDIR_P) $(DESTDIR)$(MOUNT_FUSE_PATH)
+ 

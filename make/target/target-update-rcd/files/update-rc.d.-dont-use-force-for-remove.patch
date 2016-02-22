@@ -1,0 +1,16 @@
+--- a/update-rc.d	2015-02-08 20:37:23.615007254 +0200
++++ b/update-rc.d	2015-02-08 20:37:33.823057873 +0200
+@@ -154,12 +154,7 @@
+ 	fi
+ else
+ 	if [ -f "$initd/$bn" ]; then
+-		if [ $force -eq 1 ]; then
+-			echo "update-rc.d: $initd/$bn exists during rc.d purge (continuing)" >&2
+-		else
+-			echo "update-rc.d: $initd/$bn exists during rc.d purge (use -f to force)" >&2
+-			exit 1
+-		fi
++		echo "update-rc.d: $initd/$bn exists during rc.d purge (continuing)" >&2
+ 	fi
+ fi
+ 

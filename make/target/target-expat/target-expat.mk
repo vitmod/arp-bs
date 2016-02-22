@@ -29,12 +29,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--prefix=/usr \
 		&& \
-		make
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && make install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
@@ -44,11 +44,9 @@ PACKAGES_${P} = libexpat1 libexpat_bin
 RDEPENDS_libexpat1 = libc6
 define postinst_libexpat1
 #!/bin/sh
-if [ x"$$D" = "x" ]; then
-	if [ -x /sbin/ldconfig ]; then /sbin/ldconfig ; fi
-fi
+$$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
-FILES_libexpat1 = /usr/lib/libexpat.so*
+FILES_libexpat1 = /usr/lib/libexpat.so.*
 
 RDEPENDS_libexpat_bin = libexpat1 libc6
 FILES_libexpat_bin = /usr/bin/xmlwf

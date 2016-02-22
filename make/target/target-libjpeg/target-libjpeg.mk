@@ -5,7 +5,7 @@ package[[ target_libjpeg
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 8d
+PV_${P} = 9a
 PR_${P} = 1
 
 PN_${P} = jpeg
@@ -31,12 +31,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--enable-shared \
 			--enable-static \
 		&& \
-		$(MAKE) all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
@@ -45,7 +45,7 @@ NAME_${P} = libjpeg8
 DESCRIPTION_${P} = libjpeg contains a library for handling the JPEG (JFIF) image format, as \
  well as related programs for accessing the libjpeg functions.
 RDEPENDS_${P} = libc6
-FILES_${P} = /usr/lib/*.so* 
+FILES_${P} = /usr/lib/*.so.* 
 
 call[[ ipkbox ]]
 

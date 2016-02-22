@@ -8,14 +8,17 @@ BDEPENDS_${P} = $(target_kernel_headers) $(target_glibc_headers) $(cross_mpc) $(
 PR_${P} = 1
 
 ifdef CONFIG_GCC48
-PV_${P} = 4.8.2-131
+ ST_PV_${P} = 4.8.4
+ ST_PR_${P} = 139
 else
-PV_${P} = 4.7.3-124
+ ST_PV_${P} = 4.7.3
+ ST_PR_${P} = 124
 endif
+PV_${P} := ${ST_PV}-${ST_PR}
 
 ST_PN_${P} = cross-gcc
 ${P}_SPEC = stm-${ST_PN}.spec
-${P}_SPEC_PATCH = $(${P}_SPEC).$(PV_${P}).diff
+${P}_SPEC_PATCH = $(${P}_SPEC).$(PV_${P}).first.diff
 ${P}_PATCHES = stm-${ST_PN}.$(PV_${P}).diff
 ${P}_SRCRPM = $(archivedir)/$(STLINUX)-${ST_PN}-$(PV_${P}).src.rpm
 
@@ -31,7 +34,6 @@ call[[ ipk ]]
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 	$(rpm_src_install) $(${P}_SRCRPM)
-	cp $(buildprefix)/my-$(${P}).spec $(specsprefix)/$(${P}_SPEC)
 	$(if $(${P}_SPEC_PATCH), cd $(specsprefix) && patch -p1 $(${P}_SPEC) < ${SDIR}/$(${P}_SPEC_PATCH) )
 	$(if $(${P}_PATCHES), cp $(addprefix ${SDIR}/,$(${P}_PATCHES)) $(sourcesprefix) )
 	touch $@

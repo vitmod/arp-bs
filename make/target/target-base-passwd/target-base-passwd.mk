@@ -3,11 +3,11 @@
 #
 package[[ target_base_passwd
 
-BDEPENDS_${P} = $(target_filesystem) $(host_base_passwd) $(target_glibc)
+BDEPENDS_${P} = $(target_filesystem) $(target_glibc)
 
-PR_${P} = 1
+PR_${P} = 2
 
-PV_${P} = 3.5.9-11
+PV_${P} = 3.5.9-13
 ${P}_SPEC = stm-$(${P}).spec
 ${P}_SPEC_PATCH =
 ${P}_PATCHES =

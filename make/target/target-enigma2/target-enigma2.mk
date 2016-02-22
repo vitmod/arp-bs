@@ -1,18 +1,20 @@
 #
 # ENIGMA2
 #
+ifeq ($(strip $(CONFIG_BUILD_ENIGMA2)),y)
 package[[ target_enigma2
 
-BDEPENDS_${P} = $(target_glibc) $(target_gcc_lib) $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libgif) $(target_libpng) $(target_libjpeg) $(target_libxmlccwrap) $(target_libfribidi) $(target_python) $(target_python_twisted) $(target_linux_kernel_headers) $(target_libmmeimage) $(target_libmme_host) $(target_libdreamdvd)
+BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif)
 
 PV_${P} = git
-PR_${P} = 5
-PACKAGE_ARCH_${P} = $(box_arch)
+PR_${P} = 20
+PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
 
 CONFIG_FLAGS_${P} = \
 	--with-libsdl=no \
+	--with-boxtype=none \
 	--datadir=/usr/share \
 	--libdir=/usr/lib \
 	--bindir=/usr/bin \
@@ -20,35 +22,110 @@ CONFIG_FLAGS_${P} = \
 	PY_PATH=$(targetprefix)/usr \
 	$(PLATFORM_CPPFLAGS)
 
+GST_BASE_RDEPS = \
+	gst_plugins_base_alsa \
+	gst_plugins_base_app \
+	gst_plugins_base_audioconvert \
+	gst_plugins_base_audioresample \
+	gst_plugins_base_decodebin \
+	gst_plugins_base_decodebin2 \
+	gst_plugins_base_ogg \
+	gst_plugins_base_playbin \
+	gst_plugins_base_subparse \
+	gst_plugins_base_typefindfunctions \
+	gst_plugins_base_vorbis
+
+GST_GOOD_RDEPS = \
+	gst_plugins_good_apetag \
+	gst_plugins_good_audioparsers \
+	gst_plugins_good_autodetect \
+	gst_plugins_good_avi \
+	gst_plugins_good_flac \
+	gst_plugins_good_flv \
+	gst_plugins_good_icydemux \
+	gst_plugins_good_id3demux \
+	gst_plugins_good_isomp4 \
+	gst_plugins_good_matroska \
+	gst_plugins_good_rtp \
+	gst_plugins_good_rtpmanager \
+	gst_plugins_good_rtsp \
+	gst_plugins_good_souphttpsrc \
+	gst_plugins_good_udp \
+	gst_plugins_good_wavparse
+
+GST_BAD_RDEPS = \
+	gst_plugins_bad_cdxaparse \
+	gst_plugins_bad_mms \
+	gst_plugins_bad_mpegdemux \
+	gst_plugins_bad_rtmp \
+	gst_plugins_bad_vcdsrc \
+	gst_plugins_bad_fragmented \
+	gst_plugins_bad_faad
+
+GST_UGLY_RDEPS = \
+	gst_plugins_ugly_asf \
+	gst_plugins_ugly_cdio \
+	gst_plugins_ugly_dvdsub \
+	gst_plugins_ugly_mad \
+	gst_plugins_ugly_mpegaudioparse \
+	gst_plugins_ugly_mpegstream
+
+PYTHON_RDEPS = \
+	libpython2.7 \
+	python-threading \
+	python-core \
+	python-twisted-core \
+	python-fcntl \
+	python-netclient \
+	python-netserver \
+	python-math \
+	python-codecs \
+	python-pickle \
+	python-twisted-web \
+	python-zlib \
+	python-crypt \
+	python-lang \
+	python-subprocess \
+	python-zopeinterface \
+	python-xml \
+	python-compression \
+	python-shell \
+	python-re
+
 # media framework
 ifdef CONFIG_GSTREAMER
-BDEPENDS_${P} += $(target_gstreamer)
+BDEPENDS_${P} += $(target_gst_plugins_dvbmediasink)
 CONFIG_FLAGS_${P} += --enable-mediafwgstreamer
+RDEPENDS_enigma2 += gst_plugins_dvbmediasink gst_plugins_fluendo_mpegdemux gst_plugin_subsink $(GST_BASE_RDEPS) $(GST_GOOD_RDEPS) $(GST_BAD_RDEPS) $(GST_UGLY_RDEPS)
 endif
 ifdef CONFIG_EPLAYER3
 BDEPENDS_${P} += $(target_libeplayer3)
 CONFIG_FLAGS_${P} += --enable-libeplayer3
+RDEPENDS_enigma2 += libeplayer3
 endif
 
 # box type
 ifdef CONFIG_SPARK
 CONFIG_FLAGS_${P} += --enable-spark
-keymap_${P} = keymap_spark.xml
 endif
 ifdef CONFIG_SPARK7162
 CONFIG_FLAGS_${P} += --enable-spark7162
-keymap_${P} = keymap_spark.xml
 endif
 ifdef CONFIG_HL101
 CONFIG_FLAGS_${P} += --enable-hl101
-keymap_${P} = keymap_hl101.xml
 endif
 
-# ???? lcd
-ifdef CONFIG_EXTERNALLCD
+ifdef CONFIG_EXTERNAL_LCD
+BDEPENDS_${P} += $(target_graphlcd)
 CONFIG_FLAGS_${P} += --with-graphlcd
+RDEPENDS_enigma2 += libgraphlcd
 endif
-
+ifdef CONFIG_SIGC2
+CONFIG_FLAGS_${P} += --enable-sigc2
+RDEPENDS_enigma2 += libsigc-2.4
+else
+RDEPENDS_enigma2 += libsigc-1.2
+endif
 call[[ base ]]
 
 CONFIGS_${P} = CONFIG_ENIGMA2_%
@@ -57,22 +134,19 @@ call[[ config ]]
 rule[[
 
 ifdef CONFIG_ENIGMA2_SRC_MASTER
-  git://github.com:schpuntik/enigma2-pli-arp.git;b=master;protocol=ssh
+  git://github.com/OpenAR-P/enigma2-pli-arp.git;b=master
 endif
 ifdef CONFIG_ENIGMA2_SRC_STAGING
-  git://github.com:schpuntik/enigma2-pli-arp.git;b=staging;protocol=ssh
+  git://github.com/OpenAR-P/enigma2-pli-arp.git;b=staging
 endif
-ifdef CONFIG_ENIGMA2_SRC_LAST
-  git://github.com:schpuntik/enigma2-pli-arp.git;b=last;protocol=ssh
+ifdef CONFIG_ENIGMA2_TAAPAT
+   git://bitbucket.org/Taapat/enigma2-pli-arp-taapat.git;b=master;protocol=https
+   patch:file://enigma2-taapat.patch
 endif
-ifdef CONFIG_ENIGMA2_SRC_MAX
-  git://git.code.sf.net/p/openpli/enigma2.git;b=master
-  patch:file://enigma2-pli-nightly.0.diff
-endif
-
   install:-d:$(PKDIR)/usr/share/enigma2/
-  install_file:$(PKDIR)/usr/share/enigma2/keymap.xml:file://$(keymap_${P})
-  install_file:$(PKDIR)/usr/share/enigma2/keymap_amiko.xml:file://keymap_amiko.xml
+  install_file:$(PKDIR)/usr/share/enigma2/keymap.xml:file://keymap.xml
+  install_file:$(PKDIR)/usr/share/enigma2/keytranslation.xml:file://keytranslation.xml
+  install_file:$(PKDIR)/usr/share/enigma2/skin_display_perl.xml:file://skin_display_perl.xml
 
 ]]rule
 
@@ -92,15 +166,16 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix=/usr \
 			$(CONFIG_FLAGS_${P}) \
 		&& \
-		make all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	cd $(DIR_${P}) && $(INSTALL_${P})
-
+ifndef CONFIG_DEBUG_ARP
 	$(target)-strip $(PKDIR)/usr/bin/enigma2
+endif
 	touch $@
 
 call[[ ipk ]]
@@ -111,9 +186,11 @@ call[[ ipk ]]
 PACKAGES_${P} = \
 	enigma2 \
 	enigma2_meta \
-	enigma2_fonts \
-	font_valis_enigma \
-	font_tuxtxt \
+	font_andale \
+	font_liberationsans_b \
+	font_liberationsans_bl \
+	font_liberationsans_i \
+	font_liberationsans_r \
 	enigma2_plugin_extensions_cutlisteditor \
 	enigma2_plugin_extensions_dvdplayer \
 	enigma2_plugin_extensions_graphmultiepg \
@@ -124,9 +201,9 @@ PACKAGES_${P} = \
 	enigma2_plugin_systemplugins_cablescan \
 	enigma2_plugin_systemplugins_defaultservicesscanner \
 	enigma2_plugin_systemplugins_diseqctester \
+	enigma2_plugin_systemplugins_fastscan \
 	enigma2_plugin_systemplugins_hdmicec \
 	enigma2_plugin_systemplugins_hotplug \
-	enigma2_plugin_systemplugins_keymapmanager \
 	enigma2_plugin_systemplugins_networkwizard \
 	enigma2_plugin_systemplugins_osd3dsetup \
 	enigma2_plugin_systemplugins_osdpositionsetup \
@@ -140,14 +217,14 @@ PACKAGES_${P} = \
 	enigma2_plugin_systemplugins_videoenhancement \
 	enigma2_plugin_systemplugins_videotune \
 	enigma2_plugin_systemplugins_videomode \
-	enigma2_plugin_systemplugins_wirelesslan \
-	enigma2_plugin_skin_magic \
-	enigma2_plugin_skin_megamod
+	enigma2_plugin_systemplugins_wirelesslan
 
-RDEPENDS_enigma2 = libgcc1 libpython2.7 python-threading libtuxtxt0 libgif4 libfreetype6 python-core python-twisted-core libdvbsi++1 python-re enigma2-fonts font-tuxtxt libpng16 font-valis-enigma libstdc++6 libglib libsigc-1.2 python-fcntl python-netclient python-netserver python-codecs libcrypto1 libfribidi0 python-zopeinterface python-xml libtuxtxt32bpp0 python-pickle libxmlccwrap python-shell ethtool libjpeg8 libdreamdvd0 python-twisted-web python-zlib python-crypt python-lang python-subprocess libeplayer3
+PACKAGE_ARCH_enigma2 = $(box_arch)
+RDEPENDS_enigma2 += $(PYTHON_RDEPS) libgcc1 libtuxtxt0 libbz2 libgif4 libfreetype6 libdvbsi++1 font-ae-almateen font-andale font-lcd font-md-khmurabi font-tuxtxt font-nmsbd libpng16 font-liberationsans-b font-liberationsans-bl font-liberationsans-i font-liberationsans-r libstdc++6 libglib libcrypto1 libfribidi0 libtuxtxt32bpp0 libxmlccwrap ethtool libdreamdvd0 enigma2_meta e2fsprogs-e2fsck e2fsprogs-tune2fs libjpeg-turbo
+
 FILES_enigma2 = \
 	/usr/bin \
-	/usr/lib/libopen.* \
+	/usr/lib/libopen.s* \
 	/usr/lib/enigma2/python/Components \
 	/usr/lib/enigma2/python/Plugins/Extensions/__init__.p* \
 	/usr/lib/enigma2/python/Plugins/PLi/__init__.p* \
@@ -158,6 +235,7 @@ FILES_enigma2 = \
 	/usr/lib/enigma2/python/*.p* \
 	/usr/share/enigma2/countries \
 	/usr/share/enigma2/extensions \
+	/usr/share/enigma2/hw_info \
 	/usr/share/enigma2/po \
 	/usr/share/enigma2/rc_models \
 	/usr/share/enigma2/skin_default \
@@ -168,22 +246,20 @@ DESCRIPTION_enigma2_meta = meta files for  enigma2
 RDEPENDS_enigma2_meta = enigma2
 FILES_enigma2_meta = /usr/share/meta
 
-DESCRIPTION_enigma2_fonts = Fonts for  enigma2
-RDEPENDS_enigma2_fonts =
-FILES_enigma2_fonts = \
-	/usr/share/fonts/ae_AlMateen.ttf \
-	/usr/share/fonts/andale.ttf \
-	/usr/share/fonts/lcd.ttf \
-	/usr/share/fonts/md_khmurabi_10.ttf \
-	/usr/share/fonts/nmsbd.ttf
+DESCRIPTION_font_andale = ttf fonts
+FILES_font_andale = /usr/share/fonts/andale.ttf
 
-DESCRIPTION_font_valis_enigma = Fonts for  enigma2
-RDEPENDS_font_valis_enigma =
-FILES_font_valis_enigma = /usr/share/fonts/valis_enigma.ttf
+DESCRIPTION_font_liberationsans_b = ttf fonts
+FILES_font_liberationsans_b = /usr/share/fonts/LiberationSans-Bold.ttf
 
-DESCRIPTION_font_tuxtxt = Fonts for  enigma2
-RDEPENDS_font_tuxtxt =
-FILES_font_tuxtxt = /usr/share/fonts/tuxtxt.ttf
+DESCRIPTION_font_liberationsans_bl = ttf fonts
+FILES_font_liberationsans_bl = /usr/share/fonts/LiberationSans-BoldItalic.ttf
+
+DESCRIPTION_font_liberationsans_i = ttf fonts
+FILES_font_liberationsans_i = /usr/share/fonts/LiberationSans-Italic.ttf
+
+DESCRIPTION_font_liberationsans_r = ttf fonts
+FILES_font_liberationsans_r = /usr/share/fonts/LiberationSans-Regular.ttf
 
 DESCRIPTION_enigma2_plugin_extensions_cutlisteditor = CutListEditor allows you to edit your movies
 RDEPENDS_enigma2_plugin_extensions_cutlisteditor = enigma2
@@ -246,11 +322,6 @@ DESCRIPTION_enigma2_plugin_systemplugins_hotplug = Hotplugging for removeable de
 RDEPENDS_enigma2_plugin_systemplugins_hotplug = enigma2
 FILES_enigma2_plugin_systemplugins_hotplug = /usr/lib/enigma2/python/Plugins/SystemPlugins/Hotplug
 
-DESCRIPTION_enigma2_plugin_systemplugins_keymapmanager = The KeymapManager plugin setup for optional keymaps.
-RDEPENDS_enigma2_plugin_systemplugins_keymapmanager = enigma2
-FILES_enigma2_plugin_systemplugins_keymapmanager = /usr/lib/enigma2/python/Plugins/SystemPlugins/KeymapManager \
-	$(buildprefix)/root/usr/local/share/enigma2/keymap_amiko.xml
-
 DESCRIPTION_enigma2_plugin_systemplugins_networkwizard = With the network wizard you can easily configure your network step by step.
 RDEPENDS_enigma2_plugin_systemplugins_networkwizard = enigma2
 FILES_enigma2_plugin_systemplugins_networkwizard = /usr/lib/enigma2/python/Plugins/SystemPlugins/NetworkWizard
@@ -306,18 +377,22 @@ DESCRIPTION_enigma2_plugin_systemplugins_videomode = The Videomode plugin provid
 RDEPENDS_enigma2_plugin_systemplugins_videomode = enigma2
 FILES_enigma2_plugin_systemplugins_videomode = /usr/lib/enigma2/python/Plugins/SystemPlugins/Videomode
 
+ifdef CONFIG_WLAN_SUPPORT
 DESCRIPTION_enigma2_plugin_systemplugins_wirelesslan = The wireless lan plugin helps you configuring your WLAN network interface.
 RDEPENDS_enigma2_plugin_systemplugins_wirelesslan = enigma2 python_wifi
 FILES_enigma2_plugin_systemplugins_wirelesslan = /usr/lib/enigma2/python/Plugins/SystemPlugins/WirelessLan
+endif
 
-DESCRIPTION_enigma2_plugin_skin_magic = Skin Magic for SD video
-RDEPENDS_enigma2_plugin_skin_magic = enigma2
-FILES_enigma2_plugin_skin_magic = /usr/share/enigma2/Magic
-
-DESCRIPTION_enigma2_plugin_skin_megamod = Skin megaMod  for HD video
-RDEPENDS_enigma2_plugin_skin_megamod = enigma2 enigma2_plugin_systemplugins_libgisclubskin
-FILES_enigma2_plugin_skin_megamod = /usr/share/enigma2/megaMod
+ifdef CONFIG_SPARK7162
+PACKAGE_ARCH_enigma2_plugin_systemplugins_uniontunertype = $(box_arch)
+PACKAGES_${P} += \
+	enigma2_plugin_systemplugins_uniontunertype
+DESCRIPTION_enigma2_plugin_systemplugins_uniontunertype = The Tuner mode switch  DVB-T to DVB-C
+FILES_enigma2_plugin_systemplugins_uniontunertype = /usr/lib/enigma2/python/Plugins/SystemPlugins/UnionTunerType
+endif
 
 call[[ ipkbox ]]
 
 ]]package
+endif
+

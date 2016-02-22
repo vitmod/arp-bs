@@ -1,66 +1,71 @@
 #
 # NEUTRINO
 #
+ifeq ($(strip $(CONFIG_BUILD_NEUTRINO)),y)
 package[[ target_neutrino
 
-BDEPENDS_${P} = $(target_libjpeg) $(target_libstb_hal) $(target_libopenthreads) $(target_lua) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage)
+BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libopenthreads) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc) $(target_lua) $(target_luaexpat) $(target_libstb_hal) $(target_aio_grab) $(target_tuxbox_configs)
 
 PV_${P} = git
-PR_${P} = 1
-PACKAGE_ARCH_${P} = $(box_arch)
+PR_${P} = 7
+PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
 
-
+ifdef CONFIG_DEBUG_ARP
 CONFIG_FLAGS_${P} = \
+		--with-debug
+endif
+
+CONFIG_FLAGS_${P} += \
 		--enable-silent-rules \
 		--enable-freesatepg \
 		--with-boxtype=$(TARGET) \
+		--enable-upnp \
 		--enable-giflib \
 		--with-tremor \
-		--enable-lua \
 		--enable-ffmpegdec \
-		--enable-maintainer-mode \
+		--enable-lua \
 		--with-libdir=/usr/lib \
-		--bindir=/usr/bin \
+		--with-datadir=/usr/share/tuxbox \
+		--with-fontdir=/usr/share/fonts \
 		--with-configdir=/var/tuxbox/config \
-		--with-gamesdir=/var/tuxbox/games \
-		--with-plugindir=/var/plugins \
-		--with-stb-hal-includes=$(workprefix)/target_libstb_hal/libstb-hal-git/include \
-		--with-stb-hal-build=$(workprefix)/target_libstb_hal/libstb-hal-git \
+		--with-gamesdir=/usr/lib/tuxbox/games \
+		--with-plugindir=/usr/lib/tuxbox/plugins \
+		--with-iconsdir=/usr/share/tuxbox/neutrino/icons \
+		--with-localedir=/usr/share/tuxbox/neutrino/locale \
+		--with-private_httpddir=/usr/share/tuxbox/neutrino/httpd \
+		--with-themesdir=/usr/share/tuxbox/neutrino/themes \
+		--with-stb-hal-includes=$(DIR_target_libstb_hal)/include \
+		--with-stb-hal-build=$(DIR_target_libstb_hal) \
 		$(PLATFORM_CPPFLAGS) \
 		CXXFLAGS="$(CXXFLAGS_${P})" \
 		CPPFLAGS="$(CPPFLAGS_${P})"
 
-CXXFLAGS_${P} += -Wall -W -Wshadow -fno-strict-aliasing -rdynamic -DNEW_LIBCURL -DCPU_FREQ -DMARTII -funsigned-char
+CXXFLAGS_${P} += -Wall -W -Wshadow -g0 -pipe -Os -fno-strict-aliasing -D__KERNEL_STRICT_NAMES -DCPU_FREQ
+CXXFLAGS_${P} += -D__STDC_CONSTANT_MACROS
 CPPFLAGS_${P} += -I$(driverdir)/bpamem
 
-ifdef CONFIG_SPARK
+ifeq ($(CONFIG_SPARK)$(CONFIG_SPARK7162),y)
 CPPFLAGS_${P} += -I$(driverdir)/frontcontroller/aotom
 endif
-
-ifdef CONFIG_SPARK7162
-CPPFLAGS_${P} += -I$(driverdir)/frontcontroller/aotom
-endif
-
-#ifeq ($(CONFIG_SPARK)$(CONFIG_SPARK7162),y)
-#BOXTYPE = spark
-#endif
 
 # media framework
 ifdef CONFIG_GSTREAMER
 BDEPENDS_${P} += $(target_gstreamer)
-CONFIG_FLAGS_${P} += --enable-mediafwgstreamer
+CONFIG_FLAGS_${P} += --enable-gstreamer
 endif
 ifdef CONFIG_EPLAYER3
-BDEPENDS_${P} += $(target_libeplayer3)
+BDEPENDS_${P} += $(target_libeplayer3) $(target_ffmpeg)
 CONFIG_FLAGS_${P} += --enable-libeplayer3 LIBEPLAYER3_CPPFLAGS="-I$(appsdir)/misc/tools/libeplayer3/include"
 RDEPENDS_${P} += libeplayer3
 endif
 
 # ???? lcd
-ifdef CONFIG_EXTERNALLCD
-CONFIG_FLAGS_${P} += --with-graphlcd
+ifdef CONFIG_EXTERNAL_LCD
+BDEPENDS_${P} += $(target_graphlcd)
+CONFIG_FLAGS_${P} += --enable-graphlcd
+RDEPENDS_neutrino += libgraphlcd
 endif
 
 call[[ base ]]
@@ -68,12 +73,16 @@ call[[ base ]]
 rule[[
 
 ifdef CONFIG_NEUTRINO_SRC_MASTER
-  git://github.com/OpenAR-P/neutrino-mp.git;b=master
+  git://github.com/OpenAR-P/neutrino-mp-cst-next.git;b=master
 endif
 
-ifdef CONFIG_NEUTRINO_SRC_MARTII
-  git://gitorious.org/neutrino-mp/martiis-neutrino-mp.git
+ifdef CONFIG_NEUTRINO_SRC_MAX
+  git://github.com/Duckbox-Developers/neutrino-mp-cst-next.git;b=master
+  patch:file://include.patch
 endif
+  nothing:file://neutrino.sh
+  nothing:file://post-wlan0.sh
+  nothing:file://pre-wlan0.sh
 
 ]]rule
 
@@ -93,16 +102,21 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix=/usr \
 			$(CONFIG_FLAGS_${P}) \
 		&& \
-		make all
+		$(run_make) all
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	$(MAKE) -C $(DIR_${P}) install DESTDIR=$(PKDIR) \
-
+	$(run_make) -C $(DIR_${P}) install DESTDIR=$(PKDIR)
+ifndef CONFIG_DEBUG_ARP
 	$(target)-strip $(PKDIR)/usr/bin/neutrino
 	$(target)-strip $(PKDIR)/usr/bin/pzapit
 	$(target)-strip $(PKDIR)/usr/bin/sectionsdcontrol
+endif
+	$(INSTALL_DIR) $(PKDIR)/etc/network
+	$(INSTALL_BIN) $(DIR_${P})/pre-wlan0.sh $(PKDIR)/etc/network/pre-wlan0.sh
+	$(INSTALL_BIN) $(DIR_${P})/post-wlan0.sh $(PKDIR)/etc/network/post-wlan0.sh
+	$(INSTALL_BIN) $(DIR_${P})/neutrino.sh $(PKDIR)/usr/bin/neutrino.sh
 	rm -f $(PKDIR)/usr/share/fonts/md_khmurabi_10.ttf
 	rm -f $(PKDIR)/usr/share/fonts/tuxtxt.ttf
 	rm -f $(PKDIR)/usr/share/fonts/tuxtxt.otb
@@ -126,10 +140,12 @@ PACKAGES_${P} = \
 	font_pakenham
 
 
-RDEPENDS_neutrino += neutrino-plugins neutrino-configs liblua libssl1 libcrypto1 libcurl4 libid3tag0 libmad0 libvorbisidec1 libpng16 libjpeg8 libgif4 font-md-khmurabi font-tuxtxt font-dejavulgcsansmono-bold font-micron font-micron-bold font-micron-italic font-neutrino font-pakenham libfreetype6 ffmpeg libdvbsi++1 libopenthreads libusb_1.0 libalsa libstb_hal libc6
+RDEPENDS_neutrino += neutrino-plugins neutrino-configs aio-grab liblua libssl1 libcrypto1 libcurl4 libid3tag0 libmad0 libvorbisidec1 libpng16 libjpeg-turbo libgif4 font-md-khmurabi font-tuxtxt font-dejavulgcsansmono-bold font-micron font-micron-bold font-micron-italic font-neutrino font-pakenham libfreetype6 ffmpeg libdvbsi++1 libopenthreads libusb_1.0 libasound2 libstb_hal libc6 libsigc-2.4 config-timezone
 
-FILES_neutrino = /usr/bin/* /usr/sbin/*
+PACKAGE_ARCH_neutrino = $(box_arch)
+FILES_neutrino = /usr/bin/* /usr/sbin/* /etc/network/*
 FILES_neutrino_plugins = /usr/share/tuxbox /usr/share/iso-codes/*
+PACKAGE_ARCH_neutrino = $(box_arch)
 FILES_neutrino_configs = /var
 
 FILES_font_dejavulgcsansmono_bold = /usr/share/fonts/DejaVuLGCSansMono-Bold.ttf
@@ -153,3 +169,5 @@ DESCRIPTION_font_pakenham = ttf fonts
 call[[ ipkbox ]]
 
 ]]package
+endif
+

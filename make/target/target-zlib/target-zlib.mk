@@ -26,12 +26,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--prefix=/usr \
 			--shared \
 		&& \
-		$(MAKE)
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
-	cd $(DIR_${P}) && $(MAKE) install DESTDIR=$(PKDIR)
+	cd $(DIR_${P}) && $(run_make) install DESTDIR=$(PKDIR)
 	touch $@
 
 call[[ ipk ]]
@@ -39,7 +39,7 @@ call[[ ipk ]]
 NAME_${P} = libz1
 DESCRIPTION_${P} = Zlib Compression Library Zlib is a general-purpose, patent-free, lossless data compression library \
 which is used by many different programs.
-FILES_${P} = /usr/lib/*
+FILES_${P} = /usr/lib/libz.so.*
 
 call[[ ipkbox ]]
 
