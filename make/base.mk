@@ -411,12 +411,15 @@ endef
 
 # - 1: ${P}
 define _ipkbox_do_split
+	$(foreach pkg, $(PACKAGES_$1), $(eval export FILES_$(pkg)))
+	python $(buildprefix)/split.py $(PKDIR) $(SPLITDIR_${P}) $(PACKAGES_$1)
+endef
+
+define _ipkbox_do_controls
 	$(foreach pkg, $(PACKAGES_$1),
 		install -d $(SPLITDIR_${P})/$(pkg)/CONTROL/
 		$(call write_control,$(pkg))
-		$(eval export FILES_$(pkg))
 	)
-	python $(buildprefix)/split.py $(PKDIR) $(SPLITDIR_${P}) $(PACKAGES_$1)
 endef
 
 function[[ ipkbox
@@ -450,10 +453,13 @@ $(TARGET_${P}).do_split: $(TARGET_${P}).do_package | $(TARGET_${P}).set_inherit_
 	mkdir -p $(SPLITDIR_${P})
 
 	$(call _ipkbox_do_split,${P})
-
 	touch $@
 
-$(TARGET_${P}).do_ipkbox: $(TARGET_${P}).do_split
+$(TARGET_${P}).do_controls: $(TARGET_${P}).do_split
+	$(call _ipkbox_do_controls,${P})
+	touch $@
+
+$(TARGET_${P}).do_ipkbox: $(TARGET_${P}).do_controls
 	$(remove_docs)
 	$(remove_libs)
 	$(remove_pkgconfigs)
