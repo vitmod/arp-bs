@@ -68,6 +68,7 @@ define postinst_libcairo_script_interpreter2
 $$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

@@ -49,6 +49,7 @@ DESCRIPTION_${P} = This library is intended to provide a minimal & complete Obje
 for C++ programmers, used primarily in OpenSceneGraph. It is loosely modeled on the Java thread API, and the POSIX Threads standards.
 FILES_${P} = /usr/lib/*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

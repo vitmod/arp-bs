@@ -48,6 +48,7 @@ if [ x"$$D" = "x" ]; then
 fi
 endef
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

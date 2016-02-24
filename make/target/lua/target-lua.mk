@@ -49,6 +49,7 @@ DESCRIPTION_${P} = Lua is a powerful, fast, lightweight, embeddable scripting la
 RDEPENDS_${P} = libncurses5
 FILES_${P} = /usr/bin/lua /usr/bin/luac /usr/lib/*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

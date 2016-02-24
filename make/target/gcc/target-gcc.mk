@@ -30,7 +30,7 @@ call[[ ipk ]]
 
 # Provides libs that comes with gcc
 call[[ target_gcc_lib_in ]]
-
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

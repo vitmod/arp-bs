@@ -57,6 +57,7 @@ DESCRIPTION_${P} =  A library for loose coupling of C++ method calls
 RDEPENDS_${P} = libstdc++6 libgcc1
 FILES_${P} = /usr/lib/*.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

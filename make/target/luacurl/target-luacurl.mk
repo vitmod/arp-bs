@@ -40,6 +40,7 @@ DESCRIPTION_${P} = Lua module binding CURL
 RDEPENDS_${P} = liblua
 FILES_${P} = ##/usr/bin/lua /usr/bin/luac /usr/lib/*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

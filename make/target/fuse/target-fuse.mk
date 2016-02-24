@@ -73,6 +73,7 @@ update-rc.d -r $$OPKG_OFFLINE_ROOT/ fuse remove
 endef
 FILES_fuse_utils = /etc/init.d/fuse /etc/udev/* /sbin/mount.fuse /usr/bin/*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

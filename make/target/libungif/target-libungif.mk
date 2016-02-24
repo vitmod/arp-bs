@@ -42,6 +42,7 @@ NAME_${P} = libungif4
 RDEPENDS_${P} = libc6
 FILES_${P} = /usr/lib/*.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

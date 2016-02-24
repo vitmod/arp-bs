@@ -72,6 +72,7 @@ FILES_libfontconfig1 = \
 RDEPENDS_fontconfig_utils = libfreetype6 libc6 libfontconfig1
 FILES_fontconfig_utils = /usr/bin/*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

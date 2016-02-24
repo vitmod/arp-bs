@@ -52,6 +52,7 @@ DESCRIPTION_${P} = tuxbox libtuxtxt
 RDEPENDS_${P} = libfreetype6 libz1
 FILES_${P} = /usr/lib/libtuxtxt*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

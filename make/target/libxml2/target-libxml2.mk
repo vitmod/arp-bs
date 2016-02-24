@@ -61,6 +61,7 @@ $$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 FILES_${P} = /usr/bin/xmlcatalog /usr/bin/xmllint /usr/lib/libxml2.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

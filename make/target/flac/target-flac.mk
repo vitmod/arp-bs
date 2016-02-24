@@ -56,6 +56,7 @@ NAME_libflacpp6 = libflac++6
 RDEPENDS_libflacpp6 = libgcc1 libogg0 libflac8 libstdc
 FILES_libflacpp6 = /usr/lib/libFLAC++.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

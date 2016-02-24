@@ -47,6 +47,7 @@ DESCRIPTION_${P} = libjpeg contains a library for handling the JPEG (JFIF) image
 RDEPENDS_${P} = libc6
 FILES_${P} = /usr/lib/*.so.* 
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

@@ -392,6 +392,7 @@ DESCRIPTION_enigma2_plugin_systemplugins_uniontunertype = The Tuner mode switch 
 FILES_enigma2_plugin_systemplugins_uniontunertype = /usr/lib/enigma2/python/Plugins/SystemPlugins/UnionTunerType
 endif
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

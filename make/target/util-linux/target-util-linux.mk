@@ -50,6 +50,7 @@ FILES_libblkid1 = /usr/lib/libblkid.so.*
 
 FILES_libuuid1 = /usr/lib/libuuid.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

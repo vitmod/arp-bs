@@ -59,6 +59,7 @@ FILES_${P} = \
 	/usr/lib/enigma2/python/Plugins/Extensions/Tuxtxt/* \
 	/etc/tuxtxt/tuxtxt2.conf
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

@@ -52,6 +52,7 @@ $$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 FILES_libmp3lame = /usr/lib/libmp3lame.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

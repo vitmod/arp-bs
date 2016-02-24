@@ -104,6 +104,7 @@ FILES_libext2fs2 = /lib/libext2fs.so.* \
 RDEPENDS_libss2 = libcom_err2
 FILES_libss2 = /lib/libss.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

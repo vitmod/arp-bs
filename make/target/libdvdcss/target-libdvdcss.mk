@@ -46,6 +46,7 @@ DESCRIPTION_${P} = libdvdcss is a simple library designed for accessing DVDs lik
 RDEPENDS_${P} = libc6
 FILES_${P} = /usr/lib/*.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

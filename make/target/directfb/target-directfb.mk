@@ -93,7 +93,7 @@ FILES_${P} = /usr/lib/*.so* \
 /usr/lib/directfb-1.6-0-pure/wm/*.so* \
 /usr/bin/dfbinfo
 
-
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

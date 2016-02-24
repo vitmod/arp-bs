@@ -44,7 +44,7 @@ $$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 FILES_${P} = /usr/lib/libtag_c.so.* /usr/lib/libtag.so.*
 
-
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

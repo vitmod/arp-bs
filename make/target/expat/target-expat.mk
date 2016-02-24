@@ -51,6 +51,7 @@ FILES_libexpat1 = /usr/lib/libexpat.so.*
 RDEPENDS_libexpat_bin = libexpat1 libc6
 FILES_libexpat_bin = /usr/bin/xmlwf
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

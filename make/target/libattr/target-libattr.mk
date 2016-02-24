@@ -32,6 +32,7 @@ define postinst_libattr1
 $$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

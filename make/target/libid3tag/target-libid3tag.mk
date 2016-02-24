@@ -44,6 +44,7 @@ NAME_${P} = libid3tag0
 RDEPENDS_${P} = libz1 libc6
 FILES_${P} = /usr/lib/*.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

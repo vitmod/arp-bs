@@ -51,6 +51,7 @@ NAME_${P} = libdvbsi++1
 RDEPENDS_${P} = libgcc1 libstdc++6
 FILES_${P} = /usr/lib/libdvbsi++.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

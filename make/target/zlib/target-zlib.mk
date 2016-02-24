@@ -41,6 +41,7 @@ DESCRIPTION_${P} = Zlib Compression Library Zlib is a general-purpose, patent-fr
 which is used by many different programs.
 FILES_${P} = /usr/lib/libz.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

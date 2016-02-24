@@ -107,6 +107,7 @@ FILES_libudf0 = /usr/lib/libudf.so.*
 RDEPENDS_libcdio_utils = libcdio12 libc6 libcdio_cdda0 libcdio_paranoia0 libncurses5
 FILES_libcdio_utils = /usr/bin/*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

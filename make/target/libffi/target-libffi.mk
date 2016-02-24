@@ -55,6 +55,7 @@ NAME_${P} = libffi6
 RDEPENDS_${P} = libc6
 FILES_${P} = /usr/lib/libffi.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

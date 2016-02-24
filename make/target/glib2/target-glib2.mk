@@ -65,6 +65,7 @@ FILES_${P} = \
 	/usr/lib/gio/modules \
 	/usr/share/glib-2.0/schemas/gschema.dtd
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

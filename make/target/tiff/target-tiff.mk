@@ -63,6 +63,7 @@ DESCRIPTION_libtiff_utils =  Provides support for the Tag Image File Format (TIF
 RDEPENDS_libtiff_utils = libtiff5 libc6
 FILES_libtiff_utils = /usr/bin/*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

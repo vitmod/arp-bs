@@ -55,6 +55,7 @@ define postinst_libevent_pthreads
 $$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

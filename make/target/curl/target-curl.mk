@@ -64,6 +64,7 @@ FILES_libcurl4 = /usr/lib/*.so*
 RDEPENDS_curl = libcurl4 libz1 libc6
 FILES_curl = /usr/bin/curl
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

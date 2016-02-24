@@ -57,6 +57,7 @@ FILES_libmpeg2convert0 = /usr/lib/libmpeg2convert.so.*
 RDEPENDS_mpeg2dec = libmpeg2 libmpeg2convert0 libc6
 FILES_mpeg2dec = /usr/bin/*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

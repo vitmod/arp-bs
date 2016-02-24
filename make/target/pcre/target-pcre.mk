@@ -51,6 +51,7 @@ endef
 FILES_${P} = /usr/lib/*.so.* \
 /usr/bin/pcre*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

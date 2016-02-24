@@ -724,7 +724,7 @@ DESCRIPTION_python_zlib = Python zlib Support.
 RDEPENDS_python_zlin = python_core libpython$(PYTHON_VERSION) libz1 libc6
 FILES_python_zlib = $(PYTHON_DIR)/lib-dynload/zlib.so
 
-
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

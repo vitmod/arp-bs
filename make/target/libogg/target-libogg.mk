@@ -41,6 +41,7 @@ DESCRIPTION_${P} = libogg is the bitstream and framing library for the Ogg proje
 It provides functions which are necessary to codec libraries like libvorbis.
 FILES_${P} = /usr/lib/*.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

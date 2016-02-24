@@ -36,6 +36,7 @@ DESCRIPTION_${P} = LuaExpat is a SAX XML parser based on the Expat library
 RDEPENDS_${P} = libexpat1 liblua
 FILES_${P} = /usr/lib/lua/* /usr/share/lua/*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

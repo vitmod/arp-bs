@@ -44,6 +44,7 @@ $$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 FILES_${P} = /usr/lib/*.so
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

@@ -44,6 +44,7 @@ FILES_libcrypto1 = /usr/lib/libcrypto.so.*
 RDEPENDS_libssl1 = libcrypto1
 FILES_libssl1 = /usr/lib/libssl.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

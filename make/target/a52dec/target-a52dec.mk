@@ -50,6 +50,7 @@ FILES_liba52 = /usr/lib/liba52.so.*
 RDEPENDS_a52dec = liba52 libc6
 FILES_a52dec = /usr/bin/*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

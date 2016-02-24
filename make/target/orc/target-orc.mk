@@ -57,6 +57,7 @@ FILES_liborc_test = /usr/lib/liborc-test*.so.*
 RDEPENDS_orc = liborc liborc_test libc6
 FILES_orc = /usr/bin/*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

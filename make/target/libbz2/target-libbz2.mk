@@ -37,6 +37,7 @@ call[[ ipk ]]
 DESCRIPTION_${P} =  high-quality data compressor
 FILES_${P} = /usr/bin/* /usr/lib/*.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

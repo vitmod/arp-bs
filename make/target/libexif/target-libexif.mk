@@ -41,6 +41,7 @@ DESCRIPTION_${P} = libexif is a library for parsing, editing, and saving EXIF da
 RDEPENDS_${P} = libc6
 FILES_${P} = /usr/lib/libexif.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

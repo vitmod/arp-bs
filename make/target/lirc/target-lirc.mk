@@ -109,6 +109,7 @@ define conffiles_lirc
 endef
 endif
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

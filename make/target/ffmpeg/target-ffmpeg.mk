@@ -239,6 +239,7 @@ call[[ ipk ]]
 RDEPENDS_ffmpeg = librtmp1 libbluray
 FILES_ffmpeg = /usr/lib/*.so.* /usr/bin/ffmpeg
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

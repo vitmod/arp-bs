@@ -63,6 +63,7 @@ FILES_${P} = /usr/bin/* \
 /etc/init.d/* \
 /etc/lighttpd/*.conf 
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

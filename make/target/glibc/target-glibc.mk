@@ -35,6 +35,7 @@ FILES_libc6 = \
 	/lib/*.s* \
 	/sbin/ldconfig
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

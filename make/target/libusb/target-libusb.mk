@@ -46,6 +46,7 @@ $$OPKG_OFFLINE_ROOT/sbin/ldconfig
 endef
 FILES_${P} = /usr/lib/libusb-1.0.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

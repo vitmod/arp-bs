@@ -51,6 +51,7 @@ FILES_libcap2 = /lib/*.so.*
 RDEPENDS_libcap_bin = libc6 libcap2
 FILES_libcap_bin = /sbin/*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

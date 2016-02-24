@@ -60,6 +60,7 @@ FILES_${P} = \
 	/usr/lib/libexslt.so.* \
 	$(PYTHON_DIR)/site-packages/libxslt.py
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

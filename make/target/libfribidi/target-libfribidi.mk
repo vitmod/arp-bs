@@ -48,6 +48,7 @@ FILES_libfribidi0 = /usr/lib/*.so.*
 RDEPENDS_libfribidi_bin = libfribidi0 libc6
 FILES_libfribidi_bin = /usr/bin/*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

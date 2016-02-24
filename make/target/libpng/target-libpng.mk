@@ -45,6 +45,7 @@ DESCRIPTION_libpng16 = libpng
 RDEPENDS_libpng16 = libz1 libc6
 FILES_libpng16 = /usr/lib/*.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package

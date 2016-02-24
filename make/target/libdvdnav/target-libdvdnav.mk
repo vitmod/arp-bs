@@ -52,6 +52,7 @@ FILES_libdvdnav4 = /usr/lib/libdvdnav.so.*
 RDEPENDS_libdvdnavmini4 = libc6
 FILES_libdvdnavmini4 = /usr/lib/libdvdnavmini.so.*
 
+call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package
