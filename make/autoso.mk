@@ -6,12 +6,12 @@ $(TARGET_${P}).write_provides: $(TARGET_${P}).do_split
 	for pkg in `ls ${SPLITDIR}`; \
 	do \
 		cd ${SPLITDIR}/$$pkg; \
-		for s in `find /lib /usr/lib -maxdepth 1 -type l -name '*.so.*'`; \
+		for s in `find lib usr/lib -maxdepth 1 -type l -name '*.so.*'`; \
 		do \
-			sn=`echo $$s |sed -e 's,.*lib/,,' -e 's,\.so\.,,'; \
+			sn=`echo $$s |sed -e 's,.*lib/,,' -e 's,\.so\.,,'`; \
 			echo "RPROVIDES_$$pkg += $$sn" >> $@; \
-		done \
-	done \
+		done; \
+	done; \
 	true
 
 $(TARGET_${P}).include_provides: $(TARGET_${P}).write_provides
