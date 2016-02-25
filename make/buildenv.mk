@@ -18,10 +18,10 @@ unexport MAKEFLAGS
 # disable built in rules variables
 # print why target is rebuilt
 ifeq ($(MAKE_VERSION),4.0)
-MAKEFLAGS := -r -R --trace
+MAKEFLAGS := -r -R --debug=b
 endif
 ifeq ($(MAKE_VERSION),4.1)
-MAKEFLAGS := -r -R --trace
+MAKEFLAGS := -r -R --debug=b
 endif
 
 
