@@ -28,13 +28,6 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 	touch $@
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
-#	gcc-first has no libgcc_s and libgcc_eh libs
-#	this hack is suggested somewhere in the net
-	ln -sfv libgcc.a `$(target)-gcc -print-libgcc-file-name | sed 's/libgcc/&_eh/'`
-	ln -sfv libgcc.a `$(target)-gcc -print-libgcc-file-name | sed 's/libgcc/&_s/'`
-
-#	rm -rf $(prefix)/BUILDROOT/*
-
 	$(rpm_build) $(specsprefix)/$(${P}_SPEC)
 	touch $@
 

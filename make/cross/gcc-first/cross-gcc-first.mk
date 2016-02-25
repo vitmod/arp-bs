@@ -46,6 +46,14 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	
 	rm -f $(PKDIR)/$(crossprefix)/lib/libiberty.a
+
+#	gcc-first has no libgcc_s and libgcc_eh libs
+#	but we need it for glibc
+#	this hack is suggested somewhere in the net
+
+	ln -sv libgcc.a `$(PKDIR)/$(crossprefix)/bin/$(target)-gcc -print-libgcc-file-name | sed 's/libgcc/&_eh/'`
+	ln -sv libgcc.a `$(PKDIR)/$(crossprefix)/bin/$(target)-gcc -print-libgcc-file-name | sed 's/libgcc/&_s/'`
+
 	touch $@
 
 ]]package
