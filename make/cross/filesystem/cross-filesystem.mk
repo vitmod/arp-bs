@@ -18,6 +18,7 @@ $(TARGET_${P}).do_package: $(DEPENDS_${P})
 
 	$(PKDIR_clean)
 	install -d $(PKDIR)/$(crossprefix)/etc
+	touch $(PKDIR)/.stamp
 	touch $@
 
 call[[ ipk ]]

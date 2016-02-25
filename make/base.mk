@@ -263,7 +263,7 @@ rewrite_config = \
 	cp $1 $(crossprefix)/bin/$(notdir $1) && \
 	sed -e "s,^prefix=,prefix=$(targetprefix)," -i $(crossprefix)/bin/$(notdir $1)
 
-function[[ ipk
+function[[ ipkbs
 # SYSROOT is one of host, cross, target
 SYSROOT_${P} ?= $(error undefined SYSROOT_${P})
 # Name of IPK that installs to SYSROOT

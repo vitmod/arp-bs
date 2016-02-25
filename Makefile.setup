@@ -181,9 +181,10 @@ make/local/%.mk:
 Makefile.pre: \
   Makefile.setup \
   .config \
-  make/autoso.mk \
   make/buildenv.mk \
   make/base.mk \
+  make/autoso.mk \
+  make/installer.mk \
   make/base-rpm.mk \
   make/config.mk \
   make/host/*.in \

@@ -17,9 +17,6 @@ $(TARGET_${P}).do_install: $(DEPENDS_${P})
 
 	install -d $(ipkhost)
 	install -d $(hostprefix)
-#	install -d $(hostprefix)/{bin,doc,etc,include,info,lib,man,share,var}
-#	ln -sf $(hostprefix)/lib $(hostprefix)/lib64
-#	install -d $(hostprefix)/man/man{1,2,3,4,5,6,7,8,9}
 	touch $@
 
 $(TARGET_${P}): $(TARGET_${P}).do_install

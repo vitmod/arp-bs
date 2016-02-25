@@ -17,11 +17,14 @@ $(TARGET_${P}).do_package: $(DEPENDS_${P})
 	install -d $(ipktarget)
 	install -d $(ipkbox)
 	install -d $(ipkorigin)
-	install -d $(targetsh4prefix)
+	install -d $(targetprefix)
 
-# make aclocal happy
 	$(PKDIR_clean)
+#	make aclocal happy
 	install -d $(PKDIR)/usr/share/aclocal
+#	empty package will not work
+	touch $(PKDIR)/.stamp
+	
 	touch $@
 
 ]]package
