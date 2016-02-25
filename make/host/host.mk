@@ -24,6 +24,7 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	$(PKDIR_clean)
 	install -d $(PKDIR)/$(hostprefix)/etc
+	touch $(PKDIR)/$(hostprefix)/etc/opkg.conf
 	touch $@
 
 SRC_URI_${P} = empty
