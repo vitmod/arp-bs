@@ -26,7 +26,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--disable-host-tool \
 			--with-pc_path=$(targetprefix)/usr/lib/pkgconfig \
 		&& \
-		$(MAKE)
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
