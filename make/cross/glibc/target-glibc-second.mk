@@ -8,12 +8,7 @@ BREMOVES_${P} = $(target_glibc_first)
 
 PR_${P} = 2
 
-PV_${P} := 2.14.1-56
-ST_PN_${P} = target-glibc
-${P}_SPEC = stm-${ST_PN}.spec
-${P}_SPEC_PATCH = $(${P}_SPEC).diff
-${P}_PATCHES = make-versions-4.0-and-greater.patch
-${P}_SRCRPM = $(archivedir)/$(STLINUX)-${ST_PN}-${PV}.src.rpm
+call[[ target_glibc_in ]]
 
 call[[ base ]]
 call[[ base_rpm ]]
