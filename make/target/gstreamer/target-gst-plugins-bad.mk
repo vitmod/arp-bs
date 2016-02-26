@@ -366,7 +366,7 @@ FILES_gst_plugins_bad_nsf = /usr/lib/gstreamer-0.10/libgstnsf.so
 RDEPENDS_gst_plugins_bad_nuvdemux = gst_plugins_bad gstreamer libxml2 libz1 libffi6 libc6 libglib
 FILES_gst_plugins_bad_nuvdemux = /usr/lib/gstreamer-0.10/libgstnuvdemux.so
 
-DEPENDS_gst_plugins_bad_patchdetect = gst_plugins_bad gstreamer libgstvideo libxml2 libz1 libffi6 libc6 libglib liborc
+RDEPENDS_gst_plugins_bad_patchdetect = gst_plugins_bad gstreamer libgstvideo libxml2 libz1 libffi6 libc6 libglib liborc
 FILES_gst_plugins_bad_patchdetect = /usr/lib/gstreamer-0.10/libgstpatchdetect.so
 
 RDEPENDS_gst_plugins_bad_pcapparse = gst_plugins_bad gstreamer libxml2 libz1 libffi6 libc6 libglib
