@@ -12,6 +12,7 @@ $(TARGET_${P}).do_install: $(TARGET_${P}).do_depends
 	install -d $(ipkbox)
 	install -d $(ipkorigin)
 	install -d $(targetprefix)
+	install -d $(targetprefix)/usr/share/aclocal
 	touch $@
 
 $(TARGET_${P}): $(TARGET_${P}).do_install
