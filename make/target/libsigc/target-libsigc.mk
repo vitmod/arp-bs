@@ -3,7 +3,7 @@
 #
 package[[ target_libsigc
 
-BDEPENDS_${P} = $(target_gcc_lib)
+BDEPENDS_${P} = $(target_glibc) $(target_gcc_lib)
 
 ifdef CONFIG_SIGC2
 PV_${P} = 2.4.1

@@ -3,7 +3,7 @@
 #
 package[[ target_libdvbsipp
 
-BDEPENDS_${P} = $(target_gcc_lib)
+BDEPENDS_${P} = $(target_glibc) $(target_gcc_lib)
 
 PV_${P} = 0.3.7
 PR_${P} = 1
