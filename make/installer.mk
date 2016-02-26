@@ -1,6 +1,20 @@
 # installer
 #############################################################################
 
+# Installation chain has two connection endpoints
+# Before  ${TARGET}.do_tar make shure that $(PKDIR) is ready to be packaged
+# After   ${TARGET}.do_install you have files installed to sysroots
+# Look at this sheme:
+#   YOU_FILL_PKDIR_HERE <- ${TARGET}.do_tar <- INSTALLATION <- ${TARGET}.do_install <- YOU_HAVE_FILES_IN_SYSROOT
+#
+# We also have default connections to main chain
+#   ${TARGET}.do_package <- ${TARGET}.do_tar
+#                           ${TARGET}.do_install <- ${TARGET}
+
+
+# Checks that all files are tracked correctly
+# not raises an error, juts prints verbose info
+
 installer-check-host installer-check-cross installer-check-target: installer-check-%:
 	@echo "==> check $*"
 	cat $(DEPDIR)/$*-*.files |sort > /tmp/$@_db
@@ -10,11 +24,15 @@ installer-check-host installer-check-cross installer-check-target: installer-che
 	comm --check-order -23 /tmp/$@_fs /tmp/$@_db
 	@echo 'Missing files:'
 	comm --check-order -13 /tmp/$@_fs /tmp/$@_db
+	@echo 'Duplicated files:'
+	cat /tmp/$@_db |uniq -d
 	rm -f /tmp/$@_fs /tmp/$@_db
 	@echo
 
 installer-check: installer-check-host installer-check-cross installer-check-target
 .PHONY: installer-check-host installer-check-cross installer-check-target installer-check
+
+
 
 function[[ installer
 # SYSROOT is one of host, cross, target
@@ -24,7 +42,7 @@ SYSROOT_${P} ?= $(error undefined SYSROOT_${P})
 ipkrootdir_${P} := ${WORK}/root
 PREFIX_${P} := $(${SYSROOT}prefix)
 
-TAR_${P} = $(ipk${SYSROOT})/$(${P}).tar
+TAR_${P} = $(tarprefix)/$(${P}).tar
 
 $(TARGET_${P}).do_tar: $(TARGET_${P}).do_package
 #	Fix files in PKDIR
@@ -40,6 +58,7 @@ ifeq (${SYSROOT},target)
 	$(rewrite_libtool)
 	$(rewrite_dependency)
 endif
+#	Create archive
 	cd $(PKDIR) && tar -cf ${TAR} .
 	touch $@
 
@@ -49,10 +68,11 @@ $(TARGET_${P}).clean_tar:
 
 
 # List of files in sysroot stored in ${TARGET}.files
-# Package might be removed later due to BREMOVES, in this case we remove ${TARGET}.files
-# However ${TARGET}.files_fake remains for correct dependcy chain
+# Package might be removed later due to ${BREMOVES}, in this case we remove ${TARGET}.files
+# However ${TARGET}.do_install remains for correct dependcy chain
+# So at every moment all $(TARGET_*).files list is a snapshot of sysroots
 
-$(TARGET_${P}).files $(TARGET_${P}).files_fake: $(TARGET_${P}).files%:
+$(TARGET_${P}).files $(TARGET_${P}).do_install: $(TARGET_${P}).%:
 	@echo
 	@echo "==> Installing ${P}"
 	test -f ${TAR}
@@ -65,54 +85,44 @@ $(TARGET_${P}).files $(TARGET_${P}).files_fake: $(TARGET_${P}).files%:
 	rm -f ${TARGET}.rmfiles
 	touch $@
 
-$(TARGET_${P}).rmfiles $(TARGET_${P}).rmfiles_fake: $(TARGET_${P}).rmfiles%:
+$(TARGET_${P}).rmfiles $(TARGET_${P}).do_remove: $(TARGET_${P}).%:
 	@echo
 	@echo "==> Removing ${P}"
 	cd ${PREFIX} && cat ${TARGET}.files |sed 's/^/"/; s/$$/"/' |xargs rm
 	rm -f ${TARGET}.files
 	touch $@
 
-# ${TARGET}.files_fake and ${TARGET}.rmfiles_fake are involved in build dependency chain
-# But ${TARGET}.files and ${TARGET}.rmfiles are for clean dependcy chain
 
-$(TARGET_${P}).files_fake: $(TARGET_${P}).do_tar $(foreach pkg,${BREMOVES},$(DEPDIR)/$(pkg).rmfiles_fake)
-# BREMOVES after packaged
-$(foreach pkg,${BREMOVES},$(DEPDIR)/$(pkg).rmfiles_fake: ${TARGET}.do_tar)
+# ${TARGET}.do_install and ${TARGET}.do_remove are involved in build dependency chain
+# ${TARGET}.files and ${TARGET}.rmfiles are for clean dependcy chain
+# Clean and build chains must not overlap
 
-# Target that keep track of reverse clean dependencies
+# When install
+# firstly, create tar archive
+# secondly, remove all packages that we replace - ${BREMOVES}
+$(foreach pkg,${BREMOVES},$(DEPDIR)/$(pkg).do_remove: ${TARGET}.do_tar)
+# finally, install files from my tar
+$(TARGET_${P}).do_install: $(TARGET_${P}).do_tar $(foreach pkg,${BREMOVES},$(DEPDIR)/$(pkg).do_remove)
 
-$(TARGET_${P}).do_install: $(TARGET_${P}).files_fake
-	echo -n > ${TARGET}.bdeps
+# When clean
+# firstly, uninstall all packages that depend on me
+${TARGET}.rmfiles: ${TARGET}.clean_childs
+# secondly, remove our files
+$(foreach pkg,${BREMOVES},$(DEPDIR)/$(pkg).files: ${TARGET}.rmfiles)
+# finally, reinstall files that were replaced
+${TARGET}.clean_install: ${TARGET}.rmfiles $(foreach pkg,${BREMOVES},$(DEPDIR)/$(pkg).files)
+	rm -f $(TARGET_${P}).do_install
 
-#	When clean install
-#	firstly, uninstall all packages that depend on me
-#	note that here rule is provided for parent package
-
-	$(foreach pkg,${BDEPENDS}, \
-	  echo '$(DEPDIR)/$(pkg).rmfiles: ${TARGET}.clean_install' >> ${TARGET}.bdeps && \
-	) true
-
-#	secondly, remove our files
-#	finally, reinstall files that were replaced
-
-	$(foreach pkg,${BREMOVES}, \
-	  echo '$(DEPDIR)/$(pkg).files: ${TARGET}.rmfiles' >> ${TARGET}.bdeps && \
-	  echo '${TARGET}.clean_install: $(DEPDIR)/$(pkg).files' >> ${TARGET}.bdeps && \
-	) true
-
-	touch $@
-
-# Include tracked reverse dependencies
--include $(TARGET_${P}).bdeps
-# Thanks to traked bdeps it is in fact recursive clean_install
-$(TARGET_${P}).clean_install: ${TARGET}.rmfiles
-	@echo $@
-	rm -f $(TARGET_${P}).bdeps
-	rm -f $(TARGET_${P}).files_fake
-
-# Integrate in default targets
-$(TARGET_${P}): $(TARGET_${P}).do_install
 $(TARGET_${P}).clean: $(TARGET_${P}).clean_install
+
+# Integrate in default target
+$(TARGET_${P}): $(TARGET_${P}).do_install
+
+# Print file conflicts
+$(TARGET_${P}).help_install: $(TARGET_${P}).do_tar
+	@echo "==> Files conflict:"
+	tar -tf ${TAR} |grep -v '/$$' \
+	| while read f; do test ! -f "$$f" && echo -e "\t$$f"; done
 
 ]]function
 

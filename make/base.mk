@@ -26,52 +26,28 @@ help::
 	@echo run \'make all\' if really want to build everything
 .PHONY: all
 
+
 function[[ base
 # place after variables definitions in *.mk file and before rule
 
+call[[ chain ]]
+
 # Check requirements
-${P} ?= $(error undefined ${P})
 PV_${P} ?= $(error undefined PV_${P})
 PR_${P} ?= $(error undefined PR_${P})
-TARGET_${P} ?= $(error undefined TARGET_${P})
-
-WORK_${P} = $(workprefix)/${P}
 
 # Provide defaults
-PN_${P} ?= $(patsubst host-%,%,$(patsubst cross-%,%,$(patsubst target-%,%, $(${P}) )))
+PN_${P} ?= $(patsubst ${SYSROOT}-%,%,$(${P}))
 DIR_${P} ?= ${WORK}/${PN}-${PV}
-PACKAGE_ARCH_${P} ?= sh4
-
-# opkg control default values
-VERSION_${P} ?= ${PV}-${PR}
-DESCRIPTION_${P} ?= ${P}
-MAINTAINER_${P} ?= Ar-P team
-SECTION_${P} ?= base
-PRIORITY_${P} ?= optional
-LICENSE_${P} ?= unknown
-HOMEPAGE_${P} ?= unknown
 
 # build dependencies
-DEPENDS_${P} += $(TARGET_${P}).version_${PV}-${PR}
-DEPENDS_${P} += $(addprefix $(DEPDIR)/,$(BDEPENDS_${P}))
+$(TARGET_${P}).do_depends: $(TARGET_${P}).version_${PV}-${PR}
 
-ifdef MAKE_VERBOSE
-# pedantic dependecny check
-$(foreach dep, $(value BDEPENDS_${P}), \
-	$(if $(call undefined,$(patsubst $$(%),%,$(dep))), \
-		$(warning undefined $(dep) in BDEPENDS_${P}) \
-	) \
-)
-endif
-
-# Set new variables and targets
-PREPARE_${P} = (rm -rf $(WORK_${P}) || true) && mkdir -p $(WORK_${P})
-INSTALL_${P} = true
-
-$(TARGET_${P}).version_%:
+$(TARGET_${P}).version_${PV}-${PR}:
 	rm -f $(TARGET_${P}).version_*
 	touch $@
 
+# daily helpers
 $(TARGET_${P}).clean_prepare:
 	rm -f $(TARGET_${P}).do_prepare
 
@@ -80,9 +56,6 @@ $(TARGET_${P}).clean_compile:
 
 $(TARGET_${P}).clean_package:
 	rm -f $(TARGET_${P}).do_package
-
-$(TARGET_${P}).clean: $(TARGET_${P}).clean_prepare
-	rm -f $(TARGET_${P}).do_*
 
 ifdef MAKE_VERBOSE
 $(TARGET_${P}).help:
@@ -95,39 +68,20 @@ $(TARGET_${P}).help:
 	@echo ----------------------------------------------------------------------------
 endif
 
-# default value comes from .config
-# Either override it in *mk file or by passing to make like this: 'make target-foo RM_WORK_foo=n'
-RM_WORK_${P} ?= $(CONFIG_RM_WORK)
-
-# to add some build rules add prerequisites to this target
-$(TARGET_${P}):
-ifeq (${RM_WORK},y)
-	rm -rf $(WORK_${P}) || true
-endif
-	test -f $@ && cp -a $@ $@.hold || true
-	touch $@
-
-ifdef MAKE_VERBOSE
-# HACK
-# touch deps with previous stamp
-# should avoid dependent packages rebuild
-$(TARGET_${P}).hold: $(TARGET_${P})
-	touch $(TARGET_${P}).* -r $@
-	touch $(TARGET_${P})   -r $@
-.PHONY: $(TARGET_${P}).hold
-endif
-
-# add to list
-all: $(TARGET_${P})
+# Set new variables and targets
+# New commands will be added by rule[[ directive
+PREPARE_${P} = (rm -rf $(WORK_${P}) || true) && mkdir -p $(WORK_${P})
+INSTALL_${P} = true
 
 ]]function
 
+
 function[[ base_do_prepare
-# place after variables and rule definitions
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
+$(TARGET_${P}).do_prepare: $(TARGET_${P}).do_depends
 	$(PREPARE_${P})
 	touch $@
 ]]function
+
 
 function[[ TARGET_base_do_config
 # place after variables and rule definitions
@@ -262,6 +216,7 @@ rewrite_pkgconfig = \
 rewrite_config = \
 	cp $1 $(crossprefix)/bin/$(notdir $1) && \
 	sed -e "s,^prefix=,prefix=$(targetprefix)," -i $(crossprefix)/bin/$(notdir $1)
+
 
 function[[ ipkbs
 # SYSROOT is one of host, cross, target

@@ -182,6 +182,7 @@ Makefile.pre: \
   Makefile.setup \
   .config \
   make/buildenv.mk \
+  make/chain.mk \
   make/base.mk \
   make/autoso.mk \
   make/installer.mk \
@@ -209,7 +210,7 @@ Makefile.pre: \
 	for f in $^; do \
 		echo >> $@ && \
 		echo "#---------------------------------------------------------" >> $@ && \
-		echo "_thisfile := $$f"                                  >> $@ && \
+		echo "_thisfile := $$f"                                           >> $@ && \
 		echo "#---------------------------------------------------------" >> $@ && \
 		cat $$f >> $@; \
 	done

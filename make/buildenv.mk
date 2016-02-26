@@ -105,6 +105,7 @@ VPATH := $(DEPDIR)
 
 $(if $(shell test -d $(DEPDIR) || echo fail), $(error unable to create directory $(DEPDIR)) )
 
+tarprefix := $(prefix)/tar
 # host
 hostprefix := $(prefix)/host
 ipkhost := $(prefix)/ipkhost
