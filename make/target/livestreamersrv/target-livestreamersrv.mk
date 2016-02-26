@@ -3,6 +3,8 @@
 #
 package[[ target_livestreamersrv
 
+BDEPENDS_${P} = $(target_filesystem)
+
 PV_${P} = git
 PR_${P} = 2
 

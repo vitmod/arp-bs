@@ -3,6 +3,8 @@
 #
 package[[ target_plugin_alternativesoftcammanager
 
+BDEPENDS_${P} = $(target_filesystem) $(cross_python)
+
 PV_${P} = git
 PR_${P} = 1
 PACKAGE_ARCH_${P} = all

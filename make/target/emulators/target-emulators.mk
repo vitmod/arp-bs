@@ -3,7 +3,7 @@
 #
 package[[ target_emulators
 
-BDEPEDNS_${P} = $(target_filesystem)
+BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = git
 PR_${P} = 1

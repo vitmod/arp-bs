@@ -3,6 +3,8 @@
 #
 package[[ target_nmap
 
+BDEPENDS_${P} = $(target_glibc)
+
 PV_${P} = 6.47
 PR_${P} = 1
 

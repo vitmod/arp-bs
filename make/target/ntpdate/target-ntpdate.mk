@@ -3,6 +3,8 @@
 #
 package[[ target_ntpdate
 
+BDEPENDS_${P} = $(target_glibc)
+
 PV_${P} = 4.2.8
 PR_${P} = 1
 DIR_${P} = ${WORK}/ntp-${PV}

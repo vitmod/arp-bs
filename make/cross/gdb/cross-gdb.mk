@@ -3,6 +3,8 @@
 #
 package[[ cross_gdb
 
+BDEPENDS_${P} = $(cross_filesystem)
+
 PV_${P} = 7.6
 PR_${P} = 1
 
