@@ -5,17 +5,13 @@ package[[ host_filesystem
 
 BDEPENDS_${P} =
 
-PV_${P} = 0.1
-PR_${P} = 2
+call[[ chain ]]
 
-call[[ base ]]
-
-$(TARGET_${P}).do_install: $(DEPENDS_${P})
+$(TARGET_${P}).do_install: $(TARGET_${P}).do_depends
 	install -d $(workprefix)
 	install -d $(specsprefix)
 	install -d $(sourcesprefix)
-
-	install -d $(ipkhost)
+	install -d $(tarprefix)
 	install -d $(hostprefix)
 	touch $@
 

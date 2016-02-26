@@ -3,28 +3,16 @@
 #
 package[[ target_filesystem
 
-DEPENDS_${P} = build.env host-opkg-meta bootstrap-host
+DEPENDS_${P} = build.env $(meta_host)
 
-PV_${P} = 0.1
-PR_${P} = 4
+call[[ chain ]]
 
-SRC_URI_${P} = empty
-
-call[[ base ]]
-call[[ ipk ]]
-
-$(TARGET_${P}).do_package: $(DEPENDS_${P})
-	install -d $(ipktarget)
+$(TARGET_${P}).do_install: $(TARGET_${P}).do_depends
 	install -d $(ipkbox)
 	install -d $(ipkorigin)
 	install -d $(targetprefix)
-
-	$(PKDIR_clean)
-#	make aclocal happy
-	install -d $(PKDIR)/usr/share/aclocal
-#	empty package will not work
-	touch $(PKDIR)/.stamp
-	
 	touch $@
+
+$(TARGET_${P}): $(TARGET_${P}).do_install
 
 ]]package
