@@ -21,7 +21,7 @@ call[[ ipk ]]
 
 #call[[ rpm_do_compile ]]
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
+$(TARGET_${P}).do_prepare: $(${P}_SRCRPM)
 	$(rpm_src_install) $(${P}_SRCRPM)
 	$(if $(${P}_SPEC_PATCH), cd $(specsprefix) && patch -p1 $(${P}_SPEC) < ${SDIR}/$(${P}_SPEC_PATCH) )
 	$(if $(${P}_PATCHES), cp $(addprefix ${SDIR}/,$(${P}_PATCHES)) $(sourcesprefix) )
