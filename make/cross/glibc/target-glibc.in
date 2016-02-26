@@ -1,0 +1,8 @@
+package[[ target_glibc_first
+call[[ header ]]
+]]package
+
+package[[ target_glibc_second
+call[[ header ]]
+]]package
+
