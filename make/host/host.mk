@@ -5,7 +5,7 @@ package[[ meta_host
 
 BDEPENDS_${P} = \
   $(host_autoconf) $(host_automake) $(host_autotools) $(host_pkg_config) $(host_libtool) \
-  $(host_module_init_tools) $(host_mtd_utils) $(host_lndir)
+  $(host_module_init_tools) $(host_mtd_utils) $(host_lndir) $(host_ipkg_utils) $(host_opkg)
 
 call[[ chain ]]
 
