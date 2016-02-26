@@ -115,30 +115,10 @@ def ignore(x):
 
 # joins vertex x and all its connections with returned vertex
 def parent(x):
-	if x.endswith('.do_prepare'):
-		return x.replace('.do_prepare','')
-	elif x.endswith('.do_compile'):
-		return x.replace('.do_compile','')
-	elif x.endswith('.do_package'):
-		return x.replace('.do_package','')
-	elif x.endswith('.do_ipk'):
-		return x.replace('.do_ipk','')
-	elif x.endswith('.set_inherit_vars'):
-		return x.replace('.set_inherit_vars','')
-	elif x.endswith('.do_git_version'):
-		return x.replace('.do_git_version','')
-	elif x.endswith('.write_git_version'):
-		return x.replace('.write_git_version','')
-	elif x.endswith('.include_git_version'):
-		return x.replace('.include_git_version','')
-	elif x.endswith('.do_srcrev'):
-		return x.replace('.do_srcrev','')
-	elif x.endswith('.do_split'):
-		return x.replace('.do_split','')
-	elif x.endswith('.do_ipkbox'):
-		return x.replace('.do_ipkbox','')
-	elif x.endswith('.do_install'):
-		return x.replace('.do_install','')
+	sufixes = ['.do_depends', '.do_prepare', '.do_compile', '.do_package', '.do_ipk', '.do_tar', '.set_inherit_vars', '.do_git_version', '.write_git_version', '.include_git_version', '.do_srcrev', '.do_split', '.do_ipkbox', '.do_install', '.files_fake', '.do_controls', '.include_provides', '.write_provides']
+	for s in sufixes:
+		if x.endswith(s):
+			return x.replace(s, '')
 	return None
 
 targ2 = {}
