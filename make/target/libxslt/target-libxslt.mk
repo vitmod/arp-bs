@@ -23,9 +23,7 @@ CONFIG_FLAGS_${P} = \
 #	--with-libxml-prefix="$(targetprefix)/usr" \
 #	--with-libxml-include-prefix="$(targetprefix)/usr/include" \
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+call[[ base_do_prepare ]]
 
 # 	CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/libxml2 -Os" \
 # 	CFLAGS="$(TARGET_CFLAGS) -Os" \

@@ -15,10 +15,8 @@ rule[[
   patch:file://fix-CAP_LAST_CAP.patch
 ]]rule
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
-	
+call[[ base_do_prepare ]]
+
 MAKE_FLAGS_${P} = \
 	DESTDIR=$(PKDIR) \
 	LIBDIR=$(PKDIR)/lib \

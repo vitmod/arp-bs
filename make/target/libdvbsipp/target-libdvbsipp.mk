@@ -18,9 +18,7 @@ rule[[
   patch:file://${PN}-${PV}.patch
 ]]rule
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+call[[ base_do_prepare ]]
 
 #CXXFLAGS="-I $(targetprefix)/usr/include/c++/4.7.3" \
 

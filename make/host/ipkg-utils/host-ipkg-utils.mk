@@ -15,9 +15,7 @@ rule[[
   patch:file://${PN}.diff
 ]]rule
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
 	install -d $(hostprefix)/bin

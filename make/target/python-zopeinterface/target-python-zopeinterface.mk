@@ -16,9 +16,7 @@ rule[[
   extract:http://pypi.python.org/packages/source/z/zope.interface/zope.interface-${PV}.tar.gz
 ]]rule
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && $(python_build)

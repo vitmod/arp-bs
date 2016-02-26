@@ -27,15 +27,14 @@ MAKE_FLAGS_${P} = \
 	KLIB_BUILD=$(targetprefix)/lib/modules/$(KERNEL_VERSION)/build
 
 
+call[[ base_do_prepare ]]
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P}) && \
+$(TARGET_${P}).do_prepare_post: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
-	./scripts/driver-select $(MAKE_FLAGS_${P})
+		./scripts/driver-select $(MAKE_FLAGS_${P})
 	touch $@
 
-
-$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
+$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare_post
 	cd $(DIR_${P}) && \
 	$(run_make) $(MAKE_FLAGS_${P})
 	touch $@

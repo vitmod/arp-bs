@@ -150,8 +150,9 @@ ifdef CONFIG_GIT_KERNEL_ARP
 call[[ git ]]
 endif
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
+call[[ base_do_prepare ]]
+
+$(TARGET_${P}).do_prepare_post: $(TARGET_${P}).do_prepare
 
 	cd $(DIR_${P}) && cat $(addprefix ${SDIR}/,$(${P}_patches)) | patch -p1
 	cd $(DIR_${P}) && $(MAKE) ${MAKE_FLAGS} mrproper
@@ -161,7 +162,7 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 	cp ${SDIR}/${CONFIG} $(DIR_${P})/.config
 	touch $@
 
-$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
+$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare_post
 	cd $(DIR_${P}) && $(run_make) ${MAKE_FLAGS} uImage modules
 ifdef CONFIG_DEBUG_ARP
 	cd $(DIR_${P})/tools/perf && $(run_make) ${MAKE_FLAGS} $(MAKE_ARGS) all

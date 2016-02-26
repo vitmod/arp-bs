@@ -245,7 +245,7 @@ call[[ base ]]
 WORK_${P} = $(prefix)/release
 DIR_${P} = $(WORK_${P})
 
-call[[ base_do_prepare ]]
+#call[[ base_do_prepare ]]
 opkg_rootfs := opkg -f $(prefix)/opkg-box.conf -o $(DIR_${P})
 
 $(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare

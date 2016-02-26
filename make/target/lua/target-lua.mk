@@ -18,9 +18,9 @@ rule[[
 
 call[[ git ]]
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	
+call[[ base_do_prepare ]]
+
+$(TARGET_${P}).do_prepare_post: $(TARGET_${P}).do_prepare
 	set -e; \
 	cd $(DIR_${P})/luaposix.git/ext; cp posix/posix.c include/lua52compat.h ../../src/; cd ../..; \
 	sed -i 's/<config.h>/"config.h"/' src/posix.c; \
@@ -31,7 +31,7 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 	
 	touch $@
 
-$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
+$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare_post
 	cd $(DIR_${P}) && \
 		$(BUILDENV) \
 		$(run_make) $(MAKE_ARGS) BUILDMODE=dynamic PKG_VERSION=5.2.3 AR="$(target)-ar rcu" linux

@@ -55,10 +55,7 @@ rule[[
   patch:localwork://gcc-4.5.2-sysroot.patch
 ]]rule
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	cd $(DIR_${P}) && echo 'STMicroelectronics/Linux Base ${ST_PV}-${ST_PR}' > gcc/DEV-PHASE
-	touch $@
+call[[ base_do_prepare ]]
 
 CONFIG_FLAGS_${P} = \
 	--prefix=$(crossprefix) \
@@ -89,6 +86,7 @@ CONFIG_FLAGS_${P} = \
 	--enable-__cxa_atexit
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
+	cd $(DIR_${P}) && echo 'STMicroelectronics/Linux Base ${ST_PV}-${ST_PR}' > gcc/DEV-PHASE
 	cd $(DIR_${P}) && \
 		mkdir -p objdir && cd objdir && \
 		../configure ${CONFIG_FLAGS} \

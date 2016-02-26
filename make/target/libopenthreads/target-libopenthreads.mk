@@ -17,13 +17,14 @@ rule[[
 
 call[[ git ]]
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
+call[[ base_do_prepare ]]
+
+$(TARGET_${P}).do_prepare_post: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		git submodule update --init --recursive
 	touch $@
 
-$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
+$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare_post
 	cd $(DIR_${P}) && \
 		rm CMakeFiles/* -rf CMakeCache.txt cmake_install.cmake && \
 		cmake . -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME="Linux" \

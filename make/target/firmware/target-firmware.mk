@@ -22,7 +22,7 @@ rule[[
   nothing:file://dvb-fe-stv6306.fw
 ]]rule
 
-$(TARGET_${P}).do_package: $(DEPENDS_${P})
+$(TARGET_${P}).do_package: $(TARGET_${P}).do_depends
 	$(PREPARE_${P})
 	$(PKDIR_clean)
 
