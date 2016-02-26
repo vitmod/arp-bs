@@ -3,7 +3,7 @@
 #
 package[[ host_autotools
 
-BDEPENDS_${P} = $(host_opkg_meta) $(host_rpmconfig) $(host_ccache)
+BDEPENDS_${P} = $(host_rpmconfig) $(host_ccache)
 
 PR_${P} = 1
 

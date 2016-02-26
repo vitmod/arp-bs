@@ -3,7 +3,7 @@
 #
 package[[ host_ccache
 
-BDEPENDS_${P} = $(host_opkg_meta)
+BDEPENDS_${P} = $(host_filesystem)
 
 PV_${P} = 3.1.8
 PR_${P} = 1

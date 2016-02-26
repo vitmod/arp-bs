@@ -3,14 +3,14 @@
 #
 package[[ host_rpmlocalmacros
 
-BDEPENDS_${P} = $(host_opkg_meta)
+BDEPENDS_${P} = $(host_filesystem)
 
 PV_${P} = 0.1
 PR_${P} = 10
 
 call[[ base ]]
 
-$(TARGET_${P}).do_install: $(DEPENDS_${P})
+$(TARGET_${P}).do_install: $(TARGET_${P}).do_depends
 	( echo "%_topdir $(prefix)"; \
 	  #echo "%_specdir %_topdir/SPECS"; \
 	  #echo "%_sourcedir %_topdir/SOURCES"; \
