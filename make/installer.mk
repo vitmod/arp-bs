@@ -33,6 +33,22 @@ installer-check: installer-check-host installer-check-cross installer-check-targ
 .PHONY: installer-check-host installer-check-cross installer-check-target installer-check
 
 
+# Adapt files for cross compiling
+rewrite_libtool = \
+	find $(PKDIR) -name "*.la" -type f -exec \
+		perl -pi -e "s,^libdir=.*$$,libdir='$(targetprefix)/usr/lib'," {} \;
+rewrite_dependency = \
+	find $(PKDIR) -name "*.la" -type f -exec \
+		perl -pi -e "s, /usr/lib, $(targetprefix)/usr/lib,g if /^dependency_libs/" {} \;
+rewrite_pkgconfig = \
+	find $(PKDIR) -name "*.pc" -type f -exec \
+		perl -pi -e "s,^prefix=.*$$,prefix=$(targetprefix)/usr," {} \;
+#FIXME: unpackaged 'cp'
+rewrite_config = \
+	cp $1 $(crossprefix)/bin/$(notdir $1) && \
+	sed -e "s,^prefix=,prefix=$(targetprefix)," -i $(crossprefix)/bin/$(notdir $1)
+
+
 
 function[[ installer
 # SYSROOT is one of host, cross, target

@@ -120,199 +120,14 @@ $(TARGET_${P}).do_rollback: $(TARGET_${P}).do_prepare
 
 
 
-# ipk
+# ipkbox
 #############################################################################
-
-# ipk related constants
-INHERIT_VARIABLES := NAME VERSION DESCRIPTION SECTION PRIORITY MAINTAINER LICENSE PACKAGE_ARCH HOMEPAGE RDEPENDS RREPLACES RCONFLICTS SRC_URI FILES
-INHERIT_DEFINES := preinst postinst prerm postrm conffiles
-
-opkg_cmd := echo -n "==> " && $(hostprefix)/bin/opkg -f $(prefix)/opkg.conf -o $(prefix)
-# makes run only one instance of opkg at a time
-opkg_script := $(call lock,$(opkg_cmd) $$@,$(prefix)/opkg.lock)
-# opkg-safe must be created by host-opkg package
-opkg := opkg-safe
-
-# we have several dests, so dependencies are shared across them
-host_ipkg_args   = -d hostroot
-cross_ipkg_args  = -d crossroot
-target_ipkg_args = -d targetroot
-
-# If there is something strange with opkg run 'source opkg.env' and start hacking!
-.PHONY: opkg.env
-opkg.env:
-	echo 'opkg-host()   { `which $(opkg)` $(host_ipkg_args) $$*; }'   >  $@
-	echo 'opkg-cross()  { `which $(opkg)` $(cross_ipkg_args) $$*; }'  >> $@
-	echo 'opkg-target() { `which $(opkg)` $(target_ipkg_args) $$*; }' >> $@
-
-opkg-check-target opkg-check-cross opkg-check-host: \
-opkg-check-%:
-	set -e; \
-	cat $($*prefix)/usr/lib/opkg/info/*.list |sort -u > db;  \
-	find $($*prefix)/ -type d -printf '%p/\n' -o -print | sed 's,$(prefix)/*,/,' | sort > fs; \
-	echo; \
-	echo "files unknown to opkg:"; \
-	comm --check-order -23 fs db; \
-	echo; \
-	echo "files missing:"; \
-	comm --check-order -13 fs db; \
-	true
-
-define opkg-check-depends
-	set -e; \
-	$(opkg) list-installed |cut -f 1 -d ' ' |xargs $(opkg) depends \
-	  |awk '/^\t/{print $$1}' |xargs $(opkg) whatprovides \
-	  |awk ' \
-	  /^What provides/{if(search) {print "==> Not found: " search; exit 1} else {search = $$3}} \
-	  /^    /{search=""}'; \
-	echo -e '==> depends OK'
-endef
-opkg-check-depends:
-	$(opkg-check-depends)
-
-help::
-	@echo "run 'make opkg-check-{host|cross|target}' to list opkg disowned files"
-	@echo "run 'make opkg-check-depends' to see unresolved dependencies"
-.PHONY: opkg-check-target opkg-check-cross opkg-check-host opkg-check-depends
 
 # format list separated with spaces to list separeated with commas
 _ipk_control_list = $(subst $(space),$(comma),$(subst $(space)$(space),$(space),$(subst _,-,$(strip $1))))
 
-# _ipk_write_control
-# - 1: pkg that contains variables
-# - 2: control file to write into
-define _ipk_write_control_common
-	$(eval export DESCRIPTION_$1)
-	echo "Description: $${DESCRIPTION_$1}" >> $2
-	echo 'Section: $(SECTION_$1)' >> $2
-	echo 'Priority: $(PRIORITY_$1)' >> $2
-	echo 'Maintainer: $(MAINTAINER_$1)' >> $2
-	echo 'License: $(LICENSE_$1)' >> $2
-	echo 'Homepage: $(HOMEPAGE_$1)' >> $2
-	echo 'Source: $(SRC_URI_$1)' >> $2
-endef
-define _ipk_write_control
-	echo 'Package: $(${P})' > $2
-	echo 'Version: $(VERSION_$1)' >> $2
-	echo 'Architecture: $(PACKAGE_ARCH_$1)' >> $2
-	echo 'Depends: $(call _ipk_control_list,$(BDEPENDS_$1))' >> $2
-	echo 'Replaces: $(call _ipk_control_list,$(BREPLACES_$1))' >> $2
-	echo 'Conflicts: $(call _ipk_control_list,$(BCONFLICTS_$1))' >> $2
-	echo 'Provides: $(call _ipk_control_list,$(BREMOVES_$1))' >> $2
-	$(call _ipk_write_control_common,$1,$2)
-endef
-
-# adapt files for cross compiling
-rewrite_libtool = \
-	find $(ipkrootdir_${P}) -name "*.la" -type f -exec \
-		perl -pi -e "s,^libdir=.*$$,libdir='$(targetprefix)/usr/lib'," {} \;
-rewrite_dependency = \
-	find $(ipkrootdir_${P}) -name "*.la" -type f -exec \
-		perl -pi -e "s, /usr/lib, $(targetprefix)/usr/lib,g if /^dependency_libs/" {} \;
-rewrite_pkgconfig = \
-	find $(ipkrootdir_${P}) -name "*.pc" -type f -exec \
-		perl -pi -e "s,^prefix=.*$$,prefix=$(targetprefix)/usr," {} \;
-#FIXME: unpackaged 'cp'
-rewrite_config = \
-	cp $1 $(crossprefix)/bin/$(notdir $1) && \
-	sed -e "s,^prefix=,prefix=$(targetprefix)," -i $(crossprefix)/bin/$(notdir $1)
-
-
-function[[ ipkbs
-# SYSROOT is one of host, cross, target
-SYSROOT_${P} ?= $(error undefined SYSROOT_${P})
-# Name of IPK that installs to SYSROOT
-IPK_${P} ?= $(ipk${SYSROOT})/$(${P})_${VERSION}_${PACKAGE_ARCH}.ipk
-
-ipkrootdir_${P} = ${WORK}/ipkrootdir
-# for sysroot ipk we copy all files.
-$(TARGET_${P}).do_ipk: $(TARGET_${P}).do_package
-	rm -rf ${ipkrootdir}
-	mkdir -p ${ipkrootdir}/CONTROL
-ifeq (${SYSROOT},host)
-	cp -ar $(PKDIR)/$(hostprefix)/* ${ipkrootdir}
-endif
-ifeq (${SYSROOT},cross)
-	cp -ar $(PKDIR)/$(crossprefix)/* ${ipkrootdir}
-endif
-ifeq (${SYSROOT},target)
-	cp -ar $(PKDIR)/* ${ipkrootdir}
-	$(rewrite_libtool)
-	$(rewrite_dependency)
-endif
-
-	$(call _ipk_write_control,${P},${ipkrootdir}/CONTROL/control)
-	
-	rm -f $(WORK_${P})/$(notdir $(IPK_${P}))
-	ipkg-build -o root -g root ${ipkrootdir}/ ${WORK}
-
-	mv $(WORK_${P})/$(notdir $(IPK_${P})) $(IPK_${P})
-	touch $@
-
-$(TARGET_${P}).clean_ipk:
-	rm -rf $(TARGET_${P}).do_ipk
-
-# finally install
-$(TARGET_${P}).do_install: $(TARGET_${P}).do_ipk
-
-#	Remove and save install commands for BREMOVES
-	echo '#Saved list that undo bremoves' > $(TARGET_${P}).reinstall
-	$(foreach pkg,${BREMOVES}, \
-	  $(opkg) $(${SYSROOT}_ipkg_args) remove --force-depends $(pkg)  $(newline) \
-	  cat $(DEPDIR)/$(pkg).do_install >> $(TARGET_${P}).reinstall    $(newline) \
-	)
-
-#	Save install command and run it
-	echo '#Saved install command'                         >  $@
-	echo '$(opkg) $(${SYSROOT}_ipkg_args) install ${IPK}' >> $@
-	$(SHELL) $@ || (rm -f $@ && false)
-
-#	Track reverse dependency graph
-	$(foreach bdep,$(BDEPENDS_${P}), \
-	  echo '$(DEPDIR)/$(bdep).clean_install: $(TARGET_${P}).clean_install' > $(TARGET_${P}).bdeps && \
-	) true
-
-#	$(opkg-check-depends)
-	touch $@
-
-# Include tracked reverse dependencies
--include $(TARGET_${P}).bdeps
-# Thanks to traked bdeps it is in fact recursive clean_install
-$(TARGET_${P}).clean_install:
-#	Remove my package
-	$(if $(MAKE_DEBUG_IPK),,@) \
-	if test -f $(TARGET_${P}).do_install; then \
-	  $(opkg) $(${SYSROOT}_ipkg_args) remove --force-depends $(${P}); \
-	fi
-
-#	Reinstall BREMOVES packages
-	$(if $(MAKE_DEBUG_IPK),,@) \
-	if test -f $(TARGET_${P}).reinstall; then \
-	  $(SHELL) $(TARGET_${P}).reinstall; \
-	fi
-
-#	$(opkg-check-depends)
-	rm -f $(TARGET_${P}).do_install
-	rm -f $(TARGET_${P}).reinstall
-	rm -f $(TARGET_${P}).bdeps
-
-$(TARGET_${P}): $(TARGET_${P}).do_install
-$(TARGET_${P}).clean: $(TARGET_${P}).clean_install
-
-]]function
-
-
-
-
-# ipkbox
-#############################################################################
-
-help-functions::
-	@echo
-	@echo write_control
-	@echo - 1: package name
-
-write_control = $(call _ipkbox_write_control,$1,$(SPLITDIR_${P})/$1/CONTROL/control)
+INHERIT_VARIABLES := NAME VERSION DESCRIPTION SECTION PRIORITY MAINTAINER LICENSE PACKAGE_ARCH HOMEPAGE RDEPENDS RREPLACES RCONFLICTS SRC_URI FILES
+INHERIT_DEFINES := preinst postinst prerm postrm conffiles
 
 # _ipkbox_write_control
 # - 1: pkg that contains variables
@@ -325,8 +140,14 @@ define _ipkbox_write_control
 	echo 'Replaces: $(call _ipk_control_list,$(RREPLACES_$1))' >> $2
 	echo 'Conflicts: $(call _ipk_control_list,$(RCONFLICTS_$1))' >> $2
 	echo 'Provides: $(call _ipk_control_list,$(RPROVIDES_$1))' >> $2
-
-	$(call _ipk_write_control_common,$1,$2)
+	$(eval export DESCRIPTION_$1)
+	echo "Description: $${DESCRIPTION_$1}" >> $2
+	echo 'Source: $(SRC_URI_$1)' >> $2
+	echo 'Section: $(SECTION_$1)' >> $2
+	echo 'Priority: $(PRIORITY_$1)' >> $2
+	echo 'Maintainer: $(MAINTAINER_$1)' >> $2
+	echo 'License: $(LICENSE_$1)' >> $2
+	echo 'Homepage: $(HOMEPAGE_$1)' >> $2
 
 	$(foreach file, preinst postinst prerm postrm conffiles,
 		$(if $($(file)_$1),
@@ -341,6 +162,13 @@ define _ipkbox_write_control
 		)
 	)
 endef
+
+help-functions::
+	@echo
+	@echo write_control
+	@echo - 1: package name
+
+write_control = $(call _ipkbox_write_control,$1,$(SPLITDIR_${P})/$1/CONTROL/control)
 
 define strip_libs
 	find $(SPLITDIR_${P})/* -type f -regex '.*/lib/.*\.so\(\.[0-9]+\)*' \
@@ -378,11 +206,17 @@ define _ipkbox_do_controls
 	)
 endef
 
+
 function[[ ipkbox
 
 SPLITDIR_${P} = $(WORK_${P})/split
 PACKAGES_${P} ?= $(patsubst host_%,%,$(patsubst cross_%,%,$(patsubst target_%,%, ${P} )))
 FILES_${P} ?= /
+VERSION_${P} ?= ${PV}-${PR}
+PACKAGE_ARCH_${P} ?= sh4
+MAINTAINER_${P} ?= Ar-P team
+SECTION_${P} ?= base
+PRIORITY_${P} ?= optional
 
 $(TARGET_${P}).set_inherit_vars: $(TARGET_${P}).do_package
 	$(info ==> $(notdir $@)) \
@@ -407,7 +241,6 @@ $(TARGET_${P}).set_inherit_vars: $(TARGET_${P}).do_package
 $(TARGET_${P}).do_split: $(TARGET_${P}).do_package | $(TARGET_${P}).set_inherit_vars
 	rm -rf $(SPLITDIR_${P})/*
 	mkdir -p $(SPLITDIR_${P})
-
 	$(call _ipkbox_do_split,${P})
 	touch $@
 
