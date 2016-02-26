@@ -78,7 +78,7 @@ ${P}_SPEC_PATCH =
 ${P}_PATCHES =
 ${P}_SRCRPM = $(archivedir)/$(STLINUX)-host-kernel-source-sh4-$(KERNEL_VERSION)-$(KERNEL_RELEASE).src.rpm
 
-DEPENDS_${P} += $(addprefix ${SDIR}/,$(${P}_patches) $(${P}_config))
+$(TARGET_${P}).do_package: $(addprefix ${SDIR}/,$(${P}_patches) $(${P}_config))
 
 call[[ base ]]
 call[[ base_rpm ]]
@@ -86,7 +86,7 @@ call[[ ipk ]]
 call[[ rpm_do_compile ]]
 endif
 
-$(TARGET_${P}).do_package: $(TARGET_${P}).do_compile $(DEPENDS_${P})
+$(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PREPARE_${P})
 	mkdir $(DIR_${P})
 # FIXME:
