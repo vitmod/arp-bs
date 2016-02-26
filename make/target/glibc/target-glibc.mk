@@ -1,7 +1,7 @@
 #
 # AR-P buildsystem smart Makefile
 #
-package[[ target_glibc
+package[[ target_glibc_second
 
 BDEPENDS_${P} = $(target_zlib) $(target_libelf)
 BREMOVES_${P} = $(target_glibc_first)

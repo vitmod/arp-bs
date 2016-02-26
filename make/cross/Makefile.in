@@ -1,0 +1,5 @@
+package[[ meta_toolchain
+call[[ header ]]
+]]package
+
+target_glibc := $(meta_toolchain)
