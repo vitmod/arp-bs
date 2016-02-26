@@ -123,8 +123,6 @@ endif
 
 CONFIG_${P} = linux-sh4-$(KERNEL_UPSTREAM)-$(KERNEL_LABEL)_$(TARGET).config$(DEBUG_STR)
 
-DEPENDS_${P} += $(addprefix ${SDIR}/,$(${P}_patches) ${CONFIG})
-
 rule[[
 ifdef CONFIG_GIT_KERNEL_ARP
 ifdef CONFIG_KERNEL_0211
@@ -152,7 +150,7 @@ endif
 
 call[[ base_do_prepare ]]
 
-$(TARGET_${P}).do_prepare_post: $(TARGET_${P}).do_prepare
+$(TARGET_${P}).do_prepare_post: $(TARGET_${P}).do_prepare | $(addprefix ${SDIR}/,$(${P}_patches) ${CONFIG})
 
 	cd $(DIR_${P}) && cat $(addprefix ${SDIR}/,$(${P}_patches)) | patch -p1
 	cd $(DIR_${P}) && $(MAKE) ${MAKE_FLAGS} mrproper
