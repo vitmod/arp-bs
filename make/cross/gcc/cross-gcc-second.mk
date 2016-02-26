@@ -7,16 +7,8 @@ BDEPENDS_${P} = $(target_glibc_first)
 BREMOVES_${P} = $(cross_gcc_first)
 
 PR_${P} = 1
-ST_PN_${P} = cross-gcc
 
-ifdef CONFIG_GCC48
- ST_PV_${P} = 4.8.4
- ST_PR_${P} = 139
-else
- ST_PV_${P} = 4.7.3
- ST_PR_${P} = 124
-endif
-PV_${P} := ${ST_PV}-${ST_PR}
+call[[ gcc_in ]]
 
 call[[ base ]]
 call[[ ipk ]]
