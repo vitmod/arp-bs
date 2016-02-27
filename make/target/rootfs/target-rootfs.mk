@@ -253,6 +253,7 @@ $(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
 	  echo "arch $(box_arch) 16"; \
 	  echo "arch sh4 10"; \
 	  echo "arch all 1"; \
+	  echo "option ignore_uid"; \
 	  echo "src/gz box file://$(ipkbox)"; \
 	) > $(prefix)/opkg-box.conf
 
