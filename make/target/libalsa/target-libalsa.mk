@@ -5,7 +5,7 @@ package[[ target_libalsa
 
 BDEPENDS_${P} =
 
-PV_${P} = 1.0.29
+PV_${P} = 1.1.0
 PR_${P} = 1
 
 DIR_${P} = ${WORK}/alsa-lib-${PV}
@@ -13,7 +13,7 @@ DIR_${P} = ${WORK}/alsa-lib-${PV}
 call[[ base ]]
 
 rule[[
-  extract:http://alsa.cybermirror.org/lib/alsa-lib-${PV}.tar.bz2
+  extract:ftp://ftp.alsa-project.org/pub/lib/alsa-lib-${PV}.tar.bz2
 ]]rule
 
 $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
