@@ -89,7 +89,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 PACKAGES_${P} = enigma2_plugins_meta $(PACKAGES_DYNAMIC_${P})
 # some pattern that doesn't match any files
 FILES_${P} = /tmp
-
+DESCRIPTION_${P} = Enigma2 plugins
 FILES_enigma2_plugins_meta := /usr/share/meta
 DESCRIPTION_enigma2_plugins_meta := Enigma2 plugins metadata
 

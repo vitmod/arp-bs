@@ -19,6 +19,9 @@ call[[ rpm ]]
 call[[ ipk ]]
 
 PACKAGES_${P} = acl libacl
+DESCRIPTION_${P} = The acl package contains utilities to administer Access Control Lists, \
+which are used to define more fine-grained discretionary access rights for files and directories. \
+This package is known to build and work properly using an LFS-7.5 platform.
 
 RDEPENDS_acl = libacl libc6
 FILES_acl = /usr/bin
