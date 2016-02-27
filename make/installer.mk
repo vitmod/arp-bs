@@ -94,17 +94,18 @@ $(TARGET_${P}).files $(TARGET_${P}).do_install: $(TARGET_${P}).%:
 	test -f ${TAR}
 	
 	tar -tf ${TAR} |grep -v '/$$' > $@_tar
-	cd ${PREFIX} && cat $@_tar |sed 's/^/"/; s/$$/"/' |xargs -n1 test ! -f
+	cd ${PREFIX} && cat $@_tar | perl -ne 'chomp; if(-e $$_) { exit 1; }'
 	tar -k -xf ${TAR} -C ${PREFIX}
 	
 	mv $@_tar ${TARGET}.files
-	rm -f ${TARGET}.rmfiles
+	rm -f ${TARGET}.rmfiles ${TARGET}.do_remove
 	touch $@
 
-$(TARGET_${P}).rmfiles $(TARGET_${P}).do_remove: $(TARGET_${P}).%:
+$(TARGET_${P}).rmfiles $(TARGET_${P}).do_remove $(TARGET_${P}).do_preinstall: $(TARGET_${P}).%:
 	@echo
 	@echo "==> Removing ${P}"
-	cd ${PREFIX} && cat ${TARGET}.files |sed 's/^/"/; s/$$/"/' |xargs rm
+	test ! -f ${TARGET}.files \
+	|| (cd ${PREFIX} && cat ${TARGET}.files |sed 's/^/"/; s/$$/"/' |xargs rm)
 	rm -f ${TARGET}.files
 	touch $@
 
@@ -117,8 +118,10 @@ $(TARGET_${P}).rmfiles $(TARGET_${P}).do_remove: $(TARGET_${P}).%:
 # firstly, create tar archive
 # secondly, remove all packages that we replace - ${BREMOVES}
 $(foreach pkg,${BREMOVES},$(DEPDIR)/$(pkg).do_remove: ${TARGET}.do_tar)
+# firdly, uninstall my old files
+$(TARGET_${P}).do_preinstall: $(TARGET_${P}).do_tar
 # finally, install files from my tar
-$(TARGET_${P}).do_install: $(TARGET_${P}).do_tar $(foreach pkg,${BREMOVES},$(DEPDIR)/$(pkg).do_remove)
+$(TARGET_${P}).do_install: $(TARGET_${P}).do_preinstall $(foreach pkg,${BREMOVES},$(DEPDIR)/$(pkg).do_remove)
 
 # When clean
 # firstly, uninstall all packages that depend on me
