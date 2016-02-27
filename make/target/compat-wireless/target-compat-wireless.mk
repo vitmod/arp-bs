@@ -13,7 +13,7 @@ PR_${P} = 2
 call[[ base ]]
 
 rule[[
-  extract:http://www.orbit-lab.org/kernel/compat-wireless/${PN}-${PV}.tar.bz2
+  extract:http://linuxwireless.org/download/${PN}-2.6/${PN}-${PV}.tar.bz2
   patch:file://${PN}.diff
   patch:file://002-disable_rfkill.patch
   patch:file://008-led_default.patch
