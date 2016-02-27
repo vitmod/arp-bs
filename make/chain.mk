@@ -55,6 +55,8 @@ ifeq (${RM_WORK},y)
 endif
 	test -f $@ && cp -a $@ $@.hold || true
 	touch $@
+	@echo "==> Finished ${P}"
+	@echo
 
 ifdef MAKE_VERBOSE
 # HACK

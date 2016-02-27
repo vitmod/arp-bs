@@ -78,6 +78,8 @@ INSTALL_${P} = true
 
 function[[ base_do_prepare
 $(TARGET_${P}).do_prepare: $(TARGET_${P}).do_depends
+	@echo
+	@echo "==> Preparing ${P} ..."
 	$(PREPARE_${P})
 	touch $@
 ]]function
