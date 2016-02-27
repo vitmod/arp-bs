@@ -11,7 +11,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  extract:ftp://ftp.videolan.org/pub/videolan/${PN}/${PV}/${PN}-${PV}.tar.bz2
+  extract:https://ftp.videolan.org/pub/videolan/${PN}/${PV}/${PN}-${PV}.tar.bz2
   patch:file://libaacs-buildfix.patch
   nothing:http://vlc-bluray.whoknowsmy.name/files/KEYDB.cfg
 ]]rule
