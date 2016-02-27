@@ -15,7 +15,7 @@ rule[[
 ]]rule
 
 CONFIG_FLAGS_${P} = \
-	--with-python="$(crossprefix)/bin" \
+	--with-python="$(crossprefix)" \
 	--without-crypto \
 	--without-debug \
 	--without-mem-debug
@@ -31,6 +31,7 @@ call[[ base_do_prepare ]]
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		$(BUILDENV) \
+		libtoolize -f -c && \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
