@@ -5,13 +5,13 @@ package[[ target_fuse
 
 BDEPENDS_${P} = $(target_glibc) $(target_glib2)
 
-PV_${P} = 2.9.4
+PV_${P} = 2.9.5
 PR_${P} = 1
 
 call[[ base ]]
 
 rule[[
-  extract:http://dfn.dl.sourceforge.net/sourceforge/${PN}/${PN}-${PV}.tar.gz
+  extract:https://github.com/libfuse/libfuse/releases/download/${PN}_2_9_5/${PN}-${PV}.tar.gz
   patch:file://${PN}.diff
 ]]rule
 
