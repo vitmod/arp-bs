@@ -3,6 +3,8 @@
 #
 package[[ target_ntpdate
 
+BDEPENDS_${P} = $(target_glibc)
+
 PV_${P} = 4.2.8
 PR_${P} = 1
 DIR_${P} = ${WORK}/ntp-${PV}
@@ -14,10 +16,7 @@ rule[[
   patch:file://${PN}.patch
 ]]rule
 
-
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \

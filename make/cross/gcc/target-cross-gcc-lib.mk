@@ -9,10 +9,9 @@ package[[ target_cross_gcc_lib
 
 BDEPENDS_${P} = $(cross_gcc_second)
 
-PV_${P} = $(PV_cross_gcc_second)
-PR_${P} = $(PR_cross_gcc_second)
+PR_${P} = 1
 
-SRC_URI_${P} = $(SRC_URI_cross_gcc_second)
+call[[ gcc_in ]]
 
 call[[ base ]]
 
@@ -28,6 +27,7 @@ $(TARGET_cross_gcc_second): $(TARGET_${P}).do_package
 call[[ ipk ]]
 
 ifdef CONFIG_GCC_LIB_FROM_CROSS
+SRC_URI_${P} = $(SRC_URI_cross_gcc_second)
 call[[ target_gcc_lib_in ]]
 call[[ ipkbox ]]
 endif

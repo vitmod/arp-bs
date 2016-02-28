@@ -17,10 +17,7 @@ rule[[
   patch:file://${PN}-0.10.69-add_dts_hd_detection.diff
 ]]rule
 
-
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	export PATH=$(hostprefix)/bin:$(PATH) && \

@@ -3,23 +3,15 @@
 #
 package[[ cross_filesystem
 
-DEPENDS_${P} = bootstrap-host
+BDEPENDS_${P} = $(meta_host)
 
-PV_${P} = 0.1
-PR_${P} = 5
+call[[ chain ]]
 
-SRC_URI_${P} = empty
-
-call[[ base ]]
-
-$(TARGET_${P}).do_package: $(DEPENDS_${P})
-	install -d $(ipkcross)
+$(TARGET_${P}).do_install: $(TARGET_${P}).do_depends
 	install -d $(crossprefix)
-
-	$(PKDIR_clean)
-	install -d $(PKDIR)/$(crossprefix)/etc
 	touch $@
 
-call[[ ipk ]]
+$(TARGET_${P}): $(TARGET_${P}).do_install
+$(TARGET_${P}).clean: $(TARGET_${P}).clean_childs
 
 ]]package

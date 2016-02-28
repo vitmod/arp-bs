@@ -18,12 +18,13 @@ rule[[
 
 call[[ git ]]
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
+call[[ base_do_prepare ]]
+
+$(TARGET_${P}).do_prepare_post: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && cp -f extractor__init__.py youtube_dl/extractor/__init__.py
 	touch $@
 
-$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
+$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare_post
 	cd $(DIR_${P}) && $(python_build)
 	touch $@
 

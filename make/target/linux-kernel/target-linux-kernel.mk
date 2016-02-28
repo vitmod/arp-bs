@@ -123,8 +123,6 @@ endif
 
 CONFIG_${P} = linux-sh4-$(KERNEL_UPSTREAM)-$(KERNEL_LABEL)_$(TARGET).config$(DEBUG_STR)
 
-DEPENDS_${P} += $(addprefix ${SDIR}/,$(${P}_patches) ${CONFIG})
-
 rule[[
 ifdef CONFIG_GIT_KERNEL_ARP
 ifdef CONFIG_KERNEL_0211
@@ -150,8 +148,9 @@ ifdef CONFIG_GIT_KERNEL_ARP
 call[[ git ]]
 endif
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
+call[[ base_do_prepare ]]
+
+$(TARGET_${P}).do_prepare_post: $(TARGET_${P}).do_prepare | $(addprefix ${SDIR}/,$(${P}_patches) ${CONFIG})
 
 	cd $(DIR_${P}) && cat $(addprefix ${SDIR}/,$(${P}_patches)) | patch -p1
 	cd $(DIR_${P}) && $(MAKE) ${MAKE_FLAGS} mrproper
@@ -161,7 +160,7 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 	cp ${SDIR}/${CONFIG} $(DIR_${P})/.config
 	touch $@
 
-$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
+$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare_post
 	cd $(DIR_${P}) && $(run_make) ${MAKE_FLAGS} uImage modules
 ifdef CONFIG_DEBUG_ARP
 	cd $(DIR_${P})/tools/perf && $(run_make) ${MAKE_FLAGS} $(MAKE_ARGS) all
@@ -212,15 +211,13 @@ call[[ TARGET_base_do_config ]]
 
 package[[ target_linux_kernel_headers
 
-DEPENDS_${P} = $(target_linux_kernel).do_prepare
-
 BDEPENDS_${P} = $(target_filesystem)
 BREMOVES_${P} = $(target_kernel_headers)
 
 call[[ target_linux_kernel_in ]]
 call[[ base ]]
 
-$(TARGET_${P}).do_package: $(DEPENDS_${P})
+$(TARGET_${P}).do_package: $(target_linux_kernel).do_prepare_post
 	$(PKDIR_clean)
 	cd $(DIR_${P}) && make ${MAKE_FLAGS} INSTALL_HDR_PATH=$(PKDIR)/usr headers_install
 	rm -rf $(PKDIR)/usr/include/scsi

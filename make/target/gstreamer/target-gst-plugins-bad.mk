@@ -40,8 +40,9 @@ rule[[
 
 endif
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
+call[[ base_do_prepare ]]
+
+$(TARGET_${P}).do_prepare_post: $(TARGET_${P}).do_prepare
 ifeq ($(strip $(CONFIG_GSTREAMER_GIT)),y)
 	cd $(DIR_${P})/common && \
 	git submodule init && \
@@ -50,7 +51,7 @@ ifeq ($(strip $(CONFIG_GSTREAMER_GIT)),y)
 endif
 	touch $@
 
-$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
+$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare_post
 	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(DIR_${P}) && \
 	$(BUILDENV) \
@@ -365,7 +366,7 @@ FILES_gst_plugins_bad_nsf = /usr/lib/gstreamer-0.10/libgstnsf.so
 RDEPENDS_gst_plugins_bad_nuvdemux = gst_plugins_bad gstreamer libxml2 libz1 libffi6 libc6 libglib
 FILES_gst_plugins_bad_nuvdemux = /usr/lib/gstreamer-0.10/libgstnuvdemux.so
 
-DEPENDS_gst_plugins_bad_patchdetect = gst_plugins_bad gstreamer libgstvideo libxml2 libz1 libffi6 libc6 libglib liborc
+RDEPENDS_gst_plugins_bad_patchdetect = gst_plugins_bad gstreamer libgstvideo libxml2 libz1 libffi6 libc6 libglib liborc
 FILES_gst_plugins_bad_patchdetect = /usr/lib/gstreamer-0.10/libgstpatchdetect.so
 
 RDEPENDS_gst_plugins_bad_pcapparse = gst_plugins_bad gstreamer libxml2 libz1 libffi6 libc6 libglib

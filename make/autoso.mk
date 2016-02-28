@@ -15,7 +15,7 @@ $(TARGET_${P}).write_provides: $(TARGET_${P}).do_split
 	true
 
 $(TARGET_${P}).include_provides: $(TARGET_${P}).write_provides
-	$(info "==> include $<")
+	$(info ==> $(notdir $@))
 	$(eval include $<)
 
 $(TARGET_${P}).do_controls: | $(TARGET_${P}).include_provides

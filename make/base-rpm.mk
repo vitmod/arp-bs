@@ -4,15 +4,14 @@ function[[ base_rpm
 # place after variables definitions in *.mk file and before targets definitions
 SRC_URI_${P} ?= stlinux.com
 # only check file existance
-$(TARGET_${P}).do_prepare: |$(if $(${P}_SPEC_PATCH),${SDIR}/$(${P}_SPEC_PATCH))
-$(TARGET_${P}).do_prepare: |$(if $(${P}_PATCHES),$(addprefix ${SDIR}/,$(${P}_PATCHES)))
-DEPENDS_${P} += $(${P}_SRCRPM)
+$(TARGET_${P}).do_prepare: $(TARGET_${P}).do_depends \
+| $(if $(${P}_SPEC_PATCH),${SDIR}/$(${P}_SPEC_PATCH)) $(if $(${P}_PATCHES),$(addprefix ${SDIR}/,$(${P}_PATCHES)))
 
 ]]function
 
 function[[ rpm_do_prepare
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
+$(TARGET_${P}).do_prepare: $(${P}_SRCRPM)
 	$(rpm_src_install) $(${P}_SRCRPM)
 	$(if $(${P}_SPEC_PATCH), cd $(specsprefix) && patch -p1 $(${P}_SPEC) < ${SDIR}/$(${P}_SPEC_PATCH) )
 	$(if $(${P}_PATCHES), cp $(addprefix ${SDIR}/,$(${P}_PATCHES)) $(sourcesprefix) )

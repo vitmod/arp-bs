@@ -15,7 +15,7 @@ rule[[
 ]]rule
 
 CONFIG_FLAGS_${P} = \
-	--with-python="$(crossprefix)/bin" \
+	--with-python="$(crossprefix)" \
 	--without-crypto \
 	--without-debug \
 	--without-mem-debug
@@ -23,9 +23,7 @@ CONFIG_FLAGS_${P} = \
 #	--with-libxml-prefix="$(targetprefix)/usr" \
 #	--with-libxml-include-prefix="$(targetprefix)/usr/include" \
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+call[[ base_do_prepare ]]
 
 # 	CPPFLAGS="$(CPPFLAGS) -I$(targetprefix)/usr/include/libxml2 -Os" \
 # 	CFLAGS="$(TARGET_CFLAGS) -Os" \
@@ -33,6 +31,7 @@ $(TARGET_${P}).do_prepare: $(DEPENDS_${P})
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		$(BUILDENV) \
+		libtoolize -f -c && \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \

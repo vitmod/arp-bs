@@ -3,7 +3,7 @@
 #
 package[[ host_pkg_config
 
-BDEPENDS_${P} = $(host_opkg_meta) $(host_rpmconfig) $(host_autotools)
+BDEPENDS_${P} = $(host_rpmconfig) $(host_autotools)
 
 PV_${P} = 0.28
 PR_${P} = 1
@@ -15,9 +15,7 @@ rule[[
   patch:file://${PN}-${PV}.patch
 ]]rule
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
@@ -26,7 +24,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--disable-host-tool \
 			--with-pc_path=$(targetprefix)/usr/lib/pkgconfig \
 		&& \
-		$(MAKE)
+		$(run_make)
 	touch $@
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile

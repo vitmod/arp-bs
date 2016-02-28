@@ -17,9 +17,7 @@ rule[[
 #  patch:file://glib-${PV}.patch
 ]]rule
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	echo "glib_cv_va_copy=no" > $(DIR_${P})/config.cache

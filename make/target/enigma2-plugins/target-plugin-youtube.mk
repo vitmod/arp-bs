@@ -3,6 +3,8 @@
 #
 package[[ target_plugin_youtube
 
+BDEPENDS_${P} = $(target_filesystem) $(cross_python)
+
 PV_${P} = git
 PR_${P} = 1
 PACKAGE_ARCH_${P} = all
@@ -15,9 +17,7 @@ rule[[
 
 call[[ git ]]
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \

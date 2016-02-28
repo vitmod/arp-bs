@@ -3,7 +3,7 @@
 #
 package[[ host_distributionutils
 
-BDEPENDS_${P} = $(host_opkg_meta) $(host_rpmconfig)
+BDEPENDS_${P} = $(host_rpmconfig)
 
 PR_${P} = 1
 

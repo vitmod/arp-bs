@@ -3,6 +3,8 @@
 #
 package[[ target_nmap
 
+BDEPENDS_${P} = $(target_glibc)
+
 PV_${P} = 6.47
 PR_${P} = 1
 
@@ -12,9 +14,7 @@ rule[[
   extract:https://${PN}.org/dist/${PN}-${PV}.tar.bz2
 ]]rule
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \

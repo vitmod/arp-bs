@@ -3,25 +3,19 @@
 #
 package[[ target_filesystem
 
-DEPENDS_${P} = build.env host-opkg-meta bootstrap-host
+BDEPENDS_${P} = $(meta_host)
+$(TARGET_${P}).do_depends: build.env
 
-PV_${P} = 0.1
-PR_${P} = 4
+call[[ chain ]]
 
-SRC_URI_${P} = empty
-
-call[[ base ]]
-call[[ ipk ]]
-
-$(TARGET_${P}).do_package: $(DEPENDS_${P})
-	install -d $(ipktarget)
+$(TARGET_${P}).do_install: $(TARGET_${P}).do_depends
 	install -d $(ipkbox)
 	install -d $(ipkorigin)
-	install -d $(targetsh4prefix)
-
-# make aclocal happy
-	$(PKDIR_clean)
-	install -d $(PKDIR)/usr/share/aclocal
+	install -d $(targetprefix)
+	install -d $(targetprefix)/usr/share/aclocal
 	touch $@
+
+$(TARGET_${P}): $(TARGET_${P}).do_install
+$(TARGET_${P}).clean: $(TARGET_${P}).clean_childs
 
 ]]package

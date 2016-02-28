@@ -59,8 +59,9 @@ MAKE_FLAGS_${P} = \
 	$(if $(CONFIG_PLAYER191),PLAYER191=y)
 
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
+call[[ base_do_prepare ]]
+
+$(TARGET_${P}).do_prepare_post: $(TARGET_${P}).do_prepare
 #	$(MAKE) -C $(KERNEL_DIR) ${MAKE_FLAGS} ARCH=sh modules_prepare
 
 	echo "# Automatically generated config: don't edit" > ${DIR}/.config
@@ -81,7 +82,7 @@ ifdef CONFIG_MULTICOM406
 endif
 	touch $@
 
-$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
+$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare_post
 	cd $(DIR_${P}) && $(run_make) $(MAKE_FLAGS_${P})
 	touch $@
 
@@ -263,7 +264,7 @@ PR_${P} = 1
 call[[ base ]]
 call[[ git ]]
 
-$(TARGET_${P}).do_package: $(DEPENDS_${P})
+$(TARGET_${P}).do_package: $(TARGET_${P}).do_depends
 	$(PKDIR_clean)
 	install -d $(PKDIR)/usr/include/linux/dvb
 

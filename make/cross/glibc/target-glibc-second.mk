@@ -1,18 +1,14 @@
 #
 # AR-P buildsystem smart Makefile
 #
-package[[ target_glibc
+package[[ target_glibc_second
 
 BDEPENDS_${P} = $(target_zlib) $(target_libelf)
 BREMOVES_${P} = $(target_glibc_first)
 
 PR_${P} = 2
 
-PV_${P} := 2.14.1-56
-${P}_SPEC = stm-$(${P}).spec
-${P}_SPEC_PATCH = $(${P}_SPEC).diff
-${P}_PATCHES = make-versions-4.0-and-greater.patch
-${P}_SRCRPM = $(archivedir)/$(STLINUX)-$(${P})-$(PV_${P}).src.rpm
+call[[ target_glibc_in ]]
 
 call[[ base ]]
 call[[ base_rpm ]]

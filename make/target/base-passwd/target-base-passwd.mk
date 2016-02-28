@@ -17,6 +17,14 @@ call[[ base ]]
 call[[ base_rpm ]]
 call[[ rpm ]]
 
+DESCRIPTION_${P} = This package supplies the "master" copies of /etc/passwd and /etc/group, \
+in /usr/share/base-passwd. It also supplies the utility "update-passwd", \
+which automatically makes sure that uids and gids in the 0-99 range on \
+your system are consistent with the Debian master copies. This means \
+that all entries in the masterfiles in that range have to be present on \
+your system, and only those entries. The reason for not allowing other \
+entries is that Debian reserves that range for future use.
+
 define postinst_${P}
 #!/bin/sh
 update-passwd -L \

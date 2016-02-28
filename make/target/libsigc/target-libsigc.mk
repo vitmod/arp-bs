@@ -3,7 +3,7 @@
 #
 package[[ target_libsigc
 
-BDEPENDS_${P} = $(target_gcc_lib)
+BDEPENDS_${P} = $(target_glibc) $(target_gcc_lib)
 
 ifdef CONFIG_SIGC2
 PV_${P} = 2.4.1
@@ -28,10 +28,7 @@ else
 endif
 ]]rule
 
-
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \

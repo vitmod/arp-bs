@@ -19,6 +19,12 @@ call[[ rpm ]]
 call[[ ipk ]]
 
 NAME_${P} = ${PN}
+DESCRIPTION_${P} = t any moment, a running System V is in one of the predetermined number of states, called runlevels. \
+At least one runlevel is the normal operating state of the system; typically, other runlevels represent single-user mode \
+(used for repairing a faulty system), system shutdown, and various other states. Switching from one runlevel to another \
+auses a per-runlevel set of scripts to be run, which typically mount filesystems, start or stop daemons,\
+start or stop the X Window System, shutdown the machine, etc.
+
 FILES_${P} = \
 	/sbin/fsck.nfs \
 	/sbin/killall5 \

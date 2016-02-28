@@ -3,7 +3,7 @@
 #
 package[[ target_openssl
 
-BDEPENDS_${P} = $(target_gcc_lib)
+BDEPENDS_${P} = $(target_glibc) $(target_gcc_lib)
 
 PV_${P} = 1.0.2f
 PR_${P} = 2
@@ -15,9 +15,7 @@ rule[[
   patch:file://${PN}-1.0.2.patch
 ]]rule
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \

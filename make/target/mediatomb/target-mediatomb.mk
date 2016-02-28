@@ -28,9 +28,8 @@ CONFIG_FLAGS_${P} = \
 		--with-avformat-h=$(targetprefix)/usr/include \
 		--disable-rpl-malloc
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+
+call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \

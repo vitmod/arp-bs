@@ -15,7 +15,7 @@ DESCRIPTION_${P} = firmware non public
 
 call[[ base ]]
 
-$(TARGET_${P}).do_package: $(DEPENDS_${P})
+$(TARGET_${P}).do_package: $(TARGET_${P}).do_depends
 	$(PKDIR_clean)
 
 	$(INSTALL_DIR) $(PKDIR)/lib/firmware/

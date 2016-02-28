@@ -18,10 +18,10 @@ unexport MAKEFLAGS
 # disable built in rules variables
 # print why target is rebuilt
 ifeq ($(MAKE_VERSION),4.0)
-MAKEFLAGS := -r -R --trace
+MAKEFLAGS := -r -R
 endif
 ifeq ($(MAKE_VERSION),4.1)
-MAKEFLAGS := -r -R --trace
+MAKEFLAGS := -r -R
 endif
 
 
@@ -105,6 +105,7 @@ VPATH := $(DEPDIR)
 
 $(if $(shell test -d $(DEPDIR) || echo fail), $(error unable to create directory $(DEPDIR)) )
 
+tarprefix := $(prefix)/tar
 # host
 hostprefix := $(prefix)/host
 ipkhost := $(prefix)/ipkhost

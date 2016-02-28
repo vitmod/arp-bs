@@ -3,6 +3,8 @@
 #
 package[[ target_livestreamersrv
 
+BDEPENDS_${P} = $(target_filesystem)
+
 PV_${P} = git
 PR_${P} = 2
 
@@ -19,9 +21,7 @@ rule[[
 
 call[[ git ]]
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
-	$(PREPARE_${P})
-	touch $@
+call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	$(PKDIR_clean)

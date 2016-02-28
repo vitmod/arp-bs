@@ -7,16 +7,8 @@ BDEPENDS_${P} = $(target_kernel_headers) $(target_glibc_headers) $(cross_mpc) $(
 
 PR_${P} = 1
 
-ifdef CONFIG_GCC48
- ST_PV_${P} = 4.8.4
- ST_PR_${P} = 139
-else
- ST_PV_${P} = 4.7.3
- ST_PR_${P} = 124
-endif
-PV_${P} := ${ST_PV}-${ST_PR}
+call[[ gcc_in ]]
 
-ST_PN_${P} = cross-gcc
 ${P}_SPEC = stm-${ST_PN}.spec
 ${P}_SPEC_PATCH = $(${P}_SPEC).$(PV_${P}).first.diff
 ${P}_PATCHES = stm-${ST_PN}.$(PV_${P}).diff
@@ -32,7 +24,7 @@ call[[ ipk ]]
 
 #call[[ rpm_do_compile ]]
 
-$(TARGET_${P}).do_prepare: $(DEPENDS_${P})
+$(TARGET_${P}).do_prepare: $(${P}_SRCRPM)
 	$(rpm_src_install) $(${P}_SRCRPM)
 	$(if $(${P}_SPEC_PATCH), cd $(specsprefix) && patch -p1 $(${P}_SPEC) < ${SDIR}/$(${P}_SPEC_PATCH) )
 	$(if $(${P}_PATCHES), cp $(addprefix ${SDIR}/,$(${P}_PATCHES)) $(sourcesprefix) )
@@ -46,6 +38,14 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	
 	rm -f $(PKDIR)/$(crossprefix)/lib/libiberty.a
+
+#	gcc-first has no libgcc_s and libgcc_eh libs
+#	but we need it for glibc
+#	this hack is suggested somewhere in the net
+
+	ln -sv libgcc.a `$(PKDIR)/$(crossprefix)/bin/$(target)-gcc -print-libgcc-file-name | sed 's/libgcc/&_eh/'`
+	ln -sv libgcc.a `$(PKDIR)/$(crossprefix)/bin/$(target)-gcc -print-libgcc-file-name | sed 's/libgcc/&_s/'`
+
 	touch $@
 
 ]]package
