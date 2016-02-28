@@ -43,6 +43,11 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	( echo "arch all 1" ; \
 	  echo "arch sh4 10"; \
 	  echo "arch $(box_arch) 16"; \
+	  echo "option cache_dir /var/cache/opkg"; \
+	  echo "option lists_dir /usr/lib/opkg/lists"; \
+	  echo "option info_dir /usr/lib/opkg/info"; \
+	  echo "option status_file /usr/lib/opkg/status"; \
+	  echo "option lock_file /var/run/opkg.lock";\
 	) >> $(PKDIR)/etc/opkg/opkg.conf
 	ln -sf opkg $(PKDIR)/usr/bin/ipkg-cl
 	ln -sf opkg $(PKDIR)/usr/bin/ipkg
