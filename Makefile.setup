@@ -2,6 +2,8 @@
 # basic ENVIRONMENT
 #
 
+# don't need default make targets and variables
+MAKEFLAGS := -r -R
 # sometimes sbin progs are missing
 export PATH := $(PATH):/usr/sbin:/sbin
 
@@ -229,3 +231,19 @@ Makefile: smart-rules.pl Makefile.pre
 	@echo launch make -f Makefile.setup oldconfig
 	@echo ----------------------------------------------------------------------------
 	@false
+
+# fake target to generate Makefile database
+NONE:
+.PHONY: NONE
+
+# dumping Makefile database for completion and dep-graph
+depdir := $(shell pwd)/build/.deps
+Makefile.dump: Makefile
+	$(MAKE) -f $^ -p NONE > $@ || (rm -f $@ && false)
+# we only print targets in DEPDIR that are in VPATH
+Makefile.completion: Makefile.dump
+	cat $^ |perl -ne 'if(m,^$(depdir)/([\w\/\-\.]+):([^=]|$$),) { print $$1  . "\n"; }' > $@ \
+	|| (rm -f $@ && false)
+COMPLETION: Makefile.completion
+	cat $^
+.PNONY: COMPLETION

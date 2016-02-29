@@ -8,7 +8,7 @@
 
 function _make_arp()
 {
-    local file makef makef_dir="." makef_inc cur prev i split=false
+    local file makef makef_dir makef_inc cur prev i split=false
 
     COMPREPLY=()
     _get_comp_words_by_ref cur prev
@@ -62,24 +62,26 @@ function _make_arp()
             fi
         done
 
-        [ -n "$makef" ] && makef="-f ${makef}"
-        [ -n "$makef_dir" ] && makef_dir="-C ${makef_dir}"
-
-        list=$(make -qrp $makef $makef_dir .DEFAULT 2>/dev/null | \
-               awk -F ':' '/^[[:alnum:]_\/\-\.]+:([^=]|$)/ {len=split($1,A,/\//); print A[len];}')
-
-        case "$cur" in
-        *.*)
-            list=$(compgen -W "$list" -- "$cur")
+        # Use our completion cache
+        if [ -z "$makef" -a -z "$makef_dir" -a -f Makefile.setup ]; then
+            list=$(make -f Makefile.setup COMPLETION 2>/dev/null)
+            case "$cur" in
+            *.*)
+                COMPREPLY=( $(compgen -W "$list" -- "$cur") )
             ;;
-        *)
-            # replace all foo.* just with one foo.
-            list=$(compgen -W "$list" -- "$cur" |sed 's/\..*/\./')
-            compopt -o nospace
+            *)
+                # replace all foo.* just with one foo.
+                COMPREPLY=( $(compgen -W "$list" -- "$cur" |sed 's/\..*//') )
+                compopt -o nospace
             ;;
-        esac
-        COMPREPLY=( $list )
-
+            esac
+        # We are in alien directory use general method
+        else
+            [ -z "$makef_dir" ] && makef_dir="."
+            list=$(make -qrp -f $makef -C $makef_dir .DEFAULT 2>/dev/null \
+            | awk -F ':' '/^[[:alnum:]_\/\-\.]+:([^=]|$)/ {len=split($1,A,/\//); print A[len];}')
+            COMPREPLY=( $(compgen -W "$list" -- "$cur") )
+        fi
     fi
 } &&
 complete -F _make_arp make
@@ -91,4 +93,4 @@ complete -F _make_arp make
 # indent-tabs-mode: nil
 # End:
 # ex: ts=4 sw=4 et filetype=sh
- 
+# kate: space-indent on; indent-width 4

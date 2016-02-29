@@ -9,6 +9,7 @@ localmacros
 Makefile
 Makefile.pre
 Makefile.dump
+Makefile.completion
 dep.dot
 dot.svg
 build.env
