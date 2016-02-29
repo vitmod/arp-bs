@@ -253,6 +253,12 @@ $(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
 	  echo "arch $(box_arch) 16"; \
 	  echo "arch sh4 10"; \
 	  echo "arch all 1"; \
+	  echo "option ignore_uid"; \
+	  echo "option cache_dir /var/cache/opkg"; \
+	  echo "option lists_dir /usr/lib/opkg/lists"; \
+	  echo "option info_dir /usr/lib/opkg/info"; \
+	  echo "option status_file /usr/lib/opkg/status"; \
+	  echo "option lock_file /var/run/opkg.lock";\
 	  echo "src/gz box file://$(ipkbox)"; \
 	) > $(prefix)/opkg-box.conf
 

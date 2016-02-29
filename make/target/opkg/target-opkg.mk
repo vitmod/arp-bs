@@ -3,9 +3,9 @@
 #
 package[[ target_opkg
 
-BDEPENDS_${P} = $(target_glibc) $(target_zlib)
+BDEPENDS_${P} = $(target_glibc) $(target_zlib) $(target_libarchive)
 
-PV_${P} = 0.2.4
+PV_${P} = 0.3.1
 PR_${P} = 1
 PACKAGE_ARCH_${P} = $(box_arch)
 
@@ -21,6 +21,7 @@ call[[ base_do_prepare ]]
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		$(BUILDENV) \
+		./autogen.sh && \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
@@ -40,15 +41,20 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	( echo "arch all 1" ; \
 	  echo "arch sh4 10"; \
 	  echo "arch $(box_arch) 16"; \
+	  echo "option cache_dir /var/cache/opkg"; \
+	  echo "option lists_dir /usr/lib/opkg/lists"; \
+	  echo "option info_dir /usr/lib/opkg/info"; \
+	  echo "option status_file /usr/lib/opkg/status"; \
+	  echo "option lock_file /var/run/opkg.lock";\
 	) >> $(PKDIR)/etc/opkg/opkg.conf
-	ln -sf opkg-cl $(PKDIR)/usr/bin/opkg
-	ln -sf opkg-cl $(PKDIR)/usr/bin/ipkg-cl
-	ln -sf opkg-cl $(PKDIR)/usr/bin/ipkg
+	ln -sf opkg $(PKDIR)/usr/bin/ipkg-cl
+	ln -sf opkg $(PKDIR)/usr/bin/ipkg
 	$(INSTALL) -c -m755 ${SDIR}/modprobe $(PKDIR)/usr/share/opkg/intercept/modprobe
 	touch $@
 
 NAME_${P} = ${PN}
 DESCRIPTION_${P} = lightweight package management system
+RDEPENDS_${P} = libarchive
 FILES_${P} = \
 	/etc/opkg \
 	/usr/bin \

@@ -6,7 +6,7 @@ package[[ target_libfribidi
 BDEPENDS_${P} = $(target_glibc)
 
 PV_${P} = 0.19.7
-PR_${P} = 1
+PR_${P} = 2
 
 PN_${P} = fribidi
 
@@ -26,6 +26,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--prefix=/usr \
 			--enable-memopt \
+			--with-glib=no \
 		&& \
 		$(run_make) all
 	touch $@
