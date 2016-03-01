@@ -109,11 +109,9 @@ menu "Global Configuration"
 
 		config GCC47
 		bool "Build gcc 4.7.3"
-		depends on GCC_LIB_FROM_TARGET
 
 		config GCC48
 		bool "Build gcc 4.8.4"
-		depends on GCC_LIB_FROM_TARGET
 	endchoice
 
 	config MAKE_JLEVEL
