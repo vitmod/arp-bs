@@ -209,6 +209,7 @@ Makefile.pre: \
   make/archive-specs.mk
 
 	echo "# Automatically generated file; DO NOT EDIT." > $@
+ifdef false
 	for f in $^; do \
 		echo >> $@ && \
 		echo "#---------------------------------------------------------" >> $@ && \
@@ -216,6 +217,14 @@ Makefile.pre: \
 		echo "#---------------------------------------------------------" >> $@ && \
 		cat $$f >> $@; \
 	done
+else
+	echo $^ |tr ' ' '\n' |perl -n \
+	-e 'print "#---------------------------------------------------------\n";' \
+	-e 'print "_thisfile := $$_";' \
+	-e 'print "#---------------------------------------------------------\n";' \
+	-e 'open(FILE, $$_); while (<FILE>) { print; } close(FILE);' >> $@
+endif
+
 
 Makefile: smart-rules.pl Makefile.pre
 	./smart-rules.pl Makefile.pre || (rm -f $@ && false)
