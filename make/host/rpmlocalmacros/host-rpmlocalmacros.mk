@@ -40,5 +40,6 @@ $(TARGET_${P}).do_install: $(TARGET_${P}).do_depends
 	touch $@
 
 $(TARGET_${P}): $(TARGET_${P}).do_install
+$(TARGET_${P}).clean: $(TARGET_${P}).clean_childs
 
 ]]package
