@@ -17,13 +17,14 @@ rule[[
 
 call[[ base_do_prepare ]]
 
-$(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
-	install -d $(hostprefix)/bin
+$(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
+	$(PKDIR_clean)
+	install -d $(PKDIR)/$(hostprefix)/bin
 	cd $(DIR_${P}) && \
-		$(run_make) all PREFIX=$(hostprefix) && \
-		$(run_make) install PREFIX=$(hostprefix)
+		$(run_make) all PREFIX=$(PKDIR)/$(hostprefix) && \
+		$(run_make) install PREFIX=$(PKDIR)/$(hostprefix)
 	touch $@
 
-$(TARGET_${P}): $(TARGET_${P}).do_install
+call[[ installer ]]
 
 ]]package

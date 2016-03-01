@@ -18,6 +18,7 @@ call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
+		export PATH=$(HOST_PATH) && \
 		./configure \
 			--build=$(build) \
 			--host=$(build) \
