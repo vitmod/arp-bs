@@ -16,7 +16,14 @@ call[[ chain ]]
 ${TARGET}: | ${TARGET}.do_depends
 
 # If you decided to clean it, or any package in its ${BDEPENDS}
-# be ready that it will wipe whole toolchain
-${TARGET}.clean: ${TARGET}.clean_childs
+# we break clean chain here
+${TARGET}.clean: ${TARGET}.clean_help
+${TARGET}.clean_help:
+	@echo
+	@echo ----------------------------------------------------------------------------
+	@echo Are you shure you want to remove cross and target?
+	@echo to remove all data run:
+	@echo run make ${TARGET}.clean_childs
+	@echo ----------------------------------------------------------------------------
 
 ]]package

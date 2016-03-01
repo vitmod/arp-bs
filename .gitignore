@@ -21,4 +21,5 @@ build/
 driver/
 make-*.tar.gz
 make-4.0/
+log/
 opkg.lock

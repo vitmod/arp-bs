@@ -26,7 +26,7 @@ $(TARGET_${P}).do_srcrev: $(TARGET_${P}).config
 $(TARGET_${P}).do_prepare: $(TARGET_${P}).config
 $(TARGET_${P}).config:
 	@echo
-	echo '$(foreach cfg,$(filter ${CONFIGS}, $(.VARIABLES)),$(cfg)=$($(cfg)) )' > $@
+	echo '$(foreach cfg,$(sort $(filter ${CONFIGS}, $(.VARIABLES))),$(cfg)=$($(cfg)) )' > $@
 	test -f $@_old && diff -u $@_old $@ \
 	  && (echo '==> $@ - old' && mv $@_old $@) \
 	  || (echo '==> $@ - new' && rm -f $@_old)

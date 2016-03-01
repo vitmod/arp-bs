@@ -220,7 +220,7 @@ MAKE_ARGS := \
 	OBJDUMP=$(target)-objdump \
 	LN_S="ln -s"
 
-PLATFORM_CPPFLAGS := $(CPPFLAGS) -I$(driverdir)/include
+PLATFORM_CPPFLAGS := -I$(driverdir)/include
 ifdef CONFIG_SPARK
 PLATFORM_CPPFLAGS += -DPLATFORM_SPARK
 endif
