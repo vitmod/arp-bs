@@ -1,8 +1,6 @@
 #
 # AR-P buildsystem smart Makefile
 #
-ifeq ($(strip $(CONFIG_BUILD_NEUTRINO)),y)
-
 package[[ target_libstb_hal
 
 BDEPENDS_${P} = $(target_glibc) $(target_ffmpeg) $(target_libalsa) $(target_libpng) $(target_libass) $(target_libopenthreads)
@@ -65,4 +63,3 @@ call[[ ipkbox ]]
 
 ]]package
 
-endif
