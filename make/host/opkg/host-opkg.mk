@@ -16,7 +16,7 @@ rule[[
 
 call[[ base_do_prepare ]]
 
-$(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
+$(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		export PATH=$(HOST_PATH) && \
 		./autogen.sh && \
@@ -24,14 +24,14 @@ $(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
 			PKG_CONFIG_PATH=$(hostprefix)/lib/pkgconfig \
 			--prefix=$(hostprefix) \
 		&& \
-		$(run_make) && \
-		$(run_make) install
-
-	echo '$(opkg_script)' > $(hostprefix)/bin/opkg-safe
-	chmod +x $(hostprefix)/bin/opkg-safe
-
+		$(run_make)
 	touch $@
 
-$(TARGET_${P}): $(TARGET_${P}).do_install
+$(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
+	$(PKDIR_clean)
+	cd ${DIR} && $(run_make) install DESTDIR=$(PKDIR)
+	touch $@
+
+call[[ installer ]]
 
 ]]package
