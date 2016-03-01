@@ -19,6 +19,9 @@ call[[ rpm ]]
 call[[ ipk ]]
 
 PACKAGES_${P} = libevent libevent_core libevent_extra libevent_openssl libevent_pthreads
+DESCRIPTION_${P} = The libevent API provides a mechanism to execute a callback function when a specific \
+event occurs on a file descriptor or after a timeout has been reached. Furthermore, libevent also support \
+callbacks due to signals or regular timeouts.
 
 RDEPENDS_libevent = libc6
 FILES_libevent = /usr/lib/libevent.s* /usr/lib/libevent-2.0.s*
