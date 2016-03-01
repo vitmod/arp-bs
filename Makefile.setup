@@ -246,12 +246,12 @@ NONE:
 .PHONY: NONE
 
 # dumping Makefile database for completion and dep-graph
-depdir := $(shell pwd)/build/.deps
+depdir := $(shell pwd)/build/.deps/
 Makefile.dump: Makefile
 	$(MAKE) -f $^ -p NONE > $@ || (rm -f $@ && false)
 # we only print targets in DEPDIR that are in VPATH
 Makefile.completion: Makefile.dump
-	cat $^ |perl -ne 'if(m,^$(depdir)/([\w\/\-\.]+):([^=]|$$),) { print $$1  . "\n"; }' > $@ \
+	cat $^ |perl -ne 'if(m,^($(depdir))?([\w\-\.]+):([^=]|$$),) { print $$2  . "\n"; }' > $@ \
 	|| (rm -f $@ && false)
 COMPLETION: Makefile.completion
 	cat $^
