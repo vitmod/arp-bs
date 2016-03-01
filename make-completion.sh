@@ -1,10 +1,9 @@
 # bash completion for GNU make
 
 # mod for OpenARP Makefile. based on bash-completion version 1.3
-# usage:
-#   source make-completion.sh
+# usage: source make-completion.sh
 # to auto complete make targets specific to this build-system Makefile press TAB
-#   make <TAB>
+# completion is set for alias 'mk', for more info see end of file
 
 function _make_arp()
 {
@@ -79,12 +78,23 @@ function _make_arp()
         else
             [ -z "$makef_dir" ] && makef_dir="."
             list=$(make -qrp -f $makef -C $makef_dir .DEFAULT 2>/dev/null \
-            | awk -F ':' '/^[[:alnum:]_\/\-\.]+:([^=]|$)/ {len=split($1,A,/\//); print A[len];}')
+            | awk -F ':' '/^[[:alnum:]_\/\-\.]+:([^=]|$)/ { print $1; }')
             COMPREPLY=( $(compgen -W "$list" -- "$cur") )
         fi
     fi
 } &&
-complete -F _make_arp make
+complete -F _make_arp mk
+
+alias mk="./make.sh"
+
+cat logo.txt
+echo "----------------------------------------------------------------------------"
+echo "we created an alias for GNU make: 'mk'"
+echo "it has bash completion feature modified for AR-P builds"
+echo "to start autocompleting run mk something<TAB>"
+echo "to see available extensions for a target then press . and again <TAB>"
+echo "it copies output automatically to log, and more features"
+echo "----------------------------------------------------------------------------"
 
 # Local variables:
 # mode: shell-script
