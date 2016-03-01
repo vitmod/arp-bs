@@ -12,13 +12,15 @@ mainmenu "global config"
 	default y
 	bool "Activate ccache ?"
 
-###########################################################################################
-  menu "Global Configuration"
+
+
+menu "Global Configuration"
+
 	choice
 		prompt "Target:"
 		default SPARK
 		help
-			Select box type
+		  Select box type
 
 		config SPARK
 		bool "SPARK"
@@ -29,7 +31,7 @@ mainmenu "global config"
 		config HL101
 		bool "SpiderBox HL-101 (TODO)"
 	endchoice
-		
+
 	choice
 		prompt "Kernel:"
 		default KERNEL_0211
@@ -45,19 +47,18 @@ mainmenu "global config"
 		config KERNEL_0217
 		bool "STM 24 2.6.32.61-0217"
 		select GIT_KERNEL_ARP
-
 	endchoice
 
+	config GIT_KERNEL_ARP
+	bool "Build kernel from Git STlinux"
 
-		config GIT_KERNEL_ARP
-		bool  "Build kernel from Git STlinux"
 
-###########################################################################
+
 	choice
 		prompt "toolchain building:"
 		default GLIBC_SCRATCH
 		help
-			select if use prebuilt binaries for toolchain at stage 1
+		  select if use prebuilt binaries for toolchain at stage 1
 
 		config GLIBC_BINARY
 		bool "use prebuilt glibc sh4 binaries (TODO)"
@@ -113,13 +114,14 @@ mainmenu "global config"
 		config GCC48
 		bool "Build gcc 4.8.4"
 		depends on GCC_LIB_FROM_TARGET
-	  endchoice
+	endchoice
 
 	config MAKE_JLEVEL
 		int "Number of jobs to run simultaneously"
 		default "1"
 		help
-		    Number of jobs to run simultanesouly
+		  Number of jobs to run simultanesouly
+	
 	config TARGET_CFLAGS
 		string "Target Optimizations C Flags"
 		default "-O2"
@@ -128,26 +130,29 @@ mainmenu "global config"
 		string "Target Optimizations C++ Flags"
 		default "-O2"
 
-	comment	"Equipment:"
 
-		config WLAN_SUPPORT
+
+	comment "Equipment:"
+	
+	config WLAN_SUPPORT
 		bool "Wireless support"
 
-		config 3G_SUPPORT
+	config 3G_SUPPORT
 		bool "Support 3G modem"
 
-		config NTFS_3G_SUPPORT
+	config NTFS_3G_SUPPORT
 		bool "Support ntfs filesystem"
 
-		config IPTABLES_SUPPORT
+	config IPTABLES_SUPPORT
 		bool "Iptables support"
-		
-		config EXTERNAL_LCD
-		bool  "External USB GraphLCD "
+	
+	config EXTERNAL_LCD
+		bool "External USB GraphLCD "
 
 endmenu
 
-############################################################################
+
+
 menu "GUI Configuration"
 	choice
 		prompt "Media Framework:"
@@ -190,31 +195,31 @@ menu "GUI Configuration"
 	default BUILD_ENIGMA2
 
 	config BUILD_ENIGMA2
-			bool
-			prompt "Enigma2"
+		bool "Enigma2"
+	
 	if BUILD_ENIGMA2
+	
 		choice
-		  prompt "Enigma2 source:"
-		  default ENIGMA2_SRC_MASTER
+			prompt "Enigma2 source:"
+			default ENIGMA2_SRC_MASTER
 
-		  config ENIGMA2_SRC_MASTER 
-		  bool "public branch master"
-		  depends on BUILD_ENIGMA2
+			config ENIGMA2_SRC_MASTER
+			bool "public branch master"
+			depends on BUILD_ENIGMA2
 
-		  config ENIGMA2_SRC_STAGING
-		  bool "public branch staging"
-		  depends on BUILD_ENIGMA2
+			config ENIGMA2_SRC_STAGING
+			bool "public branch staging"
+			depends on BUILD_ENIGMA2
 
-		  config ENIGMA2_TAAPAT
-		  bool "enigma2 taapat on bitbucket"
-		  depends on BUILD_ENIGMA2
-
+			config ENIGMA2_TAAPAT
+			bool "enigma2 taapat on bitbucket"
+			depends on BUILD_ENIGMA2
 		endchoice
 
-	config ENIGMA2_PLUGINS
-	bool "enigma2-plugins-extra"
-	default y
-	depends on BUILD_ENIGMA2
+		config ENIGMA2_PLUGINS
+		bool "enigma2-plugins-extra"
+		default y
+		depends on BUILD_ENIGMA2
 
 		config ENIGMA2_EXTENSION_ALTSOFTCAM
 		bool "enigma2-plugin-extensions-alternativesoftcammanager"
@@ -226,20 +231,19 @@ menu "GUI Configuration"
 		config ENIGMA2_EXTENSION_OPENWEBIF
 		bool "enigma2-plugin-extensions-openwebif"
 
-
 		config ENIGMA2_EXTENSION_MEDIAPORTAL
 		bool "enigma2-plugin-extensions-mediaportal"
 
 		config PYTHON_LIVESTREAMER
-		bool  "Livestreamer"
-		
-		config OSCAM
-		bool  "enigma2-plugin-cams-oscam"
+		bool "Livestreamer"
 
-	config ENIGMA2_SKINS
-	bool "enigma2-skins-extra"
-	default y
-	depends on BUILD_ENIGMA2
+		config OSCAM
+		bool "enigma2-plugin-cams-oscam"
+
+		config ENIGMA2_SKINS
+		bool "enigma2-skins-extra"
+		default y
+		depends on BUILD_ENIGMA2
 
 		config ENIGMA2_SKIN_MEGAMOD
 		bool "enigma2-plugin-skin-megamod"
@@ -254,17 +258,18 @@ menu "GUI Configuration"
 		config ENIGMA2_SKIN_METROPOLISHD
 		bool "enigma2-plugin-skin-metropolishd"
 
-	endif
+	endif # BUILD_ENIGMA2
 
-		config SIGC2
-		bool  "experemental  sigc++ 2.0 "
+	config SIGC2
+	bool "experemental sigc++ 2.0"
+
+
 
 	config BUILD_NEUTRINO
-		bool
-		prompt "Neutrino"
+	bool "Neutrino"
 
-		if BUILD_NEUTRINO
-		      choice
+	if BUILD_NEUTRINO
+		choice
 			prompt "Neutrino source:"
 			default NEUTRINO_SRC_MASTER
 
@@ -277,26 +282,24 @@ menu "GUI Configuration"
 			bool "public branch Max"
 			depends on BUILD_NEUTRINO
 			select SIGC2
-
-		      endchoice
-		endif
+		endchoice
+	endif
 
 	config BUILD_XBMC
-		bool
-		prompt "XBMC"
+	bool "XBMC"
 
-		if BUILD_XBMC
-			choice
+	if BUILD_XBMC
+		choice
 			prompt "XBMC source:"
 			default XBMC
 
 			config XBMC
 			bool XBMC
 			depends on BUILD_XBMC
-			endchoice
-		endif
+		endchoice
+	endif
 
 	config BUILD_VDR
-		tristate "VDR"
+	bool "VDR"
 
 endmenu
