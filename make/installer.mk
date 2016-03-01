@@ -17,6 +17,10 @@
 
 installer-check-host installer-check-cross installer-check-target: installer-check-%:
 	@echo "==> check $*"
+	
+	@echo 'Cleanup empty directories:'
+	find $($*prefix) -type d -empty -print -delete
+	
 	cat $(DEPDIR)/$*-*.files |sort > /tmp/$@_db
 	test -z "`cat /tmp/$@_db |uniq -d`"
 	cd $($*prefix) && find . -type f -o -type l |sort > /tmp/$@_fs
