@@ -263,7 +263,7 @@ $(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
 	) > $(prefix)/opkg-box.conf
 
 	cd $(ipkbox) && \
-		/usr/bin/python $(hostprefix)/bin/ipkg-make-index . > Packages && \
+		ipkg-make-index . > Packages && \
 		cat Packages | gzip > Packages.gz
 	install -d $(DIR_${P})/usr/lib/opkg
 
