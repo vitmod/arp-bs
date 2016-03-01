@@ -140,8 +140,8 @@ $(TARGET_${P}): $(TARGET_${P}).do_install
 # Print file conflicts
 $(TARGET_${P}).help_install: $(TARGET_${P}).do_tar
 	@echo "==> Files conflict:"
-	tar -tf ${TAR} |grep -v '/$$' \
-	| while read f; do test ! -f "$$f" && echo -e "\t$$f"; done
+	cd ${PREFIX} && tar -tf ${TAR} |grep -v '/$$' \
+	| while read f; do test -f "$$f" && echo -e "\t$$f"; done
 
 ]]function
 
