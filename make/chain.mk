@@ -78,6 +78,6 @@ ${TARGET}.clean_childs:
 	@echo "==> clean ${P}"
 
 ${TARGET}.clean:
-	rm -f ${TARGET}.bdep ${TARGET}.do_depends ${TARGET}
+	rm -f ${TARGET}.bdep ${TARGET}.do_depends
 
 ]]function
