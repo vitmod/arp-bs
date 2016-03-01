@@ -70,7 +70,7 @@ endif
 
 # Set new variables and targets
 # New commands will be added by rule[[ directive
-PREPARE_${P} = (rm -rf $(WORK_${P}) || true) && mkdir -p $(WORK_${P})
+PREPARE_${P} := (rm -rf $(WORK_${P}) || true) && mkdir -p $(WORK_${P})
 INSTALL_${P} = true
 
 ]]function

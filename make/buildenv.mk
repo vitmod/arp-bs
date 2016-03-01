@@ -108,19 +108,13 @@ $(if $(shell test -d $(DEPDIR) || echo fail), $(error unable to create directory
 tarprefix := $(prefix)/tar
 # host
 hostprefix := $(prefix)/host
-ipkhost := $(prefix)/ipkhost
 # cross
 devkitprefix := $(prefix)/devkit
 crossprefix := $(devkitprefix)/sh4
-targetsh4prefix := $(prefix)/target-sh4
-ipkcross := $(prefix)/ipkcross
 # target
 targetprefix := $(prefix)/target
-targetboxprefix := $(prefix)/target-$(TARGET)
-ipktarget := $(prefix)/ipktarget
-# kernel sources dir
-kernelprefix := $(devkitprefix)/sources/kernel
 
+# packages for rootfs
 ipkbox := $(prefix)/ipkbox
 ipkorigin := $(prefix)/ipkbox-origin
 
@@ -139,7 +133,6 @@ export CFLAGS = -g -O2
 export CXXFLAGS = -g -O2
 
 # Kernel configuration
-
 
 ifdef CONFIG_KERNEL_0211
 KERNEL_VERSION := 2.6.32.59_stm24_0211
@@ -244,7 +237,7 @@ start_build = $(error obsolete)
 
 # TODO: move it somewhere
 # all helpers
-PKDIR_clean = rm -rf $(PKDIR)/* && mkdir -p $(PKDIR)
+PKDIR_clean = echo '==> Packaging ${P} ...' $(newline) rm -rf $(PKDIR)/* && mkdir -p $(PKDIR)
 
 # rpm helpers
 rpm_macros := --macros /usr/lib/rpm/macros:$(configprefix)/rpm/hosts/$(build):$(configprefix)/rpm/targets/$(target):$(configprefix)/rpm/common:$(buildprefix)/localmacros

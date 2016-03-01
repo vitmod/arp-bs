@@ -33,7 +33,7 @@ $(foreach dep, $(value BDEPENDS_${P}), \
 endif
 
 # set working directory
-WORK_${P} = $(workprefix)/${P}
+WORK_${P} := $(workprefix)/${P}
 
 ${TARGET}.do_depends: $(addprefix $(DEPDIR)/,${BDEPENDS})
 #	Add target to clean chain when start build
@@ -69,7 +69,7 @@ ${TARGET}.hold: ${TARGET}
 endif
 
 # add to list
-all: $(TARGET_${P})
+all: ${TARGET}
 
 
 # saved reverse dependecnies
@@ -78,7 +78,6 @@ ${TARGET}.clean_childs:
 	@echo "==> clean ${P}"
 
 ${TARGET}.clean:
-	rm -f ${TARGET}.bdep
-	rm -f ${TARGET}.do_depends ${TARGET}
+	rm -f ${TARGET}.bdep ${TARGET}.do_depends ${TARGET}
 
 ]]function
