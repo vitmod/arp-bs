@@ -189,30 +189,29 @@ menu "GUI Configuration"
 		string "URL for nonfree plugins"
 		default "src/gz non-free-feed http://nonfree.sat-universum.de"
 
-	prompt "Apps:"
-	default BUILD_ENIGMA2
+
+
+	comment "Apps:"
 
 	config BUILD_ENIGMA2
-		bool "Enigma2"
+	bool "Enigma2"
+	default y
 	
+	choice
+		prompt "Enigma2 source:"
+		default ENIGMA2_SRC_MASTER
+
+		config ENIGMA2_SRC_MASTER
+		bool "public branch master"
+
+		config ENIGMA2_SRC_STAGING
+		bool "public branch staging"
+
+		config ENIGMA2_SRC_TAAPAT
+		bool "enigma2 taapat on bitbucket"
+	endchoice
+
 	if BUILD_ENIGMA2
-	
-		choice
-			prompt "Enigma2 source:"
-			default ENIGMA2_SRC_MASTER
-
-			config ENIGMA2_SRC_MASTER
-			bool "public branch master"
-			depends on BUILD_ENIGMA2
-
-			config ENIGMA2_SRC_STAGING
-			bool "public branch staging"
-			depends on BUILD_ENIGMA2
-
-			config ENIGMA2_TAAPAT
-			bool "enigma2 taapat on bitbucket"
-			depends on BUILD_ENIGMA2
-		endchoice
 
 		config ENIGMA2_PLUGINS
 		bool "enigma2-plugins-extra"
@@ -266,36 +265,29 @@ menu "GUI Configuration"
 	config BUILD_NEUTRINO
 	bool "Neutrino"
 
-	if BUILD_NEUTRINO
-		choice
-			prompt "Neutrino source:"
-			default NEUTRINO_SRC_MASTER
+	choice
+		prompt "Neutrino source:"
+		default NEUTRINO_SRC_MASTER
 
-			config NEUTRINO_SRC_MASTER
-			bool "public branch master"
-			depends on BUILD_NEUTRINO
-			select SIGC2
+		config NEUTRINO_SRC_MASTER
+		bool "public branch master"
+		select SIGC2
 
-			config NEUTRINO_SRC_MAX
-			bool "public branch Max"
-			depends on BUILD_NEUTRINO
-			select SIGC2
-		endchoice
-	endif
+		config NEUTRINO_SRC_MAX
+		bool "public branch Max"
+		select SIGC2
+	endchoice
 
 	config BUILD_XBMC
 	bool "XBMC"
 
-	if BUILD_XBMC
-		choice
-			prompt "XBMC source:"
-			default XBMC
+	choice
+		prompt "XBMC source:"
+		default XBMC_SRC_GIT
 
-			config XBMC
-			bool XBMC
-			depends on BUILD_XBMC
-		endchoice
-	endif
+		config XBMC_SRC_GIT
+		bool XBMC
+	endchoice
 
 	config BUILD_VDR
 	bool "VDR"

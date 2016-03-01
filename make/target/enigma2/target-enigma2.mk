@@ -1,7 +1,6 @@
 #
 # ENIGMA2
 #
-ifeq ($(strip $(CONFIG_BUILD_ENIGMA2)),y)
 package[[ target_enigma2
 
 BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif)
@@ -23,7 +22,7 @@ CONFIG_FLAGS_${P} = \
 	PY_PATH=$(targetprefix)/usr \
 	$(PLATFORM_CPPFLAGS)
 
-GST_BASE_RDEPS = \
+GST_RDEPS_${P} = \
 	gst_plugins_base_alsa \
 	gst_plugins_base_app \
 	gst_plugins_base_audioconvert \
@@ -36,7 +35,7 @@ GST_BASE_RDEPS = \
 	gst_plugins_base_typefindfunctions \
 	gst_plugins_base_vorbis
 
-GST_GOOD_RDEPS = \
+GST_RDEPS_${P} += \
 	gst_plugins_good_apetag \
 	gst_plugins_good_audioparsers \
 	gst_plugins_good_autodetect \
@@ -54,7 +53,7 @@ GST_GOOD_RDEPS = \
 	gst_plugins_good_udp \
 	gst_plugins_good_wavparse
 
-GST_BAD_RDEPS = \
+GST_RDEPS_${P} += \
 	gst_plugins_bad_cdxaparse \
 	gst_plugins_bad_mms \
 	gst_plugins_bad_mpegdemux \
@@ -63,7 +62,7 @@ GST_BAD_RDEPS = \
 	gst_plugins_bad_fragmented \
 	gst_plugins_bad_faad
 
-GST_UGLY_RDEPS = \
+GST_RDEPS_${P} += \
 	gst_plugins_ugly_asf \
 	gst_plugins_ugly_cdio \
 	gst_plugins_ugly_dvdsub \
@@ -71,7 +70,7 @@ GST_UGLY_RDEPS = \
 	gst_plugins_ugly_mpegaudioparse \
 	gst_plugins_ugly_mpegstream
 
-PYTHON_RDEPS = \
+PYTHON_RDEPS_${P} += \
 	libpython2.7 \
 	python-threading \
 	python-core \
@@ -97,7 +96,7 @@ PYTHON_RDEPS = \
 ifdef CONFIG_GSTREAMER
 BDEPENDS_${P} += $(target_gst_plugins_dvbmediasink)
 CONFIG_FLAGS_${P} += --enable-mediafwgstreamer
-RDEPENDS_enigma2 += gst_plugins_dvbmediasink gst_plugins_fluendo_mpegdemux gst_plugin_subsink $(GST_BASE_RDEPS) $(GST_GOOD_RDEPS) $(GST_BAD_RDEPS) $(GST_UGLY_RDEPS)
+RDEPENDS_enigma2 += gst_plugins_dvbmediasink gst_plugins_fluendo_mpegdemux gst_plugin_subsink ${GST_RDEPS}
 endif
 ifdef CONFIG_EPLAYER3
 BDEPENDS_${P} += $(target_libeplayer3)
@@ -140,7 +139,7 @@ endif
 ifdef CONFIG_ENIGMA2_SRC_STAGING
   git://github.com/OpenAR-P/enigma2-pli-arp.git;b=staging
 endif
-ifdef CONFIG_ENIGMA2_TAAPAT
+ifdef CONFIG_ENIGMA2_SRC_TAAPAT
    git://bitbucket.org/Taapat/enigma2-pli-arp-taapat.git;b=master;protocol=https
    patch:file://enigma2-taapat.patch
 endif
@@ -219,7 +218,7 @@ PACKAGES_${P} = \
 	enigma2_plugin_systemplugins_wirelesslan
 
 PACKAGE_ARCH_enigma2 = $(box_arch)
-RDEPENDS_enigma2 += $(PYTHON_RDEPS) libgcc1 libtuxtxt0 libbz2 libgif4 libfreetype6 libdvbsi++1 font-ae-almateen font-andale font-lcd font-md-khmurabi font-tuxtxt font-nmsbd libpng16 font-liberationsans-b font-liberationsans-bl font-liberationsans-i font-liberationsans-r libstdc++6 libglib libcrypto1 libfribidi0 libtuxtxt32bpp0 libxmlccwrap ethtool libdreamdvd0 enigma2_meta e2fsprogs-e2fsck e2fsprogs-tune2fs libjpeg-turbo
+RDEPENDS_enigma2 += ${PYTHON_RDEPS} libgcc1 libtuxtxt0 libbz2 libgif4 libfreetype6 libdvbsi++1 font-ae-almateen font-andale font-lcd font-md-khmurabi font-tuxtxt font-nmsbd libpng16 font-liberationsans-b font-liberationsans-bl font-liberationsans-i font-liberationsans-r libstdc++6 libglib libcrypto1 libfribidi0 libtuxtxt32bpp0 libxmlccwrap ethtool libdreamdvd0 enigma2_meta e2fsprogs-e2fsck e2fsprogs-tune2fs libjpeg-turbo
 
 FILES_enigma2 = \
 	/usr/bin \
@@ -394,5 +393,3 @@ call[[ provides_so ]]
 call[[ ipkbox ]]
 
 ]]package
-endif
-

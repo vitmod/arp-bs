@@ -1,7 +1,6 @@
 #
 # XBMC
 #
-ifeq ($(strip $(CONFIG_BUILD_XBMC)),y)
 package[[ target_xbmc
 
 BDEPENDS_${P} = $(target_boost) $(target_libass) $(target_libmpeg2) $(target_python) $(target_python_twisted) $(target_libmodplug) $(target_taglib) $(target_libnfs) $(target_libmicrohttpd) $(target_expat) $(target_libxmlccwrap) $(target_tinyxml) $(target_libsamplerate) $(target_flac) $(target_jasper) $(target_gst_plugins_dvbmediasink) $(target_libjpeg_turbo) $(target_lzo) $(target_fontconfig) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libsigc) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libstgles) $(target_yajl) $(target_pcre) $(target_libcdio)
@@ -51,7 +50,7 @@ CONFIG_FLAGS_${P} = \
 			PYTHON_CPPFLAGS=-I$(targetprefix)/usr/include/python$(PYTHON_VERSION) \
 			PY_PATH=$(targetprefix)/usr \
 
-GST_BASE_RDEPS = \
+GST_RDEPS_${P} = \
 	gst_plugins_base_alsa \
 	gst_plugins_base_app \
 	gst_plugins_base_audioconvert \
@@ -64,7 +63,7 @@ GST_BASE_RDEPS = \
 	gst_plugins_base_typefindfunctions \
 	gst_plugins_base_vorbis
 
-GST_GOOD_RDEPS = \
+GST_RDEPS_${P} += \
 	gst_plugins_good_apetag \
 	gst_plugins_good_audioparsers \
 	gst_plugins_good_autodetect \
@@ -82,7 +81,7 @@ GST_GOOD_RDEPS = \
 	gst_plugins_good_udp \
 	gst_plugins_good_wavparse
 
-GST_BAD_RDEPS = \
+GST_RDEPS_${P} += \
 	gst_plugins_bad_cdxaparse \
 	gst_plugins_bad_mms \
 	gst_plugins_bad_mpegdemux \
@@ -91,7 +90,7 @@ GST_BAD_RDEPS = \
 	gst_plugins_bad_fragmented \
 	gst_plugins_bad_faad
 
-GST_UGLY_RDEPS = \
+GST_RDEPS_${P} += \
 	gst_plugins_ugly_asf \
 	gst_plugins_ugly_cdio \
 	gst_plugins_ugly_dvdsub \
@@ -99,7 +98,7 @@ GST_UGLY_RDEPS = \
 	gst_plugins_ugly_mpegaudioparse \
 	gst_plugins_ugly_mpegstream
 
-PYTHON_RDEPS = \
+PYTHON_RDEPS_${P} = \
 	libpython2.7 \
 	python-threading \
 	python-core \
@@ -133,7 +132,7 @@ call[[ base ]]
 
 rule[[
 
-ifdef CONFIG_XBMC
+ifdef CONFIG_XBMC_SRC_GIT
   git://github.com/xbmc/xbmc.git:r=12.2-Frodo
   patch:file://xbmc-nightly.0.diff
   patch:file://xbmc-texture.patch
@@ -177,7 +176,7 @@ DESCRIPTION_${P} = xbmc
 SRC_URI_${P} = git://github.com/xbmc/xbmc.git
 
 RDEPENDS_xbmc_core = libstgles libmad0 libsamplerate0 libogg0 libvorbis libmodplug curl libjpeg-turbo libflac8 libbz2 libtiff5 liblzo2 libz1 libfontconfig1 libfribidi0 libfreetype6 jasper libsqlite3 libpng16 libpcre libcdio12 \
-yajl libmicrohttpd tinyxml $(PYTHON_RDEPS) $(GST_BASE_RDEPS) $(GST_GOOD_RDEPS) $(GST_BAD_RDEPS) $(GST_UGLY_RDEPS) gst_plugins_dvbmediasink gst_plugins_fluendo_mpegdemux gst_plugin_subsink libexpat1 lirc libnfs taglib directfb
+yajl libmicrohttpd tinyxml ${PYTHON_RDEPS} ${GST_RDEPS} gst_plugins_dvbmediasink gst_plugins_fluendo_mpegdemux gst_plugin_subsink libexpat1 lirc libnfs taglib directfb
 
 FILES_xbmc_core = /usr/bin/xbmc \
 		/usr/lib/xbmc/* \
@@ -212,4 +211,3 @@ FILES_xbmc_language = \
 call[[ ipkbox ]]
 
 ]]package
-endif

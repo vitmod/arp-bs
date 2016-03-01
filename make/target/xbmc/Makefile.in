@@ -1,5 +1,3 @@
-ifeq ($(strip $(CONFIG_BUILD_XBMC)),y)
 package[[ target_xbmc
 call[[ header ]]
 ]]package
-endif
