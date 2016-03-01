@@ -15,6 +15,8 @@ rule[[
   patch:file://${PN}.patch
 ]]rule
 
+call[[ git ]]
+
 MAKE_FLAGS_${P} = \
 	CROSS_COMPILE=$(target)- \
 	prefix=/usr

@@ -21,11 +21,12 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		$(BUILDENV) \
 		./configure \
-			--prefix= \
+			--prefix=/ \
 			--datarootdir=/usr/share \
 			--with-ssl=openssl \
 			--disable-nls \
 			--disable-debug \
+			--without-libssl-prefix \
 			--build=$(build) \
 			--host=$(target) \
 			--target=$(target) \

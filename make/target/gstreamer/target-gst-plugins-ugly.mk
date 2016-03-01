@@ -32,6 +32,7 @@ rule[[
 
 endif
 
+call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_prepare_post: $(TARGET_${P}).do_prepare
 ifeq ($(strip $(CONFIG_GSTREAMER_GIT)),y)

@@ -3,7 +3,7 @@
 #
 package[[ target_libalsa
 
-BDEPENDS_${P} =
+BDEPENDS_${P} = $(target_glibc)
 
 PV_${P} = 1.1.0
 PR_${P} = 1
@@ -19,7 +19,6 @@ rule[[
 call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
-	export PATH=$(hostprefix)/bin:$(PATH) && \
 	cd $(DIR_${P}) && \
 		libtoolize --force --copy --automake && \
 		aclocal -I $(hostprefix)/share/aclocal -I m4 && \

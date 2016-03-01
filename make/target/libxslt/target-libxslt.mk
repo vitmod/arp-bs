@@ -3,10 +3,10 @@
 #
 package[[ target_libxslt
 
-BDEPENDS_${P} = $(target_libxml2)
+BDEPENDS_${P} = $(target_libxml2) $(target_python)
 
 PV_${P} = 1.1.28
-PR_${P} = 1
+PR_${P} = 2
 
 call[[ base ]]
 

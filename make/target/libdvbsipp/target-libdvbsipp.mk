@@ -25,11 +25,6 @@ call[[ base_do_prepare ]]
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		$(BUILDENV) \
-		aclocal -I $(hostprefix)/share/aclocal -I m4 && \
-		autoheader && \
-		autoconf && \
-		automake --foreign && \
-		libtoolize --force && \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \

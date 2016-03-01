@@ -3,7 +3,7 @@
 #
 package[[ target_libsoup
 
-BDEPENDS_${P} = $(target_glibc)
+BDEPENDS_${P} = $(target_glib2)
 
 PV_${P} = 2.53.2
 PR_${P} = 1
