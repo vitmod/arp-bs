@@ -55,7 +55,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			ac_cv_broken_sem_getvalue=no \
 			HOSTPYTHON=$(crossprefix)/bin/python \
 		&& \
-		$(MAKE) $(MAKE_ARGS) \
+		$(run_make) $(MAKE_ARGS) \
 			HOSTPYTHON=$(crossprefix)/bin/python \
 			HOSTPGEN=$(crossprefix)/bin/pgen \
 			CROSS_COMPILE=$(target) \

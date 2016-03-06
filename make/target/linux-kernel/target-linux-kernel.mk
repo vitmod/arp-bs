@@ -153,7 +153,7 @@ call[[ base_do_prepare ]]
 $(TARGET_${P}).do_prepare_post: $(TARGET_${P}).do_prepare | $(addprefix ${SDIR}/,$(${P}_patches) ${CONFIG})
 
 	cd $(DIR_${P}) && cat $(addprefix ${SDIR}/,$(${P}_patches)) | patch -p1
-	cd $(DIR_${P}) && $(MAKE) ${MAKE_FLAGS} mrproper
+	cd $(DIR_${P}) && $(run_make) ${MAKE_FLAGS} mrproper
 # FIXME:
 	ln -sf ${SDIR}/integrated_firmware $(DIR_${P})/../integrated_firmware
 

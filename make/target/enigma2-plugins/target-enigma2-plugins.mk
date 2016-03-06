@@ -99,7 +99,7 @@ call[[ ipkbox ]]
 $(TARGET_${P}).do_split_post: $(TARGET_${P}).do_split
 	set -e; \
 	for p in $(PACKAGES_DYNAMIC_${P}); do \
-		cd ${DIR}/$$p && $(MAKE) install DESTDIR=${SPLITDIR}/$$p; \
+		cd ${DIR}/$$p && $(run_make) install DESTDIR=${SPLITDIR}/$$p; \
 		mv ${SPLITDIR}/$$p/usr/share/meta/* ${SPLITDIR}/enigma2_plugins_meta/usr/share/meta || true; \
 		rmdir --parents ${SPLITDIR}/$$p/usr/share/meta || true; \
 		for f in preinst postinst prerm postrm; do \

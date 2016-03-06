@@ -62,7 +62,7 @@ MAKE_FLAGS_${P} = \
 call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_prepare_post: $(TARGET_${P}).do_prepare
-#	$(MAKE) -C $(KERNEL_DIR) ${MAKE_FLAGS} ARCH=sh modules_prepare
+#	$(run_make) -C $(KERNEL_DIR) ${MAKE_FLAGS} ARCH=sh modules_prepare
 
 	echo "# Automatically generated config: don't edit" > ${DIR}/.config
 	echo "export CONFIG_PLAYER_191=y" >> ${DIR}/.config
