@@ -20,8 +20,9 @@ call[[ rpm ]]
 call[[ ipk ]]
 
 PACKAGES_${P} = gdb gdbserver
+DESCRIPTION_${P} = gdb gdbserver
 
-RDEPENDS_gdb = libc6
+RDEPENDS_gdb = libc6 libexpat1
 FILES_gdb = /usr/bin/gdb
 
 RDEPENDS_gdbserver = libc6
