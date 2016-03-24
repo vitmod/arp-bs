@@ -225,7 +225,7 @@ endif
 
 ifdef CONFIG_BUILD_NEUTRINO
 BDEPENDS_${P} += $(target_libid3tag) $(target_libvorbisidec) $(target_libcap) $(target_libmad) $(target_neutrino) $(target_neutrino_plugins)
-opkg_my_list += neutrino libblkid1 neutrino-plugins-cammanager
+opkg_my_list += neutrino libblkid1 neutrino-plugins-cammanager neutrino-enigma2-load
 endif
 
 ########################################################################################
