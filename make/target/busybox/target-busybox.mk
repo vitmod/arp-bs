@@ -5,7 +5,7 @@ package[[ target_busybox
 
 BDEPENDS_${P} = $(target_glibc) $(target_zlib) $(target_libffi)
 
-PV_${P} = 1.24.1
+PV_${P} = 1.24.2
 PR_${P} = 3
 
 DESCRIPTION_${P} = Tiny versions of many common UNIX utilities in a single small executable.
@@ -14,9 +14,9 @@ call[[ base ]]
 
 rule[[
   extract:http://busybox.net/downloads/${PN}-${PV}.tar.bz2
-  patch:https://busybox.net/downloads/fixes-${PV}/busybox-1.24.1-unzip.patch
-  patch:https://busybox.net/downloads/fixes-${PV}/busybox-1.24.1-unzip-regression.patch
-  patch:https://busybox.net/downloads/fixes-${PV}/busybox-1.24.1-truncate-open-mode.patch
+  patch:https://busybox.net/downloads/fixes-${PV}/busybox-1.24.2-CVE-2016-2147.patch
+  patch:https://busybox.net/downloads/fixes-${PV}/busybox-1.24.2-CVE-2016-2148.patch
+  patch:https://busybox.net/downloads/fixes-${PV}/busybox-1.24.2-ash-recursive-heredocs.patch
   nothing:file://${PN}.config
   nothing:file://busybox-cron
   nothing:file://syslog.busybox
