@@ -6,7 +6,7 @@ package[[ target_opkg
 BDEPENDS_${P} = $(target_glibc) $(target_zlib) $(target_libarchive)
 
 PV_${P} = 0.3.1
-PR_${P} = 1
+PR_${P} = 2
 PACKAGE_ARCH_${P} = $(box_arch)
 
 call[[ base ]]
@@ -48,6 +48,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	  echo "option lock_file /var/run/opkg.lock";\
 	) >> $(PKDIR)/etc/opkg/opkg.conf
 	ln -sf opkg $(PKDIR)/usr/bin/ipkg-cl
+	ln -sf opkg $(PKDIR)/usr/bin/opkg-cl
 	ln -sf opkg $(PKDIR)/usr/bin/ipkg
 	$(INSTALL) -c -m755 ${SDIR}/modprobe $(PKDIR)/usr/share/opkg/intercept/modprobe
 	touch $@
