@@ -5,7 +5,7 @@ package[[ target_wget
 
 BDEPENDS_${P} = $(target_openssl)
 
-PV_${P} = 1.15
+PV_${P} = 1.17.1
 PR_${P} = 1
 
 call[[ base ]]
