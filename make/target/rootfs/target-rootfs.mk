@@ -11,6 +11,7 @@ $(target_streamripper) $(target_libbz2)
 
 # core system libraries, binaries and scripts
 opkg_my_list = \
+	avahi-daemon \
 	sysvinit \
 	devinit \
 	udev \
