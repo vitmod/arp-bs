@@ -5,7 +5,7 @@ package[[ target_curl
 
 BDEPENDS_${P} = $(target_glibc) $(target_zlib)
 
-PV_${P} = 7.44.0
+PV_${P} = 7.48.0
 PR_${P} = 1
 
 call[[ base ]]
