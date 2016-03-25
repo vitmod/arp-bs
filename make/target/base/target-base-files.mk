@@ -6,7 +6,7 @@ package[[ target_base_files
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = 0.2
-PR_${P} = 3
+PR_${P} = 4
 PACKAGE_ARCH_${P} = $(box_arch)
 
 DESCRIPTION_${P} = Miscellaneous files for the base system.
@@ -70,6 +70,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	ln -sf /media $(PKDIR)/mnt
 	ln -sf /media/hdd $(PKDIR)/hdd
 	ln -sf /proc/mounts $(PKDIR)/etc/mtab
+	ln -sf /usr/bin/cam $(PKDIR)/var/emu
 	echo "$(TARGET)" > $(PKDIR)/etc/hostname
 	echo "576i50" > $(PKDIR)/etc/videomode
 ifdef CONFIG_BUILD_ENIGMA2
