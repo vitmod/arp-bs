@@ -20,6 +20,9 @@ fi
 	  echo "run" > /dev/vfd
 	  echo "LOADING neutrino"
 	  echo "starting neutrino ->"
+	  if [ -f /etc/init.d/cam ]; then
+	    /etc/init.d/cam restart > /dev/null
+	  fi
 		killall showiframe &
 		/usr/bin/neutrino
 	  rtv=$?
@@ -27,11 +30,20 @@ fi
 	 case "$rtv" in
 		0) echo "0"
 		   echo "SHUTDOWN"
+		   if [ -f /etc/init.d/cam ]; then
+		      /etc/init.d/cam stop > /dev/null
+		   fi
 		   init 0;;
 		1) echo "1"
 		   echo "REBOOT"
+		   if [ -f /etc/init.d/cam ]; then
+		      /etc/init.d/cam stop > /dev/null
+		   fi
 		   init 6;;
 		*) echo "*"
 		   echo "ERROR"
+		   if [ -f /etc/init.d/cam ]; then
+		      /etc/init.d/cam stop > /dev/null
+		   fi
 		   init 6;;
 	 esac
