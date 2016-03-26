@@ -6,7 +6,7 @@ package[[ target_enigma2
 BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif)
 
 PV_${P} = git
-PR_${P} = 20
+PR_${P} = 21
 PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -144,10 +144,12 @@ ifdef CONFIG_ENIGMA2_SRC_TAAPAT
    patch:file://enigma2-taapat.patch
 endif
   install:-d:$(PKDIR)/usr/share/enigma2/
+  install:-d:$(PKDIR)/usr/script/
   install_file:$(PKDIR)/usr/share/enigma2/keymap.xml:file://keymap.xml
   install_file:$(PKDIR)/usr/share/enigma2/keytranslation.xml:file://keytranslation.xml
   install_file:$(PKDIR)/usr/share/enigma2/skin_display_perl.xml:file://skin_display_perl.xml
-
+  install_bin:$(PKDIR)/usr/script/standby_enter.sh:file://standby_enter.sh
+  install_bin:$(PKDIR)/usr/script/standby_leave.sh:file://standby_leave.sh
 ]]rule
 
 call[[ git ]]
@@ -231,6 +233,7 @@ FILES_enigma2 = \
 	/usr/lib/enigma2/python/Screens \
 	/usr/lib/enigma2/python/Tools \
 	/usr/lib/enigma2/python/*.p* \
+	/usr/script/*.* \
 	/usr/share/enigma2/countries \
 	/usr/share/enigma2/extensions \
 	/usr/share/enigma2/hw_info \
