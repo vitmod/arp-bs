@@ -6,7 +6,7 @@ package[[ target_neutrino_plugins
 
 BDEPENDS_${P} =  $(target_lua) $(target_neutrino)
 PV_${P} = git
-PR_${P} = 3
+PR_${P} = 4
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
 

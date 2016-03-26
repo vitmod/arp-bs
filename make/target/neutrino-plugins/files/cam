@@ -33,7 +33,6 @@ cam_stop() {
   rm -rf /tmp/*.info /tmp/mgcamd.pid /tmp/camd.socket /tmp/wicardd.* /tmp/share.* /tmp/*.log /tmp/*.txt
 	sleep 2
   killall -9 mgcamd >/dev/null
-  killall -9 oscam8x >/dev/null
   killall -9 oscam >/dev/null
   killall -9 wicardd-sh4 >/dev/null
 }
