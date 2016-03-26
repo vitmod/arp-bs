@@ -49,6 +49,7 @@ $(TARGET_${P}).version_${PV}-${PR}:
 
 # daily helpers
 $(TARGET_${P}).clean_prepare:
+	rm -f $(TARGET_${P}).version_${PV}-${PR}
 	rm -f $(TARGET_${P}).do_prepare
 
 $(TARGET_${P}).clean_compile:
@@ -310,7 +311,7 @@ else
 UPDATE_SAFE_${P} :=
 endif
 # initial srcrev value
-$(SRCREV_${P}): $(GIT_DIR_${P})
+$(SRCREV_${P}): $(GIT_DIR_${P}) $(TARGET_${P}).version_${PV}-${PR}
 	$(UPDATE_SAFE_${P})
 	cd $(GIT_DIR_${P}) && $(git_log_srcrev) > ${SRCREV}
 
@@ -384,7 +385,7 @@ $(TARGET_${P}).do_prepare: $(SRCREV_${P})
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_svn_version
 
 # initial srcrev value
-$(SRCREV_${P}): $(SVN_DIR_${P})
+$(SRCREV_${P}): $(SVN_DIR_${P}) $(TARGET_${P}).version_${PV}-${PR}
 	$(UPDATE_${P})
 	cd $(SVN_DIR_${P}) && $(svn_log_srcrev) > ${SRCREV}
 
@@ -419,7 +420,7 @@ $(TARGET_${P}).include_svn_version: $(TARGET_${P}).write_svn_version
 
 # Here we specify the main code of generating dynamic variables
 # output file will be included by make at run time
-$(TARGET_${P}).write_svn_version: $(SVN_DIR_${P})
+$(TARGET_${P}).write_svn_version: ${SRCREV}
 	echo -n "SVN_VERSION_${P} := " > $@
 	cd $(SVN_DIR_${P}) && $(svn_log_version) >> $@
 
