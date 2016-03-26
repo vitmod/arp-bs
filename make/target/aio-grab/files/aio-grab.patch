@@ -1,5 +1,5 @@
 diff --git a/main.c b/main.c
-index 715ef75..88ee3b5 100644
+index bb74bf4..85cc1fe 100644
 --- a/main.c
 +++ b/main.c
 @@ -37,10 +37,48 @@ Feel free to use the code for your own projects. See LICENSE file for details.
@@ -55,12 +55,12 @@ index 715ef75..88ee3b5 100644
  void (*resize)(const unsigned char *source, unsigned char *dest, int xsource, int ysource, int xdest, int ydest, int colors);
  void combine(unsigned char *output, const unsigned char *video, const unsigned char *osd, int vleft, int vtop, int vwidth, int vheight, int xres, int yres);
  
--static enum {UNKNOWN, PALLAS, VULCAN, WETEKPLAY, XILLEON, BRCM7366ARM, BRCM7400, BRCM7401, BRCM7405, BRCM7325, BRCM7335, BRCM7358, BRCM7362, BRCM7241, BRCM7346, BRCM7356, BRCM7424, BRCM7425, BRCM7435, BRCM7552} stb_type = UNKNOWN;
-+// static enum {UNKNOWN, PALLAS, VULCAN, WETEKPLAY, XILLEON, BRCM7366ARM, BRCM7400, BRCM7401, BRCM7405, BRCM7325, BRCM7335, BRCM7358, BRCM7362, BRCM7241, BRCM7346, BRCM7356, BRCM7424, BRCM7425, BRCM7435, BRCM7552} stb_type = UNKNOWN;
- 
+-static enum {UNKNOWN, PALLAS, VULCAN, XILLEON, BRCM7366ARM, BRCM7400, BRCM7401, BRCM7405, BRCM7325, BRCM7335, BRCM7358, BRCM7362, BRCM7241, BRCM7346, BRCM7356, BRCM7424, BRCM7425, BRCM7435, BRCM7552} stb_type = UNKNOWN;
++//static enum {UNKNOWN, PALLAS, VULCAN, XILLEON, BRCM7366ARM, BRCM7400, BRCM7401, BRCM7405, BRCM7325, BRCM7335, BRCM7358, BRCM7362, BRCM7241, BRCM7346, BRCM7356, BRCM7424, BRCM7425, BRCM7435, BRCM7552} stb_type = UNKNOWN;
  
  static int chr_luma_stride = 0x40;
-@@ -113,6 +151,7 @@ int main(int argc, char **argv)
+ static int chr_luma_register_offset = 0;
+@@ -112,6 +150,7 @@ int main(int argc, char **argv)
  
  	const char* filename = "/tmp/screenshot.bmp";
  
@@ -68,7 +68,7 @@ index 715ef75..88ee3b5 100644
  	// detect STB
  	char buf[256];
  	FILE *fp = fopen("/proc/fb","r");
-@@ -335,6 +374,7 @@ int main(int argc, char **argv)
+@@ -329,6 +368,7 @@ int main(int argc, char **argv)
  		default:
  			break;
  	}
@@ -76,7 +76,7 @@ index 715ef75..88ee3b5 100644
  
  	// process command line
  	while ((c = getopt (argc, argv, "dhj:lbnopqr:sv")) != -1)
-@@ -417,14 +457,17 @@ int main(int argc, char **argv)
+@@ -411,14 +451,17 @@ int main(int argc, char **argv)
  
  	int mallocsize=1920*1080;
  
@@ -95,7 +95,7 @@ index 715ef75..88ee3b5 100644
  
  	output = (unsigned char *)malloc(mallocsize*4);
  
-@@ -440,6 +483,7 @@ int main(int argc, char **argv)
+@@ -434,6 +477,7 @@ int main(int argc, char **argv)
  		getvideo(video,&xres_v,&yres_v);
  	}
  
@@ -103,7 +103,7 @@ index 715ef75..88ee3b5 100644
  	// get aspect ratio
  	if (stb_type == VULCAN || stb_type == PALLAS)
  	{
-@@ -454,6 +498,10 @@ int main(int argc, char **argv)
+@@ -448,6 +492,10 @@ int main(int argc, char **argv)
  	else
  	{
  		fp = fopen("/proc/stb/vmpeg/0/aspect", "r");
@@ -114,7 +114,7 @@ index 715ef75..88ee3b5 100644
  		if (fp)
  		{
  			while (fgets(buf,sizeof(buf), fp))
-@@ -490,7 +538,10 @@ int main(int argc, char **argv)
+@@ -484,7 +532,10 @@ int main(int argc, char **argv)
  		}
  		if (dst_width == 720) dst_width = 0;
  		if (dst_height == 576) dst_height = 0;
@@ -125,7 +125,7 @@ index 715ef75..88ee3b5 100644
  
  	// resizing
   	if (video_only)
-@@ -772,7 +823,16 @@ void getvideo(unsigned char *video, int *xres, int *yres)
+@@ -766,7 +817,16 @@ void getvideo(unsigned char *video, int *xres, int *yres)
  	int stride = 0;
  	FILE *fp;
  	char buf[256];
@@ -143,7 +143,7 @@ index 715ef75..88ee3b5 100644
  	if (stb_type == BRCM7366ARM)
  	{
  		int fd_video = open("/dev/dvb/adapter0/video0", O_RDONLY);
-@@ -788,13 +848,226 @@ void getvideo(unsigned char *video, int *xres, int *yres)
+@@ -782,13 +842,226 @@ void getvideo(unsigned char *video, int *xres, int *yres)
  		*yres = 1080;
  		return;
  	}
@@ -371,15 +371,15 @@ index 715ef75..88ee3b5 100644
  	if (stb_type > XILLEON)
  	{
  		// grab bcm pic from decoder memory
-@@ -1212,6 +1485,7 @@ void getvideo(unsigned char *video, int *xres, int *yres)
- 		return;
+@@ -1152,6 +1425,7 @@ void getvideo(unsigned char *video, int *xres, int *yres)
  
+ 		free(memory_tmp);
  	}
 +#endif
  
  	close(mem_fd);
  
-@@ -1237,22 +1511,26 @@ void getvideo(unsigned char *video, int *xres, int *yres)
+@@ -1177,22 +1451,26 @@ void getvideo(unsigned char *video, int *xres, int *yres)
  			int GV=yuv2rgbtable_gv[V];
  			int BV=yuv2rgbtable_bv[V];
  
@@ -406,7 +406,7 @@ index 715ef75..88ee3b5 100644
  			video[out1+rgbstride]=CLAMP((Y + RU)>>16);
  			video[out1+1+rgbstride]=CLAMP((Y - GV - GU)>>16);
  			video[out1+2+rgbstride]=CLAMP((Y + BV)>>16);
-@@ -1262,12 +1540,14 @@ void getvideo(unsigned char *video, int *xres, int *yres)
+@@ -1202,12 +1480,14 @@ void getvideo(unsigned char *video, int *xres, int *yres)
  
  			Y=yuv2rgbtable_y[luma[pos]];
  
@@ -421,25 +421,7 @@ index 715ef75..88ee3b5 100644
  			video[out1+rgbstride]=CLAMP((Y + RU)>>16);
  			video[out1+1+rgbstride]=CLAMP((Y - GV - GU)>>16);
  			video[out1+2+rgbstride]=CLAMP((Y + BV)>>16);
-@@ -1291,7 +1571,7 @@ void getosd(unsigned char *osd, int *xres, int *yres)
- 	unsigned char *lfb;
- 	struct fb_fix_screeninfo fix_screeninfo;
- 	struct fb_var_screeninfo var_screeninfo;
--
-+#if 0
- 	fb=open((stb_type == WETEKPLAY) ? "/dev/fb/2" : "/dev/fb/0", O_RDWR);
- 	if (fb == -1)
- 	{
-@@ -1302,7 +1582,7 @@ void getosd(unsigned char *osd, int *xres, int *yres)
- 			return;
- 		}
- 	}
--
-+#endif
- 	if(ioctl(fb, FBIOGET_FSCREENINFO, &fix_screeninfo) == -1)
- 	{
- 		fprintf(stderr, "Framebuffer: <FBIOGET_FSCREENINFO failed>\n");
-@@ -1390,6 +1670,7 @@ void getosd(unsigned char *osd, int *xres, int *yres)
+@@ -1330,6 +1610,7 @@ void getosd(unsigned char *osd, int *xres, int *yres)
  			return;
  		}
  
@@ -447,7 +429,7 @@ index 715ef75..88ee3b5 100644
  		if (stb_type == VULCAN) // DM500/5620 stores the colors as a 16bit word with yuv values, so we have to convert :(
  		{
  			unsigned short yuv;
-@@ -1430,6 +1711,7 @@ void getosd(unsigned char *osd, int *xres, int *yres)
+@@ -1370,6 +1651,7 @@ void getosd(unsigned char *osd, int *xres, int *yres)
  			fprintf(stderr, "unsupported framebuffermode\n");
  			return;
  		}
