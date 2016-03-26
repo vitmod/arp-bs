@@ -6,7 +6,7 @@ package[[ target_base_files
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = 0.2
-PR_${P} = 5
+PR_${P} = 6
 PACKAGE_ARCH_${P} = $(box_arch)
 
 DESCRIPTION_${P} = Miscellaneous files for the base system.
@@ -56,7 +56,6 @@ rule[[
   install:-d:$(PKDIR)/dev
   install_file:$(PKDIR)/etc/motd:file://motd
   install_file:$(PKDIR)/etc/fstab:file://fstab
-  install_bin:$(PKDIR)/bin/vdstandby:file://vdstandby
   install_file:$(PKDIR)/etc/vdstandby.cfg:file://vdstandby.cfg
   install_file:$(PKDIR)/etc/profile:file://profile
 ]]rule
