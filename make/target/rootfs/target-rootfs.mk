@@ -51,7 +51,6 @@ opkg_my_list += \
 	linux-kernel \
 	kernel-module-avs \
 	kernel-module-bpamem \
-	kernel-module-cec \
 	kernel-module-compcache \
 	kernel-module-cpu-frequ \
 	kernel-module-e2-proc \
@@ -63,6 +62,11 @@ opkg_my_list += \
 	kernel-module-simu-button \
 	kernel-module-smartcard \
 	kernel-module-stgfb
+
+ifndef CONFIG_HL101
+opkg_my_list += \
+	kernel-module-cec
+endif
 
 ifeq ($(BUILD_PTI_NP), NO)
 opkg_my_list += \
@@ -139,7 +143,6 @@ opkg_my_list += \
 	enigma2-plugin-systemplugins-cablescan \
 	enigma2-plugin-systemplugins-defaultservicesscanner \
 	enigma2-plugin-systemplugins-diseqctester \
-	enigma2-plugin-systemplugins-hdmicec \
 	enigma2-plugin-systemplugins-hotplug \
 	enigma2-plugin-systemplugins-networkwizard \
 	enigma2-plugin-systemplugins-osd3dsetup \
@@ -154,6 +157,11 @@ opkg_my_list += \
 	enigma2-plugin-systemplugins-videoenhancement \
 	enigma2-plugin-systemplugins-videotune \
 	enigma2-plugin-systemplugins-videomode
+
+ifndef CONFIG_HL101
+opkg_my_list += \
+	enigma2-plugin-systemplugins-hdmicec
+endif
 ifdef CONFIG_SPARK7162
 opkg_my_list += \
 	enigma2-plugin-systemplugins-uniontunertype
