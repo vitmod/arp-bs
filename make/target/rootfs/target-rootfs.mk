@@ -289,13 +289,13 @@ ifdef CONFIG_BUILD_ENIGMA2
 endif
 ifdef CONFIG_BUILD_NEUTRINO
 #	add version neutrino
-	echo "imagename=Neutrino" > $(DIR_${P})/etc/.version
-	echo "homepage=https://github.com/OpenAR-P" >> $(DIR_${P})/etc/.version
-	echo "creator=`id -un`" >> $(DIR_${P})/etc/.version
-	echo "docs=https://github.com/OpenAR-P/neutrino-mp-cst-next/wiki" >> $(DIR_${P})/etc/.version
-	echo "forum=http://www.allrussian.info/index.php?page=Board&boardID=204" >> $(DIR_${P})/etc/.version
-	echo "version=OpenAR-P_`date +%d-%m-%y-%T`_git-`git rev-list --count HEAD`" >> $(DIR_${P})/etc/.version
-	echo "git=`git describe --all`" >> $(DIR_${P})/etc/.version
+	echo "imagename=Neutrino" > $(DIR_${P})/.version
+	echo "homepage=https://github.com/OpenAR-P" >> $(DIR_${P})/.version
+	echo "creator=`id -un`" >> $(DIR_${P})/.version
+	echo "docs=https://github.com/OpenAR-P/neutrino-mp-cst-next/wiki" >> $(DIR_${P})/.version
+	echo "forum=http://www.allrussian.info/index.php?page=Board&boardID=204" >> $(DIR_${P})/.version
+	echo "version=OpenAR-P_`date +%d-%m-%y-%T`_git-`git rev-list --count HEAD`" >> $(DIR_${P})/.version
+	echo "git=`git describe --all`" >> $(DIR_${P})/.version
 endif
 	touch $@
 
