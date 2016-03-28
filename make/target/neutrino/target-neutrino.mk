@@ -6,7 +6,7 @@ package[[ target_neutrino
 BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libopenthreads) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc) $(target_flac) $(target_lua) $(target_luaexpat) $(target_libstb_hal) $(target_aio_grab) $(target_tuxbox_configs) $(target_libfribidi)
 
 PV_${P} = git
-PR_${P} = 9
+PR_${P} = 10
 PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -32,8 +32,9 @@ CONFIG_FLAGS_${P} += \
 		--with-datadir=/usr/share/tuxbox \
 		--with-fontdir=/usr/share/fonts \
 		--with-configdir=/var/tuxbox/config \
-		--with-gamesdir=/usr/lib/tuxbox/games \
-		--with-plugindir=/usr/lib/tuxbox/plugins \
+		--with-gamesdir=/var/tuxbox/games \
+		--with-plugindir=/var/tuxbox/plugins \
+		--with-luaplugindir=/usr/lib/lua/5.2 \
 		--with-iconsdir=/usr/share/tuxbox/neutrino/icons \
 		--with-localedir=/usr/share/tuxbox/neutrino/locale \
 		--with-private_httpddir=/usr/share/tuxbox/neutrino/httpd \
