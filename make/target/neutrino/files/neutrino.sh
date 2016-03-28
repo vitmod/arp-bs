@@ -5,8 +5,8 @@ exec_prefix=${prefix}
 datarootdir=${prefix}/share
 
 
-if [ -d /home/root ]; then
-	export HOME=/home/root
+if [ -d /root ]; then
+	export HOME=/root
 	cd
 fi
 # neutrino exit codes:
