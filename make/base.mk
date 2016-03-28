@@ -195,6 +195,9 @@ define remove_docs
 	rm -rf $(SPLITDIR_${P})/*/usr/share/locale
 	rm -rf $(SPLITDIR_${P})/*/usr/share/gtk-doc
 endef
+define remove_pyc
+	find $(SPLITDIR_${P})/* -type f -name '*.pyc' -delete
+endef
 
 # - 1: ${P}
 define _ipkbox_do_split
@@ -255,6 +258,7 @@ $(TARGET_${P}).do_ipkbox: $(TARGET_${P}).do_controls
 	$(remove_docs)
 	$(remove_libs)
 	$(remove_pkgconfigs)
+	$(remove_pyc)
 	$(strip_libs)
 
 	set -e; \
