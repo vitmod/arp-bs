@@ -253,14 +253,12 @@ PR_${P} = 7
 RM_WORK_${P} = $(false)
 
 call[[ base ]]
-#overwrite workdir
-WORK_${P} = $(prefix)/release
-DIR_${P} = $(WORK_${P})
 
-call[[ base_do_prepare ]]
+DIR_${P} = $(prefix)/release
 opkg_rootfs := opkg -f $(prefix)/opkg-box.conf -o $(DIR_${P})
 
-$(TARGET_${P}).do_install: $(TARGET_${P}).do_prepare
+$(TARGET_${P}).do_install: $(TARGET_${P}).do_depends
+	rm -rf ${DIR} && mkdir ${DIR}
 	( echo "dest root /"; \
 	  echo "arch $(box_arch) 16"; \
 	  echo "arch sh4 10"; \
