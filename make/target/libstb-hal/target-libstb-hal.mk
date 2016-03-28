@@ -6,7 +6,7 @@ package[[ target_libstb_hal
 BDEPENDS_${P} = $(target_glibc) $(target_ffmpeg) $(target_libalsa) $(target_libpng) $(target_libass) $(target_libopenthreads)
 
 PV_${P} = git
-PR_${P} = 1
+PR_${P} = 2
 
 ifdef CONFIG_GSTREAMER
 BDEPENDS_${P} += $(target_gstreamer)
@@ -39,6 +39,11 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--build=$(build) \
 			--prefix=/usr \
+			--with-libdir=/usr/lib \
+			--with-themesdir=/usr/share/tuxbox/neutrino/themes \
+			--with-datadir=/usr/share/tuxbox \
+			--with-fontdir=/usr/share/fonts \
+			--with-plugindir=/usr/lib/tuxbox/plugins \
 			--with-target=cdk \
 			--with-boxtype=$(TARGET) \
 			$(PLATFORM_CPPFLAGS) \
