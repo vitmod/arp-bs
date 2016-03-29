@@ -5,7 +5,7 @@ package[[ target_expat
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 2.1.0
+PV_${P} = 2.1.1
 PR_${P} = 1
 
 DESCRIPTION_${P} = Expat is an XML parser library written in C. It is a stream-oriented parser \
@@ -14,7 +14,7 @@ in which an application registers handlers for things the parser might find in t
 call[[ base ]]
 
 rule[[
-  extract:http://prdownloads.sourceforge.net/sourceforge/${PN}/${PN}-${PV}.tar.gz
+  extract:http://downloads.sourceforge.net/project/${PN}/${PN}/${PV}/${PN}-${PV}.tar.bz2
 ]]rule
 
 call[[ base_do_prepare ]]
