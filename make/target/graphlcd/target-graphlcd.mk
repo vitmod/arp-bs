@@ -3,10 +3,10 @@
 #
 package[[ target_graphlcd
 
-BDEPENDS_${P} = $(target_glibc)
+BDEPENDS_${P} = $(target_glibc) $(target_freetype)
 
 PV_${P} = git
-PR_${P} = 1
+PR_${P} = 2
 
 call[[ base ]]
 
@@ -23,7 +23,8 @@ call[[ base_do_prepare ]]
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
-	export PATH=$(hostprefix)/bin:$(PATH) && \
+		export TARGET=$(target)- && \
+		export LDFLAGS="-L$(targetprefix)/usr/lib -Wl,-rpath-link,$(targetprefix)/usr/lib" && \
 	$(BUILDENV) \
 	$(run_make) all DESTDIR=$(targetprefix)
 	touch $@

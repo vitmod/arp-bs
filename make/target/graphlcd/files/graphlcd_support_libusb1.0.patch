@@ -307,4 +307,4 @@
 +        LIBS += $(shell pkg-config --libs libusb-1.0)
          DEFINES += -DHAVE_DRIVER_picoLCD_256x64
      endif
- endif  
+ endif

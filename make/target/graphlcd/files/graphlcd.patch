@@ -1,24 +1,25 @@
---- graphlcd-base/Make.config	2011-12-06 23:03:38.986910111 +0100
-+++ graphlcd-base/Make.config.fix	2011-12-06 23:03:18.216901196 +0100
-@@ -3,7 +3,7 @@
+diff --git a/Make.config b/Make.config
+index 3ddedd2..be01f4e 100644
+--- a/Make.config
++++ b/Make.config
+@@ -3,12 +3,12 @@
  
  ### The C compiler and options:
  
 -CC       = gcc
-+CC       = sh4-linux-gcc
- CFLAGS   = -O2
+-CFLAGS   = -O2
++CC       = $(TARGET)gcc
++CFLAGS   = -pipe -Os
  
- #CXX      = g++
-@@ -13,7 +13,7 @@
+-#CXX      = g++
++CXX      = $(TARGET)g++
  
- # no CXX given at all: force g++
- ifeq (x$(CXX)x,xx)
--  CXX=g++
-+  CXX=sh4-linux-g++
- endif
+-CXXFLAGS = -g -O2 -Wall -Woverloaded-virtual
++CXXFLAGS = -g -pipe -Os -Wall -Woverloaded-virtual
+ #CXXFLAGS = -g -ggdb -O0 -Wall -Woverloaded-virtual
+ CXXFLAGS += -MMD -MP
  
- # CXX set to clang++: force clang
-@@ -40,14 +40,15 @@
+@@ -39,14 +39,15 @@ ifndef $(DESTDIR)
  DESTDIR = /usr/local
  endif
  
@@ -35,11 +36,11 @@
  ### Includes and defines
  
 -#INCLUDES += -I
-+INCLUDES += -I$(DESTDIR)/include
++INCLUDES += -I$(DESTDIR)/usr/include
  
  DEFINES += -D_GNU_SOURCE
  # define HAVE_DEBUG when invoking "make" if you want to use debugging
-@@ -64,7 +65,7 @@
+@@ -63,7 +64,7 @@ endif
  HAVE_FREETYPE2=1
  
  # comment this variable out if you don't want to use fontconfig font names
@@ -48,7 +49,14 @@
  
  # comment this variable out if you want binaries to be stripped when installing (for production-level binaries or packages)
  #HAVE_STRIP = -s
-@@ -80,7 +81,7 @@
+@@ -73,13 +74,13 @@ HAVE_FONTCONFIG=1
+ #HAVE_GRAPHICSMAGICK=1
+ 
+ # comment this variable or set to 0 if you do not want to build the vncserver driver, even if requirements (libvncserver) are fullfilled on the system
+-HAVE_DRIVER_VNCSERVER=1
++#HAVE_DRIVER_VNCSERVER=1
+ 
+ ### Experimental drivers
  
  # uncomment this variable if you want to enable the experimental AX 206 based digital photo frame driver
  # Read DRIVER.ax206dpf before use!
@@ -57,9 +65,11 @@
  
  # uncomment this variable if you want to enable the experimental support for picoLCD 256x64 
  #HAVE_DRIVER_picoLCD_256x64=1
---- graphlcd-base/Makefile	2011-12-06 23:03:38.986910111 +0100
-+++ graphlcd-base/Makefile.fix	2011-12-06 23:03:18.216901196 +0100
-@@ -7,6 +7,7 @@
+diff --git a/Makefile b/Makefile
+index 82f06b4..ab8c309 100644
+--- a/Makefile
++++ b/Makefile
+@@ -7,6 +7,7 @@ VERSION = 0.3.0
  ARCHIVE = $(PROJECT)-$(VERSION)
  PACKAGE = $(ARCHIVE)
  TMPDIR = /tmp
@@ -67,7 +77,7 @@
  
  UDEVRULESDIR ?= /etc/udev/rules.d/
  UDEVRULE ?= 99-graphlcd-base.rules
-@@ -24,7 +25,7 @@
+@@ -24,7 +25,7 @@ install:
  	@$(MAKE) -C glcddrivers install
  	@$(MAKE) -C glcdskin install
  	@$(MAKE) -C tools install
@@ -76,23 +86,23 @@
  
  uninstall:
  	@$(MAKE) -C glcdgraphics uninstall
---- graphlcd-base/glcddrivers/port.c	2011-12-07 22:31:41.607561726 +0100
-+++ graphlcd-base/glcddrivers/port.fix	2011-12-07 22:31:47.877565426 +0100
-@@ -18,13 +18,36 @@
+diff --git a/glcddrivers/port.c b/glcddrivers/port.c
+index cfb4156..f905334 100644
+--- a/glcddrivers/port.c
++++ b/glcddrivers/port.c
+@@ -18,12 +18,34 @@
  #include <unistd.h>
  #include <termios.h>
  #include <pthread.h>
--#include <sys/io.h>
-+#ifndef __sh__
-+ #include <sys/io.h>
++#if defined(i386) || defined(__x86_64__)
+ #include <sys/io.h>
 +#endif
  #include <sys/ioctl.h>
  #include <linux/ppdev.h>
  #include <linux/parport.h>
  
  
- 
-+#ifdef __sh__
++#if !defined(i386) && !defined(__x86_64__)
 +/* konfetti: those are currently only dummy. not tested, not really
 + * thinking on it. it needs revise for the params etc. also we need
 + * to revise the assembler code below. but for now its ok because
@@ -112,13 +122,41 @@
 +	return syscall(__NR_iopl, level);
 +}
 +#endif
-+
+ 
  #include "port.h"
  
- #if defined(__linux__) && (defined(__i386__) || defined(__x86_64__))
---- graphlcd-base/graphlcd.conf	2011-12-11 17:28:26.778505886 +0100
-+++ graphlcd-base/graphlcd.conf.fix	2011-12-11 17:28:33.998507890 +0100
-@@ -29,7 +29,7 @@
+diff --git a/glcdgraphics/Makefile b/glcdgraphics/Makefile
+index 5abbb2b..66fc7c9 100644
+--- a/glcdgraphics/Makefile
++++ b/glcdgraphics/Makefile
+@@ -41,13 +41,15 @@ DEPFILE = $(OBJS:%.o=%.d)
+ -include $(DEPFILE)
+ 
+ ifdef HAVE_FREETYPE2
+-	ifneq ($(shell which freetype-config),)
+-		INCLUDES += $(shell freetype-config --cflags)
+-		LIBS += $(shell freetype-config --libs)
+-	else
+-		INCLUDES += -I/usr/include/freetype -I/usr/local/include/freetype
+-		LIBS += -lfreetype
+-	endif
++#	ifneq ($(shell which freetype-config),)
++#		INCLUDES += $(shell freetype-config --cflags)
++#		LIBS += $(shell freetype-config --libs)
++#	else
++#		INCLUDES += -I/usr/include/freetype -I/usr/local/include/freetype
++#		LIBS += -lfreetype
++#	endif
++	INCLUDES += -I$(DESTDIR)/usr/include/freetype2
++	LIBS += -L$(DESTDIR)/usr/lib -lfreetype
+ 	DEFINES += -DHAVE_FREETYPE2
+ endif
+ 
+diff --git a/graphlcd.conf b/graphlcd.conf
+index fce9270..3c228da 100644
+--- a/graphlcd.conf
++++ b/graphlcd.conf
+@@ -29,7 +29,7 @@ WaitMethod=3
  #  Select the process priority that is used when sleeping.
  #  Possible values: -20 <= x <= 19
  #  Default value: 0
@@ -127,10 +165,11 @@
  
  # General driver settings
  #  This section lists the display settings that are parsed and
-@@ -115,466 +115,7 @@
+@@ -114,467 +114,7 @@ WaitPriority=0
+ #  A value of 0 completely disables complete refreshs. 
  #  Possible values: 0 <= x <= 50
  #  Default value: 5
- 
+-
 -########################################################################
 -
 -[framebuffer]
@@ -594,7 +633,7 @@
  ########################################################################
  
  [ax206dpf]
-@@ -588,8 +129,8 @@
+@@ -588,8 +128,8 @@ Driver=dm140gink
  #
  #  Default size: 320 x 240 or 240 x 320 (see "Portrait")
  Driver=ax206dpf
@@ -605,26 +644,11 @@
  #
  # UpsideDown
  #  Rotates the display output by 180 degrees. This might be useful, if
-@@ -649,15 +190,3 @@
- #
- 
- ########################################################################
--
--[vncserver]
--# vncserver driver
--#  Output goes to a vncserver device
--#  Default size: 320 x 240
--Driver=vncserver
--Width=320
--Height=240
--#
--# HttpDir
--#  Webclients directory of libvncserver installation (only needed for webclient access)
--#HttpDir=/usr/share/webclients
-
---- graphlcd-base/tools/convpic/Makefile.org	2012-01-21 23:04:06.899524642 +0100
-+++ graphlcd-base/tools/convpic/Makefile	2012-01-21 23:04:06.847524649 +0100
-@@ -36,7 +36,7 @@
+diff --git a/tools/convpic/Makefile b/tools/convpic/Makefile
+index 6029d5f..180a6c2 100644
+--- a/tools/convpic/Makefile
++++ b/tools/convpic/Makefile
+@@ -33,7 +33,7 @@ $(PRGNAME): $(OBJS)
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
@@ -633,9 +657,11 @@
  
  uninstall:
  	rm -f $(BINDIR)/$(PRGNAME)
---- graphlcd-base/tools/crtfont/Makefile.org	2012-01-21 23:10:38.711524640 +0100
-+++ graphlcd-base/tools/crtfont/Makefile	2012-01-21 23:10:38.663524640 +0100
-@@ -35,7 +35,7 @@
+diff --git a/tools/crtfont/Makefile b/tools/crtfont/Makefile
+index 64b1fb6..4cd8826 100644
+--- a/tools/crtfont/Makefile
++++ b/tools/crtfont/Makefile
+@@ -32,7 +32,7 @@ $(PRGNAME): $(OBJS)
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
@@ -644,9 +670,11 @@
  
  uninstall:
  	rm -f $(BINDIR)/$(PRGNAME)
---- graphlcd-base/tools/genfont/Makefile.org	2012-01-21 23:13:28.307524643 +0100
-+++ graphlcd-base/tools/genfont/Makefile	2012-01-21 23:13:28.255524646 +0100
-@@ -38,7 +38,7 @@
+diff --git a/tools/genfont/Makefile b/tools/genfont/Makefile
+index 9a699dd..ca85b5f 100644
+--- a/tools/genfont/Makefile
++++ b/tools/genfont/Makefile
+@@ -35,7 +35,7 @@ $(PRGNAME): $(OBJS)
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
@@ -655,9 +683,11 @@
  	
  uninstall:
  	rm -f $(BINDIR)/$(PRGNAME)
---- graphlcd-base/tools/showpic/Makefile.org	2012-01-21 23:15:43.891524641 +0100
-+++ graphlcd-base/tools/showpic/Makefile	2012-01-21 23:15:43.843524640 +0100
-@@ -36,7 +36,7 @@
+diff --git a/tools/lcdtestpattern/Makefile b/tools/lcdtestpattern/Makefile
+index c004253..c21c3ab 100644
+--- a/tools/lcdtestpattern/Makefile
++++ b/tools/lcdtestpattern/Makefile
+@@ -33,7 +33,7 @@ $(PRGNAME): $(OBJS)
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
@@ -666,9 +696,11 @@
  
  uninstall:
  	rm -f $(BINDIR)/$(PRGNAME)
---- graphlcd-base/tools/showtext/Makefile.org	2012-01-21 23:18:13.715524639 +0100
-+++ graphlcd-base/tools/showtext/Makefile	2012-01-21 23:18:13.667524641 +0100
-@@ -36,7 +36,7 @@
+diff --git a/tools/showpic/Makefile b/tools/showpic/Makefile
+index e9bc83c..431b4b2 100644
+--- a/tools/showpic/Makefile
++++ b/tools/showpic/Makefile
+@@ -33,7 +33,7 @@ $(PRGNAME): $(OBJS)
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
@@ -677,9 +709,11 @@
  
  uninstall:
  	rm -f $(BINDIR)/$(PRGNAME)
---- graphlcd-base/tools/lcdtestpattern/Makefile.org	2012-01-21 23:19:57.715524641 +0100
-+++ graphlcd-base/tools/lcdtestpattern/Makefile	2012-01-21 23:19:56.899524641 +0100
-@@ -36,7 +36,7 @@
+diff --git a/tools/showtext/Makefile b/tools/showtext/Makefile
+index 62196aa..a5fd7ff 100644
+--- a/tools/showtext/Makefile
++++ b/tools/showtext/Makefile
+@@ -33,7 +33,7 @@ $(PRGNAME): $(OBJS)
  
  install: $(PRGNAME)
  	install -d $(BINDIR)
@@ -688,16 +722,16 @@
  
  uninstall:
  	rm -f $(BINDIR)/$(PRGNAME)
---- graphlcd-git/glcdgraphics/Makefile.orig	2016-01-13 01:47:34.680713384 +0100
-+++ graphlcd-git/glcdgraphics/Makefile	2016-01-13 01:49:06.641407453 +0100
-@@ -45,8 +45,8 @@
+diff --git a/tools/skintest/Makefile b/tools/skintest/Makefile
+index fe73388..3096752 100644
+--- a/tools/skintest/Makefile
++++ b/tools/skintest/Makefile
+@@ -33,7 +33,7 @@ $(PRGNAME): $(OBJS)
  
- ifdef HAVE_FREETYPE2
- 	ifneq ($(shell which freetype-config),)
--		INCLUDES += $(shell freetype-config --cflags)
--		LIBS += $(shell freetype-config --libs)
-+		INCLUDES += $(shell pkg-config --cflags freetype2)
-+		LIBS += $(shell pkg-config  --libs freetype2)
- 	else
- 		INCLUDES += -I/usr/include/freetype -I/usr/local/include/freetype
- 		LIBS += -lfreetype
+ install: $(PRGNAME)
+ 	install -d $(BINDIR)
+-	install -m 755 -o root -g root $(HAVE_STRIP) $(PRGNAME) $(BINDIR)
++	install -m 755 $(PRGNAME) $(BINDIR)
+ 
+ uninstall:
+ 	rm -f $(BINDIR)/$(PRGNAME)
