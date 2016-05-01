@@ -88,6 +88,7 @@ PACKAGES="\
 	${UBUNTU:+autopoint}            ${SUSE:+glib2-devel} \
 	${UBUNTU:+cfv}                  ${SUSE:+fakeroot} \
 	${UBUNTU:+fakeroot} \
+	${UBUNTU:+libtool-bin} \
 	${UBUNTU:+gawk} \
 	${UBUNTU:+gperf} \
 	${UBUNTU:+libglib2.0-bin} \
