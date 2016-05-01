@@ -19,7 +19,7 @@ endif
 function[[ target_linux_kernel_in
 
 PV_${P} = $(KERNEL_VERSION)
-PR_${P} = 9
+PR_${P} = 10
 
 DIR_${P} = $(WORK_target_linux_kernel)/linux-$(KERNEL_MAJOR)
 PACKAGE_ARCH_${P} = $(box_arch)
@@ -54,6 +54,7 @@ ${P}_patches = \
 	linux-ftdi_sio.c_stm24_$(KERNEL_LABEL).patch \
 	linux-sh4-lzma-fix_stm24_$(KERNEL_LABEL).patch \
 	stm-gpio-fix-build-CONFIG_BUG.patch \
+	perl-version.patch \
 	perf-warning-fix.diff
 
 ifeq ($(CONFIG_KERNEL_0211),y)
