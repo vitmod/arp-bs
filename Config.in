@@ -45,7 +45,7 @@ menu "Global Configuration"
 		bool "STM 24 2.6.32.61-0215"
 
 		config KERNEL_0217
-		bool "STM 24 2.6.32.61-0217"
+		bool "STM 24 2.6.32.71-0217"
 		select GIT_KERNEL_ARP
 	endchoice
 

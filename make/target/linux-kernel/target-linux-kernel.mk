@@ -19,7 +19,7 @@ endif
 function[[ target_linux_kernel_in
 
 PV_${P} = $(KERNEL_VERSION)
-PR_${P} = 10
+PR_${P} = 11
 
 DIR_${P} = $(WORK_target_linux_kernel)/linux-$(KERNEL_MAJOR)
 PACKAGE_ARCH_${P} = $(box_arch)
@@ -127,13 +127,13 @@ CONFIG_${P} = linux-sh4-$(KERNEL_UPSTREAM)-$(KERNEL_LABEL)_$(TARGET).config$(DEB
 rule[[
 ifdef CONFIG_GIT_KERNEL_ARP
 ifdef CONFIG_KERNEL_0211
-  git://git.stlinux.com/stm/linux-sh4-2.6.32.y.git;b=stmicro;r=3bce06ff873fb5098c8cd21f1d0e8d62c00a4903
+  git://github.com/MaxWiesel/linux-sh4-2.6.32.y.git;b=stmicro;r=3bce06ff873fb5098c8cd21f1d0e8d62c00a4903
 endif
 ifdef CONFIG_KERNEL_0215
-  git://git.stlinux.com/stm/linux-sh4-2.6.32.y.git;b=stmicro;r=5384bd391266210e72b2ca34590bd9f543cdb5a3
+  git://github.com/MaxWiesel/linux-sh4-2.6.32.y.git;b=stmicro;r=5384bd391266210e72b2ca34590bd9f543cdb5a3
 endif
 ifdef CONFIG_KERNEL_0217
-  git://git.stlinux.com/stm/linux-sh4-2.6.32.y.git;b=stmicro;r=b43f8252e9f72e5b205c8d622db3ac97736351fc
+  git://github.com/MaxWiesel/linux-sh4-2.6.32.y.git;b=stmicro;r=a534b4cd32be858849d675d131a69235ff5369f0
 endif
 else
   dirextract:local://$(archivedir)/$(STLINUX)-host-kernel-source-sh4-$(KERNEL_VERSION)-$(KERNEL_RELEASE).src.rpm
