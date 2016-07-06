@@ -11,7 +11,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  nothing:git://github.com/OpenPLi/${PN}.git
+  git://github.com/OpenPLi/${PN}.git;b=master;r=009fd8b71d3fd974df4048cc4de038dcb94a778f
   patch:file://${PN}.patch
 ]]rule
 
