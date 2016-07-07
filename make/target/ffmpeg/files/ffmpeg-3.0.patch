@@ -1,6 +1,6 @@
 --- a/libavformat/avio.h
 +++ b/libavformat/avio.h
-@@ -147,12 +147,6 @@
+@@ -237,12 +237,6 @@
       */
      int writeout_count;
  
@@ -10,9 +10,9 @@
 -     * This field is internal to libavformat and access from outside is not allowed.
 -     */
 -    int orig_buffer_size;
- } AVIOContext;
  
- /* unbuffered I/O */
+     /**
+      * Threshold to favor readahead over seek.
 --- a/libavformat/aviobuf.c
 +++ b/libavformat/aviobuf.c
 @@ -33,7 +33,7 @@
@@ -24,7 +24,7 @@
  
  /**
   * Do seeks within this distance ahead of the current buffer by skipping
-@@ -79,7 +79,6 @@
+@@ -83,7 +83,6 @@
                    int64_t (*seek)(void *opaque, int64_t offset, int whence))
  {
      s->buffer      = buffer;
@@ -32,15 +32,17 @@
      s->buffer_size = buffer_size;
      s->buf_ptr     = buffer;
      s->opaque      = opaque;
-@@ -463,14 +462,14 @@
+@@ -471,16 +471,16 @@
      }
  
      /* make buffer smaller in case it ended up large after probing */
 -    if (s->read_packet && s->orig_buffer_size && s->buffer_size > s->orig_buffer_size) {
 +    if (s->read_packet && s->buffer_size > max_buffer_size) {
          if (dst == s->buffer) {
--            ffio_set_buf_size(s, s->orig_buffer_size);
-+            ffio_set_buf_size(s, max_buffer_size);
+-            int ret = ffio_set_buf_size(s, s->orig_buffer_size);
++            int ret = ffio_set_buf_size(s, max_buffer_size);
+             if (ret < 0)
+                 av_log(s, AV_LOG_WARNING, "Failed to decrease buffer size\n");
  
              s->checksum_ptr = dst = s->buffer;
          }
@@ -51,7 +53,7 @@
      }
  
      if (s->read_packet)
-@@ -829,7 +828,6 @@
+@@ -857,7 +857,6 @@
  
      av_free(s->buffer);
      s->buffer = buffer;

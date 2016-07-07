@@ -6,8 +6,8 @@ package[[ target_ffmpeg
 BDEPENDS_${P} = $(target_glibc) $(target_libbluray) $(target_rtmpdump)
 
 PV_${P} = ${PV_MOJ}.${PV_MIN}
-PV_MOJ_${P} = 2.6
-PV_MIN_${P} = 3
+PV_MOJ_${P} = 3.0
+PV_MIN_${P} = 1
 
 PR_${P} = 2
 
@@ -63,7 +63,7 @@ CONFIG_FLAGS_${P} += \
 		--disable-inline-asm \
 		--disable-yasm \
 		--disable-mips32r2 \
-		--disable-mipsdspr1 \
+		--disable-mipsdsp \
 		--disable-mipsdspr2 \
 		--disable-mipsfpu \
 		--disable-fast-unaligned \
