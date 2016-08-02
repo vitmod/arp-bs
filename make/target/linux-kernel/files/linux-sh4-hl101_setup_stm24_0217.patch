@@ -47,12 +47,18 @@
  
  void __init mb442_setup(char** cmdline_p)
  {
-@@ -43,6 +71,8 @@
+@@ -39,10 +67,12 @@
+ 
+ 	stx7100_configure_asc(2, &(struct stx7100_asc_config) {
+ 			.hw_flow_control = 0,
+-			.is_console = 1, });
++			.is_console = 0, });
  	stx7100_configure_asc(3, &(struct stx7100_asc_config) {
  			.hw_flow_control = 0,
- 			.is_console = 0, });
+-			.is_console = 0, });
++			.is_console = 1, });
 +			
-+	bpa2_init(bpa2_parts_table, ARRAY_SIZE(bpa2_parts_table));		
++  	bpa2_init(bpa2_parts_table, ARRAY_SIZE(bpa2_parts_table));			
  }
  
  static struct resource mb442_smc91x_resources[] = {
@@ -101,7 +107,8 @@
  	},
  };
  
-@@ -96,6 +157,7 @@
+@@ -95,7 +156,7 @@
+ 	return 1;
  }
  
 -#define STMMAC_PHY_ADDR 14
@@ -109,7 +116,7 @@
  static int stmmac_phy_irqs[PHY_MAX_ADDR] = {
  	[STMMAC_PHY_ADDR] = IRL3_IRQ,
  };
-@@ -119,9 +181,9 @@
+@@ -119,9 +180,9 @@
  			.out0_enabled = 0,
  			.out1_enabled = 1, });
  
@@ -122,7 +129,7 @@
  
  	stx7100_configure_usb();
  
-@@ -130,11 +192,6 @@
+@@ -130,11 +191,6 @@
  			.tx_enabled = 0,
  			.tx_od_enabled = 0, });
  
@@ -134,7 +141,7 @@
  	gpio_request(MB442_PIO_FLASH_VPP, "Flash VPP");
  	gpio_direction_output(MB442_PIO_FLASH_VPP, 0);
  
-@@ -149,14 +206,6 @@
+@@ -149,14 +205,6 @@
  			.mdio_bus_data = &stmmac_mdio_bus,
  		});
  
