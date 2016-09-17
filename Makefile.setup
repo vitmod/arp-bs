@@ -159,11 +159,20 @@ $(make_DIR)/config.status: $(make_PN)-$(make_PV).tar.gz
 	tar -xzf $^
 	cd $(make_DIR) && ./configure && make
 
+make: $(make_DIR)/config.status
+	@echo ----------------------------------------------------------------------------
+	@echo we built GNU Make 4 for you
+	@echo to start using it add it to your path:
+	@echo export PATH=`pwd`/$(make_DIR):'$$PATH'
+	@echo run \'wich make\' to check your setup
+	@echo NOTE: GNU Make version > 4 is required to sort out logs in parralel build.
+	@echo ----------------------------------------------------------------------------
+
 make-clean:
 	$(MAKE) -C $(make_DIR) clean
 make-distclean:
 	rm -rf $(make_DIR)
-.PHONY: make-clean make-distclean
+.PHONY: make make-clean make-distclean
 
 #
 # create buildsystem Makefile

@@ -94,6 +94,8 @@ echo "it has bash completion feature modified for AR-P builds"
 echo "to start autocompleting run mk something<TAB>"
 echo "to see available extensions for a target then press . and again <TAB>"
 echo "it copies output automatically to log, and more features"
+echo "to run parallel builds with 'mk -jN ...' you need make >= 4.0"
+echo "it can be installed with 'mk make'"
 echo "----------------------------------------------------------------------------"
 
 # Local variables:
