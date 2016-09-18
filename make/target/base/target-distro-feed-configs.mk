@@ -3,7 +3,7 @@
 #
 package[[ target_distro_feed_configs
 
-BDEPENDS_${P} =
+BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = 0.2
 PR_${P} = 1
