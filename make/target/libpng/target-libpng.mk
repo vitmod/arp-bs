@@ -12,6 +12,7 @@ call[[ base ]]
 
 rule[[
   extract:https://sourceforge.net/projects/libpng/files/libpng16/${PV}/${PN}-${PV}.tar.xz
+#  extract:http://download.sourceforge.net/${PN}/${PN}-${PV}.tar.xz
   nothing:file://${PN}.diff
   patch:file://${PN}-workaround_for_stmfb_alpha_error.patch
 ]]rule
