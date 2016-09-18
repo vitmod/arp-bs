@@ -24,6 +24,7 @@ function[[ rpm_do_compile
 
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	$(PKDIR_clean)
+	@echo "==> Building ${P} ..."
 	$(rpm_build) $(specsprefix)/$(${P}_SPEC)
 	touch $@
 ]]function
