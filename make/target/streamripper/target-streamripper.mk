@@ -3,7 +3,7 @@
 #
 package[[ target_streamripper
 
-BDEPENDS_${P} =  $(target_libogg) $(target_libvorbis) $(target_libmad)
+BDEPENDS_${P} =  $(target_libogg) $(target_libvorbis) $(target_libmad) $(target_glib2)
 
 PV_${P} = 1.64.6
 PR_${P} = 2
