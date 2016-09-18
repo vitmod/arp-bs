@@ -131,7 +131,7 @@ $(TARGET_${P}).do_install: $(TARGET_${P}).do_preinstall $(foreach pkg,${BREMOVES
 # firstly, uninstall all packages that depend on me
 ${TARGET}.rmfiles: ${TARGET}.clean_childs
 # secondly, remove our files
-$(foreach pkg,${BREMOVES},$(DEPDIR)/$(pkg).files: ${TARGET}.rmfiles)
+$(foreach pkg,${BREMOVES},$(DEPDIR)/$(pkg).files: | ${TARGET}.rmfiles)
 # finally, reinstall files that were replaced
 ${TARGET}.clean_install: ${TARGET}.rmfiles $(foreach pkg,${BREMOVES},$(DEPDIR)/$(pkg).files)
 	rm -f $(TARGET_${P}).do_install
