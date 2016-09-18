@@ -1,2 +1,2 @@
-DEPENDOFF=&CCCam		~T250 ~GЗапустить,var/tuxbox/plugins/camstartstop cccamstart,/var/tuxbox/config/.cccam,CCCam будет активен.
-DEPENDON=&CCCam			~T250 ~RОстановить,var/tuxbox/plugins/camstartstop cccamstop,/var/tuxbox/config/.cccam,CCCam будет остановлен.
+DEPENDOFF=&CCCam		~T250 ~GЗапустить,/var/tuxbox/plugins/camstartstop cccamstart,/var/tuxbox/config/.cccam,CCCam будет активен.
+DEPENDON=&CCCam			~T250 ~RОстановить,/var/tuxbox/plugins/camstartstop cccamstop,/var/tuxbox/config/.cccam,CCCam будет остановлен.

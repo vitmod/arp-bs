@@ -1,2 +1,2 @@
-DEPENDOFF=&MgCamd		~T250 ~GAktiviren,var/tuxbox/plugins/camstartstop mgcamdstart,/var/tuxbox/config/.mgcamd,MGCamd wird aktiv.
-DEPENDON=&MgCamd		~T250 ~RAnhalten,var/tuxbox/plugins/camstartstop mgcamdstop,/var/tuxbox/config/.mgcamd,MGCamd wird angehalten.
+DEPENDOFF=&MgCamd		~T250 ~GAktiviren,/var/tuxbox/plugins/camstartstop mgcamdstart,/var/tuxbox/config/.mgcamd,MGCamd wird aktiv.
+DEPENDON=&MgCamd		~T250 ~RAnhalten,/var/tuxbox/plugins/camstartstop mgcamdstop,/var/tuxbox/config/.mgcamd,MGCamd wird angehalten.

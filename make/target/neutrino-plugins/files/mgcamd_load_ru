@@ -1,2 +1,2 @@
-DEPENDOFF=&MgCamd		~T250 ~GЗапустить,var/tuxbox/plugins/camstartstop mgcamdstart,/var/tuxbox/config/.mgcamd,MGCamd будет активен.
-DEPENDON=&MgCamd		~T250 ~RОстановить,var/tuxbox/plugins/camstartstop mgcamdstop,/var/tuxbox/config/.mgcamd,MGCamd будет остановлен.
+DEPENDOFF=&MgCamd		~T250 ~GЗапустить,/var/tuxbox/plugins/camstartstop mgcamdstart,/var/tuxbox/config/.mgcamd,MGCamd будет активен.
+DEPENDON=&MgCamd		~T250 ~RОстановить,/var/tuxbox/plugins/camstartstop mgcamdstop,/var/tuxbox/config/.mgcamd,MGCamd будет остановлен.
