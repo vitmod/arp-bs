@@ -6,7 +6,7 @@ package[[ cross_gcc_second
 BDEPENDS_${P} = $(target_glibc_first)
 BREMOVES_${P} = $(cross_gcc_first)
 
-PR_${P} = 1
+PR_${P} = 2
 
 call[[ gcc_in ]]
 
@@ -41,11 +41,16 @@ rule[[
 # Our patches
   patch:file://stm-${ST_PN}.${ST_PV}-${ST_PR}.diff
 # check these patches when stlinux src.rpm updates
+ifdef CONFIG_GCC48
+  patch:localwork://gcc-${ST_PV}-stm-150128.patch
+else
   patch:localwork://gcc-${ST_PV}-stm-130807.patch
+endif
   patch:localwork://gcc-4.7.0-sh-use-gnu-hash-style.patch
   patch:localwork://gcc-4.2.4-multilibpath.patch
   patch:localwork://gcc-4.5.2-sysroot.patch
   patch:file://gcc_cp_cfns.diff
+  patch:localwork://gcc-4.7.3-stack-protect-strong.patch
 ]]rule
 
 call[[ base_do_prepare ]]
