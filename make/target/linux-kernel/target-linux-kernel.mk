@@ -217,7 +217,7 @@ BREMOVES_${P} = $(target_kernel_headers)
 call[[ target_linux_kernel_in ]]
 call[[ base ]]
 
-$(TARGET_${P}).do_package: $(target_linux_kernel).do_prepare_post
+$(TARGET_${P}).do_package: $(target_linux_kernel).do_package
 	$(PKDIR_clean)
 	cd $(DIR_${P}) && make ${MAKE_FLAGS} INSTALL_HDR_PATH=$(PKDIR)/usr headers_install
 	rm -rf $(PKDIR)/usr/include/scsi
