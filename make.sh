@@ -33,7 +33,7 @@ if echo "$@" |grep -E '\-j[0-9]+' >/dev/null; then
 	case "$choice" in 
 	n ) exit ;;
 	# TODO: more
-	* )	cat $f |less -i -p"/fail|error"
+	* )	less -i "+?error|fail" $f
 		echo "log saved to $f, make.log symlink updated"
 	;;
 	esac
