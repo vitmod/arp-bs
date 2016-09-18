@@ -3,7 +3,7 @@
 #
 package[[ target_libmme_host
 
-BDEPENDS_${P} = $(target_glibc)
+BDEPENDS_${P} = $(target_glibc) $(target_driver)
 
 PR_${P} = $(PR_tdt_tools).1
 
