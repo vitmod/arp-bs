@@ -5,13 +5,13 @@ package[[ target_libpng
 
 BDEPENDS_${P} = $(target_glibc) $(target_zlib)
 
-PV_${P} = 1.6.25
+PV_${P} = 1.6.26rc01
 PR_${P} = 2
 
 call[[ base ]]
 
 rule[[
-  extract:http://sourceforge.net/projects/libpng/files/latest/${PN}-${PV}.tar.xz
+  extract:https://sourceforge.net/projects/libpng/files/libpng16/${PV}/${PN}-${PV}.tar.xz
   nothing:file://${PN}.diff
   patch:file://${PN}-workaround_for_stmfb_alpha_error.patch
 ]]rule
