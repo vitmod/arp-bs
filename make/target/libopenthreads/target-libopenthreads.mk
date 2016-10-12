@@ -11,7 +11,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  git://c00lstreamtech.de/cst-public-libraries-openthreads.git
+  git://github.com/coolstreamtech/cst-public-libraries-openthreads.git
   patch:file://${PN}.patch
 ]]rule
 
