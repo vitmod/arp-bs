@@ -3,10 +3,10 @@
 #
 package[[ target_neutrino
 
-BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libopenthreads) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc) $(target_flac) $(target_lua)  $(target_libstb_hal) $(target_aio_grab) $(target_tuxbox_configs) $(target_libfribidi)
+BDEPENDS_${P} =  $(target_libjpeg_turbo) $(target_libopenthreads) $(target_curl) $(target_util_linux) $(target_libalsa) $(target_libdvbsipp) $(target_libgif) $(target_libmme_host) $(target_libmmeimage) $(target_libsigc) $(target_flac) $(target_lua)  $(target_libstb_hal) $(target_aio_grab) $(target_tuxbox_configs) $(target_libfribidi) $(target_libxml2)
 
 PV_${P} = git
-PR_${P} = 11
+PR_${P} = 12
 PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -140,7 +140,7 @@ PACKAGES_${P} = \
 	font_pakenham
 
 
-RDEPENDS_neutrino += neutrino-plugins neutrino-configs aio-grab liblua libssl1 libcrypto1 libcurl4 libid3tag0 libmad0 libvorbisidec1 libpng16 libjpeg-turbo libgif4 font-md-khmurabi font-tuxtxt font-dejavulgcsansmono-bold font-micron font-micron-bold font-micron-italic font-neutrino font-pakenham libfreetype6 ffmpeg libdvbsi++1 libopenthreads libusb_1.0 libasound2 libstb_hal libc6 libsigc-2.4 config-timezone libfribidi0
+RDEPENDS_neutrino += neutrino-plugins neutrino-configs aio-grab liblua libssl1 libcrypto1 libcurl4 libid3tag0 libmad0 libvorbisidec1 libpng16 libjpeg-turbo libgif4 font-md-khmurabi font-tuxtxt font-dejavulgcsansmono-bold font-micron font-micron-bold font-micron-italic font-neutrino font-pakenham libfreetype6 ffmpeg libdvbsi++1 libopenthreads libusb_1.0 libasound2 libstb_hal libc6 libsigc-2.4 config-timezone libfribidi0 libxml2
 
 PACKAGE_ARCH_neutrino = $(box_arch)
 FILES_neutrino = /usr/bin/* /usr/sbin/* /etc/network/*
