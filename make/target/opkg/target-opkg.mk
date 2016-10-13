@@ -5,14 +5,14 @@ package[[ target_opkg
 
 BDEPENDS_${P} = $(target_glibc) $(target_zlib) $(target_libarchive)
 
-PV_${P} = 0.3.1
+PV_${P} = 0.3.3
 PR_${P} = 2
 PACKAGE_ARCH_${P} = $(box_arch)
 
 call[[ base ]]
 
 rule[[
-  extract:http://downloads.yoctoproject.org/releases/${PN}/${PN}-${PV}.tar.gz
+  extract:https://git.yoctoproject.org/cgit/cgit.cgi/${PN}/snapshot/${PN}-${PV}.tar.gz
   patch:file://${PN}.patch
 ]]rule
 

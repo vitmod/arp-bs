@@ -1,6 +1,6 @@
 --- a/libopkg/pkg.c	2015-02-07 18:14:48.831021713 +0200
 +++ b/libopkg/pkg.c	2015-02-07 18:17:42.155881184 +0200
-@@ -705,6 +705,7 @@
+@@ -694,6 +694,7 @@
              if (pkg->provides_count > 1) {
                  fprintf(fp, "Provides:");
                  for (i = 1; i < pkg->provides_count; i++) {
@@ -24,7 +24,7 @@ packages containing large numbers of files
 
 --- a/libopkg/opkg_install.c	2015-02-07 18:14:48.835021733 +0200
 +++ b/libopkg/opkg_install.c	2015-02-07 18:20:23.556681528 +0200
-@@ -82,7 +82,7 @@
+@@ -65,7 +65,7 @@
                   owner ? owner->name : "<NULL>");
  
          if (!owner || (owner == old_pkg) || obs)
@@ -35,7 +35,7 @@ packages containing large numbers of files
      if (old_pkg) {
 --- a/libopkg/pkg_hash.c
 +++ b/libopkg/pkg_hash.c
-@@ -794,3 +794,21 @@ file_hash_set_file_owner(const char *file_name, pkg_t *owning_pkg)
+@@ -803,3 +803,21 @@ file_hash_set_file_owner(const char *file_name, pkg_t *owning_pkg)
          owning_pkg->state_flag |= SF_FILELIST_CHANGED;
      }
  }
@@ -59,7 +59,7 @@ packages containing large numbers of files
 +}
 --- a/libopkg/pkg_hash.h	2015-02-07 18:14:48.835021733 +0200
 +++ b/libopkg/pkg_hash.h	2015-02-07 18:25:49.646298519 +0200
-@@ -56,6 +56,7 @@
+@@ -54,6 +54,7 @@
  void file_hash_remove(const char *file_name);
  pkg_t *file_hash_get_file_owner(const char *file_name);
  void file_hash_set_file_owner(const char *file_name, pkg_t * pkg);
@@ -125,7 +125,7 @@ packages containing large numbers of files
          case ARGS_OPT_NO_INSTALL_RECOMMENDS:
              opkg_config->no_install_recommends = 1;
              break;
-@@ -334,8 +335,8 @@
+@@ -335,8 +336,8 @@
      printf("\t--tmp-dir                       Specify tmp-dir.\n");
      printf("\t--cache-dir <path>              Specify cache directory.\n");
      printf("\t--host-cache-dir                Don't place cache in offline root dir.\n");
