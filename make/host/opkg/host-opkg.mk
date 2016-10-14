@@ -5,13 +5,13 @@ package[[ host_opkg
 
 BDEPENDS_${P} = $(host_filesystem) $(host_libarchive)
 
-PV_${P} = 0.3.1
+PV_${P} = 0.3.3
 PR_${P} = 2
 
 call[[ base ]]
 
 rule[[
-  http://downloads.yoctoproject.org/releases/${PN}/${PN}-${PV}.tar.gz
+  https://git.yoctoproject.org/cgit/cgit.cgi/${PN}/snapshot/${PN}-${PV}.tar.gz
 ]]rule
 
 call[[ base_do_prepare ]]
