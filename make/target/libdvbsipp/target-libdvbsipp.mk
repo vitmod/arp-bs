@@ -5,7 +5,7 @@ package[[ target_libdvbsipp
 
 BDEPENDS_${P} = $(target_glibc) $(target_gcc_lib)
 
-PV_${P} = 0.3.7
+PV_${P} = 0.3.8
 PR_${P} = 1
 
 PN_${P} = libdvbsi++
@@ -14,7 +14,7 @@ DESCRIPTION_${P} = libdvbsi++ is a open source C++ library for parsing DVB Servi
 call[[ base ]]
 
 rule[[
-  extract:http://www.saftware.de/${PN}/${PN}-${PV}.tar.bz2
+  git://git.opendreambox.org/git/obi/libdvbsi++.git;b=master;r=c4d4597fb8bf77d1fd4b122438c71a762080a245
   patch:file://${PN}-${PV}.patch
 ]]rule
 
@@ -25,6 +25,7 @@ call[[ base_do_prepare ]]
 $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		$(BUILDENV) \
+		./autogen.sh && \
 		./configure \
 			--build=$(build) \
 			--host=$(target) \
