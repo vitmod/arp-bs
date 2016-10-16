@@ -5,7 +5,7 @@ package[[ target_libusb
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 1.0.9
+PV_${P} = 1.0.20
 PR_${P} = 1
 
 call[[ base ]]
