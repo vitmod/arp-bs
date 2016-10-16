@@ -6,12 +6,12 @@ package[[ target_emulators
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = git
-PR_${P} = 1
+PR_${P} = 2
 
 call[[ base ]]
 
 rule[[
-  git://github.com:schpuntik/cams.git;protocol=ssh
+  git://github.com:schpuntik/cams.git
 ]]rule
 
 call[[ git ]]
