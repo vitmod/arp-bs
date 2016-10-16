@@ -6,7 +6,7 @@ package[[ target_plugin_alternativesoftcammanager
 BDEPENDS_${P} = $(target_filesystem) $(cross_python)
 
 PV_${P} = git
-PR_${P} = 1
+PR_${P} = 2
 PACKAGE_ARCH_${P} = all
 
 call[[ base ]]
@@ -27,6 +27,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 $(TARGET_${P}).do_package: $(TARGET_${P}).do_compile
 	$(PKDIR_clean)
 	cd $(DIR_${P}) && \
+	$(INSTALL_DIR) $(PKDIR)/var/emu && \
 	$(crossprefix)/bin/python ./setup.py install \
 	--install-purelib=$(PKDIR)/usr/lib/enigma2/python/Plugins
 	touch $@
@@ -35,7 +36,7 @@ NAME_${P} = enigma2-plugin-extensions-alternativesoftcammanager
 DESCRIPTION_${P} = Start, stop, restart SoftCams, change settings
 MAINTAINER_${P} = Taapat taapat@gmail.com
 
-FILES_${P} = /usr/lib/enigma2/python/Plugins/Extensions/AlternativeSoftCamManager/*
+FILES_${P} = /usr/lib/enigma2/python/Plugins/Extensions/AlternativeSoftCamManager/* /var/emu
 
 call[[ ipkbox ]]
 
