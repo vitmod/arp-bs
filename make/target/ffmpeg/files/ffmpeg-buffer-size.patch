@@ -1,20 +1,21 @@
---- a/libavformat/avio.h
-+++ b/libavformat/avio.h
-@@ -237,12 +237,6 @@
-      */
+--- a/libavformat/avio.h	2016-01-16 13:54:30.822506061 +0200
++++ b/libavformat/avio.h	2016-01-16 13:56:34.175117736 +0200
+@@ -274,13 +274,6 @@
      int writeout_count;
  
--    /**
+     /**
 -     * Original buffer size
 -     * used internally after probing and ensure seekback to reset the buffer size
 -     * This field is internal to libavformat and access from outside is not allowed.
 -     */
 -    int orig_buffer_size;
- 
-     /**
+-
+-    /**
       * Threshold to favor readahead over seek.
---- a/libavformat/aviobuf.c
-+++ b/libavformat/aviobuf.c
+      * This is current internal only, do not use from outside.
+      */
+--- a/libavformat/aviobuf.c	2015-12-20 04:07:49.000000000 +0200
++++ b/libavformat/aviobuf.c	2016-01-16 14:03:01.233037056 +0200
 @@ -33,7 +33,7 @@
  #include "url.h"
  #include <stdarg.h>
@@ -24,7 +25,7 @@
  
  /**
   * Do seeks within this distance ahead of the current buffer by skipping
-@@ -83,7 +83,6 @@
+@@ -88,7 +88,6 @@
                    int64_t (*seek)(void *opaque, int64_t offset, int whence))
  {
      s->buffer      = buffer;
@@ -32,7 +33,7 @@
      s->buffer_size = buffer_size;
      s->buf_ptr     = buffer;
      s->opaque      = opaque;
-@@ -471,16 +471,16 @@
+@@ -524,16 +523,16 @@
      }
  
      /* make buffer smaller in case it ended up large after probing */
@@ -53,7 +54,7 @@
      }
  
      if (s->read_packet)
-@@ -857,7 +857,6 @@
+@@ -959,7 +958,6 @@
  
      av_free(s->buffer);
      s->buffer = buffer;
