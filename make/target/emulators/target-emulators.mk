@@ -11,7 +11,7 @@ PR_${P} = 2
 call[[ base ]]
 
 rule[[
-  git://github.com:schpuntik/cams.git
+  git://github.com/schpuntik/cams.git
 ]]rule
 
 call[[ git ]]
