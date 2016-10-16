@@ -6,7 +6,7 @@ package[[ target_neutrino_plugins
 
 BDEPENDS_${P} =  $(target_lua) $(target_neutrino)
 PV_${P} = git
-PR_${P} = 4
+PR_${P} = 5
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
 
@@ -165,7 +165,7 @@ RDEPENDS_neutrino_cccam_load = neutrino_plugins_shellexec enigma2-plugin-softcam
 FILES_neutrino_mgcamd_load = /var/tuxbox/config/flex/mgcamd_load/mgcamd_load*
 RDEPENDS_neutrino_mgcamd_load = neutrino_plugins_shellexec enigma2-plugin-softcams-mgcamd neutrino_plugins_cammanager
 FILES_neutrino_oscam_load = /var/tuxbox/config/flex/oscam_load/oscam_load*
-RDEPENDS_neutrino_oscam_load = neutrino_plugins_shellexec enigma2-plugin-softcams-oscam neutrino_plugins_cammanager
+RDEPENDS_neutrino_oscam_load = neutrino_plugins_shellexec enigma2-plugin-softcams-oscam-ymod neutrino_plugins_cammanager
 FILES_neutrino_wicardd_load = /var/tuxbox/config/flex/wicardd_load/wicardd_load*
 RDEPENDS_neutrino_wicardd_load = neutrino_plugins_shellexec enigma2-plugin-softcams-wicardd neutrino_plugins_cammanager
 FILES_neutrino_enigma2_load = /var/tuxbox/config/flex/flex_loadenigma.conf
