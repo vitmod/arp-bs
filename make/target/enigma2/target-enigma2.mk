@@ -3,10 +3,10 @@
 #
 package[[ target_enigma2
 
-BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif)
+BDEPENDS_${P} = $(target_libsigc) $(target_libdvbsipp) $(target_freetype) $(target_tuxtxt32bpp) $(target_libpng) $(target_libxmlccwrap) $(target_python) $(target_python_twisted) $(target_libreadline) $(target_libdreamdvd) $(target_libmme_host) $(target_libmmeimage) $(target_libfribidi) $(target_libjpeg_turbo) $(target_libgif) $(target_fonts)
 
 PV_${P} = git
-PR_${P} = 21
+PR_${P} = 22
 PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = Framebuffer-based digital media application
@@ -95,12 +95,12 @@ PYTHON_RDEPS_${P} += \
 # media framework
 ifdef CONFIG_GSTREAMER
 BDEPENDS_${P} += $(target_gst_plugins_dvbmediasink)
-CONFIG_FLAGS_${P} += --enable-mediafwgstreamer
+CONFIG_FLAGS_${P} += --with-gstversion
 RDEPENDS_enigma2 += gst_plugins_dvbmediasink gst_plugins_fluendo_mpegdemux gst_plugin_subsink ${GST_RDEPS}
 endif
 ifdef CONFIG_EPLAYER3
 BDEPENDS_${P} += $(target_libeplayer3)
-CONFIG_FLAGS_${P} += --enable-libeplayer3
+CONFIG_FLAGS_${P} += --enable-libeplayer3 --disable-gstreamer
 RDEPENDS_enigma2 += libeplayer3
 endif
 
@@ -114,6 +114,8 @@ endif
 ifdef CONFIG_HL101
 CONFIG_FLAGS_${P} += --enable-hl101
 endif
+
+CXXFLAGS_${P} += -D__STDC_CONSTANT_MACROS
 
 ifdef CONFIG_EXTERNAL_LCD
 BDEPENDS_${P} += $(target_graphlcd)
@@ -165,6 +167,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--host=$(target) \
 			--prefix=/usr \
 			$(CONFIG_FLAGS_${P}) \
+			CXXFLAGS="$(CXXFLAGS_${P})" \
 		&& \
 		$(run_make) all
 	touch $@
@@ -220,7 +223,7 @@ PACKAGES_${P} = \
 	enigma2_plugin_systemplugins_wirelesslan
 
 PACKAGE_ARCH_enigma2 = $(box_arch)
-RDEPENDS_enigma2 += ${PYTHON_RDEPS} libgcc1 libtuxtxt0 libbz2 libgif4 libfreetype6 libdvbsi++1 font-ae-almateen font-andale font-lcd font-md-khmurabi font-tuxtxt font-nmsbd libpng16 font-liberationsans-b font-liberationsans-bl font-liberationsans-i font-liberationsans-r libstdc++6 libglib libcrypto1 libfribidi0 libtuxtxt32bpp0 libxmlccwrap ethtool libdreamdvd0 enigma2_meta e2fsprogs-e2fsck e2fsprogs-tune2fs libjpeg-turbo
+RDEPENDS_enigma2 += ${PYTHON_RDEPS} libgcc1 libtuxtxt0 libbz2 libgif4 libfreetype6 libdvbsi++1 font-ae-almateen font-andale font-tuxtxt font-nmsbd font-valis-enigma libpng16 font-liberationsans-b font-liberationsans-bl font-liberationsans-i font-liberationsans-r libstdc++6 libglib libcrypto1 libfribidi0 libtuxtxt32bpp0 libxmlccwrap ethtool libdreamdvd0 enigma2_meta e2fsprogs-e2fsck e2fsprogs-tune2fs libjpeg-turbo
 
 FILES_enigma2 = \
 	/usr/bin \
