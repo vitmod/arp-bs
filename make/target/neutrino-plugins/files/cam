@@ -8,22 +8,22 @@
 # Inactive by default. Fill the gaps, and chmod 755 to activate.
 cam_start() {
 if [ -f /var/tuxbox/config/.mgos ]; then
-  /var/emuoscam -b -c /var/keys/ >/dev/null
+  /var/emu/oscam -b -c /var/keys/ >/dev/null
   #sleep 6
-  /var/emumgcamd >/dev/null  
+  /var/emu/mgcamd >/dev/null
 fi
 
 if [ -f /var/tuxbox/config/.oscam ]; then
-  /var/emuoscam -b -c /var/keys >/dev/null
+  /var/emu/oscam -b -c /var/keys >/dev/null
 fi
 
 if [ -f /var/tuxbox/config/.mgcamd ]; then
-  /var/emumgcamd >/dev/null
+  /var/emu/mgcamd >/dev/null
 fi
 
 if [ -f /var/tuxbox/config/.wicardd ]; then
   ulimit -s 512
-  /var/emuwicardd-sh4 -c /var/keys/wicardd.conf & > /dev/null
+  /var/emu/wicardd-sh4 -c /var/keys/wicardd.conf & > /dev/null
 fi
 }
 
