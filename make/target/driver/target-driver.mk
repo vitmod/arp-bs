@@ -18,7 +18,7 @@ package[[ target_driver
 call[[ target_driver_common ]]
 
 BDEPENDS_${P} = $(target_linux_kernel_headers) $(target_linux_kernel)
-PR_${P} = 1
+PR_${P} = 2
 RM_WORK_${P} = $(false)
 
 call[[ base ]]
@@ -137,6 +137,7 @@ PACKAGES_${P} = \
 	kernel_module_rt3070sta \
 	kernel_module_rt5370sta \
 	kernel_module_rtl8192cu \
+	kernel_module_rtl8192du \
 	kernel_module_rtl871x \
 	kernel_module_rtl8188eu
 
@@ -240,6 +241,10 @@ RDEPENDS_kernel_module_rt5370sta = firmware_rt5370
 DESCRIPTION_kernel_module_rtl8192cu = rtl8192cu driver for control wireless devices
 FILES_kernel_module_rtl8192cu = /lib/modules/$(KERNEL_VERSION)/extra/wireless/rtl8192cu
 RDEPENDS_kernel_module_rtl8192cu = firmware_rtl8192cu
+
+DESCRIPTION_kernel_module_rtl8192du = rtl8192du driver for control wireless devices
+FILES_kernel_module_rtl8192du = /lib/modules/$(KERNEL_VERSION)/extra/wireless/rtl8192du
+RDEPENDS_kernel_module_rtl8192du = firmware_rtl8192de
 
 DESCRIPTION_kernel_module_rtl871x = rtl871x driver for control wifi devices
 FILES_kernel_module_rtl871x = /lib/modules/$(KERNEL_VERSION)/extra/wireless/rtl871x
