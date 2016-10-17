@@ -6,7 +6,7 @@ package[[ target_firmware_wlan
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = git
-PR_${P} = 3
+PR_${P} = 4
 PACKAGE_ARCH_${P} = all
 
 DESCRIPTION_${P} = linux-firmware
@@ -40,6 +40,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	ln -sf /lib/firmware/rt2870.bin $(PKDIR)/lib/firmware/rt5370.bin && \
 	$(INSTALL_FILE) rtlwifi/rtl8188eufw.bin $(PKDIR)/lib/firmware/rtlwifi && \
 	$(INSTALL_FILE) rtlwifi/rtl8192cufw.bin $(PKDIR)/lib/firmware/rtlwifi && \
+	$(INSTALL_FILE) rtlwifi/rtl8192defw.bin $(PKDIR)/lib/firmware/rtlwifi && \
 	$(INSTALL_FILE) rtlwifi/rtl8712u.bin $(PKDIR)/lib/firmware/rtlwifi && \
 	$(INSTALL_FILE) htc_7010.fw $(PKDIR)/lib/firmware && \
 	$(INSTALL_FILE) htc_9271.fw $(PKDIR)/lib/firmware && \
@@ -54,6 +55,7 @@ PACKAGES_${P} = \
 	firmware_rt5370 \
 	firmware_rtl8188eu \
 	firmware_rtl8192cu \
+	firmware_rtl8192de \
 	firmware_rtl8712u \
 	firmware_carl9170 \
 	firmware_ath9k_htc \
@@ -83,6 +85,9 @@ FILES_firmware_rtl8188eu = \
 
 FILES_firmware_rtl8192cu =\
 	/lib/firmware/rtlwifi/rtl8192cufw.bin
+
+FILES_firmware_rtl8192de =\
+	/lib/firmware/rtlwifi/rtl8192defw.bin
 
 FILES_firmware_rtl8712u = \
 	/lib/firmware/rtlwifi/rtl8712u.bin
