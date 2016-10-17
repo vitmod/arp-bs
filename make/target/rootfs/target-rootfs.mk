@@ -100,6 +100,7 @@ opkg_my_list += \
 	kernel-module-rt3070sta \
 	kernel-module-rt5370sta \
 	kernel-module-rtl8192cu \
+	kernel-module-rtl8192du \
 	kernel-module-rtl871x \
 	kernel-module-rtl8188eu \
 	kernel-module-ath9k-htc \
