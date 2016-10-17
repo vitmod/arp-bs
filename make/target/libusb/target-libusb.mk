@@ -4,8 +4,8 @@
 package[[ target_libusb
 
 BDEPENDS_${P} = $(target_glibc)
-
-PV_${P} = 1.0.20
+# do not change
+PV_${P} = 1.0.9
 PR_${P} = 1
 
 call[[ base ]]
@@ -23,6 +23,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 			--build=$(build) \
 			--host=$(target) \
 			--target=$(target) \
+			--disable-udev \
 			--prefix=/usr \
 		&& \
 		$(run_make) all
