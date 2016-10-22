@@ -1,0 +1,2 @@
+DEPENDOFF=&OsCam		~T250 ~GЗапустити,/var/tuxbox/plugins/camstartstop oscamstart,/var/tuxbox/config/.oscam,OSCam буде активний.
+DEPENDON=&OsCam			~T250 ~RЗупинити,/var/tuxbox/plugins/camstartstop oscamstop,/var/tuxbox/config/.oscam,OSCam буде зупинено.
