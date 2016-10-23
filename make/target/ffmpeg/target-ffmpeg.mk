@@ -262,6 +262,11 @@ CONFIG_FLAGS_${P} += \
 	--enable-pthreads \
 	--prefix=/usr
 
+ifdef CONFIG_GCC48
+EXTRA_CFLAGS_$(P) = --extra-cflags="-I$(targetprefix)/usr/include -ffunction-sections -fdata-sections -fno-aggressive-loop-optimizations"
+else
+EXTRA_CFLAGS_$(P) = --extra-cflags="-I$(targetprefix)/usr/include -ffunction-sections -fdata-sections "
+endif
 
 call[[ base_do_prepare ]]
 
@@ -269,7 +274,7 @@ $(TARGET_${P}).do_compile: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && \
 		$(BUILDENV) \
 		./configure \
-			--extra-cflags="-I$(targetprefix)/usr/include -ffunction-sections -fdata-sections -fno-aggressive-loop-optimizations" \
+			$(EXTRA_CFLAGS_$(P)) \
 			--extra-ldflags="-L$(targetprefix)/usr/lib -Wl,--gc-sections,--print-gc-sections,-lrt" \
 			$(CONFIG_FLAGS_${P}) \
 		&& \
