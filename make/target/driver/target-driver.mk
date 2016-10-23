@@ -7,7 +7,7 @@ PV_${P} = git
 PACKAGE_ARCH_${P} = $(box_arch)
 
 DESCRIPTION_${P} = Drivers for stm box
-SRC_URI_${P} = https://github.com/OpenAR-P/tdt-arp
+SRC_URI_${P} = https://github.com/OpenAR-P/driver.git
 
 GIT_DIR_${P} = $(driverdir)
 
@@ -182,7 +182,7 @@ DESCRIPTION_kernel_module_encrypt = driver encrypt
 FILES_kernel_module_encrypt = /lib/modules/$(KERNEL_VERSION)/extra/encrypt
 
 DESCRIPTION_kernel_module_frontcontroller = frontcontroller driver for control  devices
-#RDEPENDS_kernel_module_frontcontroller = fp_control
+RDEPENDS_kernel_module_frontcontroller = udev-event-rules
 FILES_kernel_module_frontcontroller = /lib/modules/$(KERNEL_VERSION)/extra/frontcontroller
 
 DESCRIPTION_kernel_dvb_modules_stv090x = frontends driver for control  devices
