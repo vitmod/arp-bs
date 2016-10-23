@@ -15,7 +15,6 @@ opkg_my_list = \
 	sysvinit \
 	devinit \
 	udev \
-	udev-rules \
 	initscripts \
 	update-rc.d \
 	busybox \
