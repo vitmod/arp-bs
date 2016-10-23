@@ -45,6 +45,7 @@ rule[[
   patch:localwork://gcc-4.7.0-sh-use-gnu-hash-style.patch
   patch:localwork://gcc-4.2.4-multilibpath.patch
   patch:localwork://gcc-4.5.2-sysroot.patch
+  patch:file://gcc_cp_cfns.diff
 ]]rule
 
 call[[ base_do_prepare ]]
