@@ -6,7 +6,7 @@ package[[ target_udev_rules
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = 0.4
-PR_${P} = 1
+PR_${P} = 2
 
 call[[ base ]]
 
@@ -24,8 +24,12 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && $(INSTALL_${P})
 	touch $@
 
+PACKAGES_${P} = udev-dvb-ca-rules udev-event-rules
 DESCRIPTION_${P} = custom udev rules
-RDEPENDS_${P} = udev
+FILES_udev_dvb_ca_rules = /etc/udev/rules.d/60-dvb-ca.rules
+RDEPENDS_udev_dvb_ca_rules = udev
+FILES_udev_event_rules = /etc/udev/rules.d/65-event.rules
+RDEPENDS_udev_event_rules = udev
 
 call[[ ipkbox ]]
 
