@@ -24,7 +24,7 @@ $(TARGET_${P}).do_package: $(TARGET_${P}).do_prepare
 	cd $(DIR_${P}) && $(INSTALL_${P})
 	touch $@
 
-PACKAGES_${P} = udev-dvb-ca-rules udev-event-rules
+PACKAGES_${P} = udev_dvb_ca_rules udev_event_rules
 DESCRIPTION_${P} = custom udev rules
 FILES_udev_dvb_ca_rules = /etc/udev/rules.d/60-dvb-ca.rules
 RDEPENDS_udev_dvb_ca_rules = udev
