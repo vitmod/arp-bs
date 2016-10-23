@@ -7,7 +7,7 @@ package[[ target_enigma2_skins
 BDEPENDS_${P} = $(target_enigma2)
 
 PV_${P} = git
-PR_${P} = 1
+PR_${P} = 2
 
 call[[ base ]]
 
@@ -83,7 +83,7 @@ FILES_${P} = /tmp
 FILES_enigma2_skins_meta := /usr/share/meta
 DESCRIPTION_enigma2_skins_meta := Enigma2 skins metadata
 
-RDEPENDS_enigma2_plugin_skin_megamod = enigma2 enigma2_plugin_systemplugins_libgisclubskin
+RDEPENDS_enigma2_plugin_skin_megamod = enigma2 enigma2_plugin_systemplugins_libgisclubskin font_lcd
 
 call[[ ipkbox ]]
 
