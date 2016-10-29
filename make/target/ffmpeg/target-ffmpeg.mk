@@ -7,7 +7,7 @@ BDEPENDS_${P} = $(target_glibc) $(target_libbluray) $(target_rtmpdump) $(target_
 
 PV_${P} = ${PV_MOJ}.${PV_MIN}
 PV_MOJ_${P} = 3.1
-PV_MIN_${P} = 4
+PV_MIN_${P} = 5
 
 PR_${P} = 2
 
