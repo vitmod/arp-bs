@@ -6,12 +6,12 @@ package[[ target_rfkill
 BDEPENDS_${P} = $(target_glibc)
 
 PV_${P} = git
-PR_${P} = 1
+PR_${P} = 2
 
 call[[ base ]]
 
 rule[[
-  nothing:git://git.sipsolutions.net/rfkill.git
+  git://github.com/jprvita/rfkill.git
 ]]rule
 
 call[[ git ]]
