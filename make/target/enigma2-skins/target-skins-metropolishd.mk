@@ -6,7 +6,7 @@ package[[ target_enigma2_skins_metropolishd
 BDEPENDS_${P} = $(target_filesystem)
 
 PV_${P} = git
-PR_${P} = 1
+PR_${P} = 2
 PACKAGE_ARCH_${P} = all
 
 call[[ base ]]
@@ -28,7 +28,7 @@ call[[ ipk ]]
 
 NAME_${P} = enigma2-plugin-skin-metropolishd
 DESCRIPTION_${P} = Skin MetropolisHD for enigma2
-RDEPENDS_${P} = enigma2
+RDEPENDS_${P} = enigma2 font_lcd
 FILES_${P} = /usr
 
 call[[ ipkbox ]]
