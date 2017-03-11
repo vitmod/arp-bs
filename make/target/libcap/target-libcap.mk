@@ -11,7 +11,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  extract:http://mirror.linux.org.au/linux/libs/security/linux-privs/${PN}2/${PN}-${PV}.tar.bz2
+  extract:https://www.kernel.org/pub/linux/libs/security/linux-privs/${PN}2/${PN}-${PV}.tar.gz
   patch:file://fix-CAP_LAST_CAP.patch
 ]]rule
 
