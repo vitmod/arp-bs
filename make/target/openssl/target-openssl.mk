@@ -5,7 +5,7 @@ package[[ target_openssl
 
 BDEPENDS_${P} = $(target_glibc) $(target_gcc_lib)
 
-PV_${P} = 1.0.2j
+PV_${P} = 1.0.2k
 PR_${P} = 4
 
 call[[ base ]]
