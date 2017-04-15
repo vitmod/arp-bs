@@ -89,7 +89,7 @@ menu "Global Configuration"
 
 	choice
 		prompt "gcc libs from:"
-		default GCC_LIB_FROM_TARGET
+		default GCC_LIB_FROM_CROSS
 
 		config GCC_LIB_FROM_CROSS
 		bool "cross-gcc"
