@@ -5,7 +5,7 @@ package[[ target_zlib
 
 BDEPENDS_${P} = $(target_binutils)
 
-PV_${P} = 1.2.8
+PV_${P} = 1.2.11
 PR_${P} = 1
 
 call[[ base ]]
