@@ -11,7 +11,7 @@ PR_${P} = 1
 call[[ base ]]
 
 rule[[
-  extract:http://sourceforge.net/projects/${PN}/files/${PN}/v${PV}/${PN}-${PV}.tar.gz
+  extract:https://sourceforge.net/projects/${PN}/files/${PN}/v${PV}/${PN}-${PV}.tar.gz
   patch:file://${PN}.patch
 ]]rule
 
