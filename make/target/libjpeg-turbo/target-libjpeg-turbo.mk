@@ -5,7 +5,7 @@ package[[ target_libjpeg_turbo
 
 BDEPENDS_${P} = $(target_glibc)
 
-PV_${P} = 1.4.2
+PV_${P} = 1.5.3
 PR_${P} = 3
 
 PN_${P} = libjpeg-turbo
@@ -13,8 +13,7 @@ PN_${P} = libjpeg-turbo
 call[[ base ]]
 
 rule[[
-  extract:http://sourceforge.net/projects/${PN}/files/${PN}-${PV}.tar.gz
-  patch:file://jpeg.diff
+  extract:https://sourceforge.net/projects/${PN}/files/${PN}-${PV}.tar.gz
 ]]rule
 
 call[[ base_do_prepare ]]
