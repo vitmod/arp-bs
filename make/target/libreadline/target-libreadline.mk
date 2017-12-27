@@ -13,7 +13,7 @@ DIR_${P} = ${WORK}/readline-${PV}
 call[[ base ]]
 
 rule[[
-  extract:ftp://ftp.cwru.edu/pub/bash/readline-${PV}.tar.gz
+  extract:https://ftp.gnu.org/gnu/readline/readline-${PV}.tar.gz
 ]]rule
 
 call[[ base_do_prepare ]]
