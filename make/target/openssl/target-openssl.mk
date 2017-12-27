@@ -5,14 +5,18 @@ package[[ target_openssl
 
 BDEPENDS_${P} = $(target_glibc) $(target_gcc_lib)
 
-PV_${P} = 1.0.2k
+PV_${P} = 1.0.2m
 PR_${P} = 4
 
 call[[ base ]]
 
 rule[[
-  extract:ftp://ftp.openssl.org/source/${PN}-${PV}.tar.gz
-  patch:file://${PN}-1.0.2.patch
+  extract:ftp://ftp.openssl.org/source/old/1.0.2/${PN}-${PV}.tar.gz
+  patch:file://${PN}-${PV}-optimize-for-size.patch
+  patch:file://${PN}-${PV}-makefile-dirs.patch
+  patch:file://${PN}-${PV}-disable_doc_tests.patch
+  patch:file://${PN}-${PV}-fix-parallel-building.patch
+  patch:file://${PN}-${PV}-compat_versioned_symbols-1.patch
 ]]rule
 
 call[[ base_do_prepare ]]

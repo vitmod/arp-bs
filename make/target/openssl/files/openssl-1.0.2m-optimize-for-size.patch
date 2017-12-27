@@ -1,6 +1,6 @@
---- a/Configure.old
+--- a/Configure
 +++ b/Configure
-@@ -377,7 +377,7 @@
+@@ -374,7 +374,7 @@
  ####
  # *-generic* is endian-neutral target, but ./config is free to
  # throw in -D[BL]_ENDIAN, whichever appropriate...
@@ -9,13 +9,3 @@
  "linux-ppc",	"gcc:-DB_ENDIAN -O3 -Wall::-D_REENTRANT::-ldl:BN_LLONG RC4_CHAR RC4_CHUNK DES_RISC1 DES_UNROLL:${ppc32_asm}:linux32:dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
  
  #######################################################################
---- openssl-1.0.2k.old/Makefile.org
-+++ openssl-1.0.2k.new/Makefile.org
-@@ -140,7 +140,7 @@
- 
- BASEADDR=
- 
--DIRS=   crypto ssl engines apps test tools
-+DIRS=   crypto ssl
- ENGDIRS= ccgost
- SHLIBDIRS= crypto ssl
