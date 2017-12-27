@@ -13,7 +13,7 @@ PN_${P} = fribidi
 call[[ base ]]
 
 rule[[
-  extract:http://fribidi.org/download/${PN}-${PV}.tar.bz2
+  extract:https://download.videolan.org/contrib/fribidi/${PN}-${PV}.tar.bz2
 ]]rule
 
 call[[ base_do_prepare ]]
